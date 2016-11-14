@@ -1,0 +1,10 @@
+<%#head.html%>
+<%
+	var site = this.site || {};
+	var staticPath = this.site.staticPath;
+%>
+<div class="test"><%= this.test %></div>
+<img src="<%= staticPath %>/img/index.png" alt="">
+<img src="http://inke.com/images/logo_white.png" alt="">
+<script src="<%= staticPath %>/js/page/index.js"></script>
+<%#foot.html%>

@@ -1,0 +1,23 @@
+<%
+	var site = this.site || {};
+	var staticPath = this.site.staticPath;
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><%= this.pageTitle || site.pageTitle %></title>
+	<meta name="description" content="<%= this.pageDescription || site.pageDescription %>" />
+	<meta name="keywords" content="<%= this.pageKeywords || site.pageKeywords %>" />
+	<%=
+		(function(css){
+			var cssStr='',
+				base =staticPath;
+			css.forEach(function(src){
+				cssStr+='<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css">'
+			});
+			return cssStr; 
+		})(this._CSSLinks)
+	%>
+</head>
+<body>

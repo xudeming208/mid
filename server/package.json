@@ -1,0 +1,28 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "author": "徐德明",
+  "email": "xudeming208@126.com",
+  "description": "node MVC 框架",
+  "bin": {
+    "app": "app"
+  },
+  "keywords": [
+    "node.js",
+    "javascript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xudeming208"
+  },
+  "scripts": {
+    "start": "sudo pm2 delete all && pm2 start server/index.js jserver/jserver.js -i 0"
+  },
+  "dependencies": {
+    "less": "^2.7.1"
+  },
+  "devDependencies": {
+    "colors": "^1.1.2",
+    "less": "^2.7.1"
+  }
+}
