@@ -1,4 +1,4 @@
-var getHtml=require('/Users/inke/Documents/tirger/server/server/base/render.js').getHtml;
+var getHtml=require('/Users/inke/Documents/xdm/tirger/server/server/base/render.js').getHtml;
 function _getHtml(obj,_data){
 let html='';
 html+='</body></html>'

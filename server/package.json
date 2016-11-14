@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "author": "徐德明",
   "email": "xudeming208@126.com",
-  "description": "node MVC 框架",
+  "description": "nodejs MVC 框架",
   "bin": {
     "app": "app"
   },
@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/xudeming208"
+    "url": "https://github.com/xudeming208/tirger"
   },
   "scripts": {
     "start": "sudo pm2 delete all && pm2 start server/index.js jserver/jserver.js -i 0"
