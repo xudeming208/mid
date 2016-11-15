@@ -6,7 +6,7 @@ nodejs mvc frame
 2. cd server
 3. npm install 
 3. npm run start
-4. In the browser input 127.0.0.1:8083 or yourIp:8083, and then can see the pages（The default is open the PC pages, if you want to open the H5 pages, configure config）
+4. In the browser input **127.0.0.1:8083** or **yourIp:8083**, and then can see the pages（`The default is open the PC pages, if you want to open the H5 pages, configure config`）
 
 ##How to use the domain name?
 * bind `host` => sudo vi /etc/hosts，like this：
@@ -27,5 +27,5 @@ server {
 ```
 
 ##problem
-* If start frame failed, please try "pm2 delete all", then "npm run start"
-* Contact me: xudeming208@126.com
+* If start frame failed, please try `"pm2 delete all"`, then `"npm run start"`
+* Contact me: `xudeming208@126.com`
