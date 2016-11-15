@@ -87,7 +87,7 @@ if (cluster.isMaster) {
 			if (fileType == 'less') {
 				less.render(data, {
 					paths: [filePath.substr(0, filePath.lastIndexOf('/'))],
-					compress: false
+					compress: ETC.compress
 				}).then(output => {
 					writeFile('css', output && output.css);
 				}, error => {

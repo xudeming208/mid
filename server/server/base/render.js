@@ -1,12 +1,14 @@
 const fs = require('fs');
 const path = require('path');
+let quotes = ETC.compress ? "'" : "`";
 
 // complie
 let complie = (obj, tpl, content, data) => {
 	let html = '';
 	let result = '';
-	let str = content.replace(/[\r\n\t]+/g, '').replace(/this/g, '_data'),
-		arr = str.split('<%');
+	ETC.compress && (content = content.replace(/[\r\n\t]+/g, ''));
+	let str = content.replace(/this/g, '_data');
+	let arr = str.split('<%');
 	// console.log(arr)
 	html += "var getHtml=require('" + __filename + "').getHtml;\n"
 	html += "function _getHtml(obj,_data){\n"
@@ -28,9 +30,9 @@ let complie = (obj, tpl, content, data) => {
 				default:
 					html += rightArr[0] + "\n";
 			}
-			html += "html+='" + rightArr[1] + "'\n";
+			html += "html+=" + quotes + rightArr[1] + quotes + "\n";
 		} else {
-			html += "html+='" + arr[i] + "'\n";
+			html += "html+=" + quotes + arr[i] + quotes + "\n";
 		}
 	}
 	html += "return html;"

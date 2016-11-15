@@ -2,7 +2,8 @@
 	"etc": {
 		"serverPort": 8083,
 		"jserverPort": 8084,
-		"defaultMod": "index"
+		"defaultMod": "index",
+		"compress": true
 	},
 	"path": {
 		"pc": "./pc",
