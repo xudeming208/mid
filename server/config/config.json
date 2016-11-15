@@ -22,7 +22,7 @@
 	"host": {
 		"127.0.0.1": "pc",
 		"192.168.82.33": "pc",
-		"h5.fedevot.inke.com": "h5",
-		"pc.fedevot.inke.com": "pc"
+		"h5.fedevot.test.com": "h5",
+		"pc.fedevot.test.com": "pc"
 	}
 }
