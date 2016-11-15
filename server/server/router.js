@@ -11,6 +11,7 @@ let route = (req, res) => {
 		modUrl = pathname.substr(1).replace(/\/+/g, '/').split('/'),
 		fileType = pathname.match(/(\.[^.]+|)$/)[0]; //取得后缀名
 	console.log(fileType)
+	// ico
 	if (fileType == '.ico') {
 		fs.readFile('./favicon.ico', (err, html) => { //读取内容
 			if (err) throw err;
@@ -21,6 +22,13 @@ let route = (req, res) => {
 			res.end(html);
 		});
 		return;
+	}
+	// 获取URL参数
+	console.log('---------------------------------------------');
+	console.log(reqUrl);
+	req.__get = {};
+	for (var k in reqUrl.query){
+		req.__get[k.replace(/[<>%\'\"]/g,'')] = reqUrl.query[k];
 	}
 	/*
 	url 格式 [/ 地址/...]模块文件名/方法名/[参数] 

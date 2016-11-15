@@ -6,5 +6,13 @@
 <div class="test"><%= this.test %></div>
 <img src="<%= staticPath %>/img/index.png" alt="">
 <img src="http://inke.com/images/logo_white.png" alt="">
+<ul>
+	<% this.arr.forEach(function(item){ %>
+		<li>
+			<h3><%= item.title %></h3>
+			<p><%= item.content %></p>
+		</li>
+	<% }) %>
+</ul>
 <script src="<%= staticPath %>/js/page/index.js"></script>
 <%#foot.html%>

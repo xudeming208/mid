@@ -6,6 +6,7 @@ const controllerObj = {
 		this.getData(php, data => {
 			data.pageTitle = 'index';
 			data._CSSLinks = ['index'];
+			// console.log(data);
 			this.render('index.html', data);
 		})
 	}

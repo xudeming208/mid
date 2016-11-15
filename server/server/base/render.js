@@ -48,7 +48,7 @@ let complie = (obj, tpl, content, data) => {
 };
 
 // 获取HTML
-let getHtml = function(obj, tpl, data) {
+let getHtml = (obj, tpl, data) => {
 	let filePath = path.resolve(__dirname, '../../../apps/', HOST[obj.hostname], PATH.view, '.', tpl);
 	console.log('-----------')
 	console.log(filePath)
@@ -57,6 +57,18 @@ let getHtml = function(obj, tpl, data) {
 
 // 输出HTML
 let render = function(tpl, data) {
+	if (this.req.__get['__pd__']) {
+		//show data  
+		var now = new Date()
+		if (this.req.__get['__pd__'] == '/rb/' + (now.getMonth() + now.getDate() + 1)) {
+			this.res.writeHead(200, {
+				'Content-Type': 'text/plain',
+				'Cache-Control': 'no-cache,no-store'
+			});
+			this.res.end(JSON.stringify(data));
+			return;
+		}
+	}
 	this.res.end(getHtml(this, tpl, data));
 }
 
