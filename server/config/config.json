@@ -14,7 +14,7 @@
 		"view": "./mvc/view/"
 	},
 	"site": {
-		"staticPath": "http://192.168.82.33:8084",
+		"staticPath": "http://127.0.0.1:8084",
 		"pageTitle": "demo",
 		"pageDescription": "nodejs mvc frame",
 		"pageKeywords": "nodejs mvc frame"

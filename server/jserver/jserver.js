@@ -81,22 +81,38 @@ if (cluster.isMaster) {
 		}
 		filePath += pathname;
 		console.log(filePath)
-		fs.readFile(filePath, unicode, (err, data) => { //读取内容
-			if (err) throw err;
-			// less compaile
-			if (fileType == 'less') {
-				less.render(data, {
-					paths: [filePath.substr(0, filePath.lastIndexOf('/'))],
-					compress: ETC.compress
-				}).then(output => {
-					writeFile('css', output && output.css);
-				}, error => {
-					console.log(error);
-				})
-			} else {
-				writeFile(fileType, data);
-			}
-		});
+		if (!fs.existsSync(filePath)) {
+			res.writeHead(404, {
+				'Content-Type': 'text/plain'
+			});
+			res.end(filePath + ' is lost');
+		} else {
+			fs.readFile(filePath, unicode, (err, data) => { //读取内容
+				if (err) {
+					res.writeHead(500, {
+						'Content-Type': 'text/plain'
+					});
+					res.end(err);
+				}
+				// less compaile
+				if (fileType == 'less') {
+					less.render(data, {
+						paths: [filePath.substr(0, filePath.lastIndexOf('/'))],
+						compress: ETC.compress
+					}).then(output => {
+						writeFile('css', output && output.css);
+					}, error => {
+						console.log(error);
+						res.writeHead(500, {
+							'Content-Type': 'text/plain'
+						});
+						res.end(filePath + 'compile error');
+					})
+				} else {
+					writeFile(fileType, data);
+				}
+			});
+		}
 	}).listen(port, () => {
 		console.log(`jserver has start on ${getIp()}:${port} at ${new Date().toLocaleString()}`.green.underline);
 	});

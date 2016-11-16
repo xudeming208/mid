@@ -47,7 +47,7 @@ if (cluster.isMaster) {
 		// res.setHeader("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
 		// res.setHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
 		// res.setHeader("X-Powered-By", ' 3.2.1');
-		router.route(req, res);
+		router(req, res);
 	}).listen(port, () => {
 		console.log(`Server has start on ${getIp()}:${port} at ${new Date().toLocaleString()}`.green.underline);
 	});

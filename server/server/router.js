@@ -1,7 +1,7 @@
 const url = require('url');
 const path = require('path');
 const fs = require('fs');
-const getData = require('./base/getData.js').getData;
+const getData = require('./base/getData.js');
 const render = require('./base/render.js').render;
 
 let route = (req, res) => {
@@ -11,10 +11,15 @@ let route = (req, res) => {
 		modUrl = pathname.substr(1).replace(/\/+/g, '/').split('/'),
 		fileType = pathname.match(/(\.[^.]+|)$/)[0]; //取得后缀名
 	console.log(fileType)
-	// ico
+		// ico
 	if (fileType == '.ico') {
 		fs.readFile('./favicon.ico', (err, html) => { //读取内容
-			if (err) throw err;
+			if (err) {
+				res.writeHead(500, {
+					'Content-Type': 'text/plain'
+				});
+				res.end(err);
+			}
 			// console.log(data)
 			res.writeHead(200, {
 				"Content-Type": "image/x-icon;charset=utf-8"
@@ -27,8 +32,8 @@ let route = (req, res) => {
 	console.log('---------------------------------------------');
 	console.log(reqUrl);
 	req.__get = {};
-	for (var k in reqUrl.query){
-		req.__get[k.replace(/[<>%\'\"]/g,'')] = reqUrl.query[k];
+	for (var k in reqUrl.query) {
+		req.__get[k.replace(/[<>%\'\"]/g, '')] = reqUrl.query[k];
 	}
 	/*
 	url 格式 [/ 地址/...]模块文件名/方法名/[参数] 
@@ -48,15 +53,27 @@ let route = (req, res) => {
 	// console.log(reqUrl.hostname)
 	let modPath = path.resolve(__dirname, '../../apps/', PATH[HOST[hostname]], PATH.controller, modName + '.js');
 	console.log(modPath);
-	// console.log(req)
-	let modJs = require(modPath);
-	// console.log(modJs)
-	// console.log(modFun)
-	modJs['controllerObj']['hostname'] = hostname;
-	modJs['controllerObj']['req'] = req;
-	modJs['controllerObj']['res'] = res;
-	modJs['controllerObj']['getData'] = getData;
-	modJs['controllerObj']['render'] = render;
-	modJs['controllerObj'][modFun](modParam);
+	if (!fs.existsSync(modPath)) {
+		res.writeHead(404, {
+			'Content-Type': 'text/plain'
+		});
+		res.end('404');
+	} else {
+		// console.log(req)
+		let modJs = require(modPath);
+		// console.log(modJs)
+		// console.log(modFun)
+		let extendObj = {
+			hostname: hostname,
+			req: req,
+			res: res,
+			getData: getData,
+			render: render
+		}
+		for (let i in extendObj) {
+			modJs['controllerObj'][i] = extendObj[i];
+		}
+		modJs['controllerObj'][modFun](modParam);
+	}
 }
-exports.route = route;
+module.exports = route;
