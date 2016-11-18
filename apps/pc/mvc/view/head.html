@@ -14,7 +14,7 @@
 			var cssStr='',
 				base =staticPath;
 			css.forEach(function(src){
-				cssStr+='<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css">'
+				cssStr+='<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css'+site.version+'">'
 			});
 			return cssStr; 
 		})(this._CSSLinks)

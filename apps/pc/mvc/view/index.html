@@ -3,7 +3,7 @@
 	var site = this.site || {};
 	var staticPath = this.site.staticPath;
 %>
-<div class="test"><%= this.test %></div>
+<div class="test"><%= this.test %>2</div>
 <img src="<%= staticPath %>/img/index.png" alt="">
 <img src="http://inke.com/images/logo_white.png" alt="">
 <ul>
@@ -14,5 +14,5 @@
 		</li>
 	<% }) %>
 </ul>
-<script src="<%= staticPath %>/js/page/index.js"></script>
+<script src="<%= staticPath %>/js/page/index.js<%= site.version %>"></script>
 <%#foot.html%>

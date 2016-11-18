@@ -1,3 +1,4 @@
+'use strict'
 // console.log(__dirname)
 require('../config/config.js')
 require('colors');
@@ -6,24 +7,12 @@ const cpuNums = ETC.cpuNums || require('os').cpus().length;
 const http = require('http');
 const fs = require('fs');
 const port = ETC.serverPort || 8083;
+const getIp = require('../config/getIp');
 const router = require('./router.js');
 // mkdir tmp
 if (!fs.existsSync('../tmp')) {
 	fs.mkdirSync('../tmp');
 }
-// getIp
-let getIp = () => {
-	let ifaces = require('os').networkInterfaces();
-	let ret = [];
-	for (let dev in ifaces) {
-		ifaces[dev].forEach(details => {
-			if (details.family == 'IPv4' && !details.internal) {
-				ret.push(details.address)
-			}
-		})
-	}
-	return ret.length ? ret[0] : '127.0.0.1'
-};
 // server
 if (cluster.isMaster) {
 	for (let i = 0; i < cpuNums; i++) {

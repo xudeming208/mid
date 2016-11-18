@@ -1,17 +1,21 @@
+'use strict'
 const fs = require('fs');
 const path = require('path');
+let tplPath = path.resolve(__dirname, '../../../apps/');
+let resultArr = [];
 let quotes = ETC.compress ? "'" : "`";
 
 // complie
-let complie = (obj, tpl, content, data) => {
-	let html = '';
-	let result = '';
+let complie = (filePath, tpl, content, data) => {
+	let html = '',
+		result = '';
 	ETC.compress && (content = content.replace(/[\r\n\t]+/g, ''));
 	let str = content.replace(/this/g, '_data');
 	let arr = str.split('<%');
 	// console.log(arr)
+	html += "/* " + filePath + " */\n"
 	html += "var getHtml=require('" + __filename + "').getHtml;\n"
-	html += "function _getHtml(obj,_data){\n"
+	html += "function _getHtml(_data){\n"
 	html += "let html='';\n"
 	for (let i = 0, len = arr.length; i < len; i++) {
 		let item = arr[i];
@@ -25,7 +29,7 @@ let complie = (obj, tpl, content, data) => {
 					html += "html+=" + rightArr[0].substr(1) + "\n";
 					break;
 				case '#':
-					html += "html+=getHtml(obj,'" + rightArr[0].substr(1) + "',_data);\n"
+					html += "html+=getHtml('" + rightArr[0].substr(1) + "',_data);\n"
 					break;
 				default:
 					html += rightArr[0] + "\n";
@@ -39,20 +43,16 @@ let complie = (obj, tpl, content, data) => {
 	html += "}\n"
 	html += 'exports._getHtml=_getHtml' + '\n'
 	let tmpFile = path.resolve(__dirname, '../../tmp/', tpl.replace('.html', '.js'));
-	// console.log(tmpFile)
-	// if (!fs.existsSync(tmpFile)) {
 	fs.writeFileSync(tmpFile, html);
-	// }
-	result = require(tmpFile)._getHtml(obj, data);
+	result = require(tmpFile)._getHtml(data);
+	resultArr.push(result);
 	return result
 };
 
 // 获取HTML
-let getHtml = (obj, tpl, data) => {
-	let filePath = path.resolve(__dirname, '../../../apps/', HOST[obj.hostname], PATH.view, '.', tpl);
-	console.log('-----------')
-	console.log(filePath)
-	return complie(obj, tpl, fs.readFileSync(filePath, 'utf-8'), data);
+let getHtml = (tpl, data) => {
+	let filePath = path.resolve(tplPath, '.', tpl);
+	return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
 };
 
 // 输出HTML
@@ -69,7 +69,9 @@ let render = function(tpl, data) {
 			return;
 		}
 	}
-	this.res.end(getHtml(this, tpl, data));
+	tplPath = path.resolve(tplPath, HOST[this.hostname], PATH.view);
+	getHtml(tpl, data);
+	this.res.end(resultArr[resultArr.length - 1]);
 }
 
 exports.getHtml = getHtml;

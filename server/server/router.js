@@ -1,3 +1,4 @@
+'use strict'
 const url = require('url');
 const path = require('path');
 const fs = require('fs');
@@ -70,6 +71,7 @@ let route = (req, res) => {
 			getData: getData,
 			render: render
 		}
+		console.log(req.headers)
 		for (let i in extendObj) {
 			modJs['controllerObj'][i] = extendObj[i];
 		}

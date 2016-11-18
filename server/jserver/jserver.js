@@ -1,3 +1,4 @@
+'use strict'
 require('../config/config.js')
 require('colors');
 const cluster = require('cluster');
@@ -7,6 +8,7 @@ const http = require('http');
 const fs = require('fs');
 const url = require('url');
 const less = require('less');
+const getIp = require('../config/getIp');
 const port = ETC.jserverPort || 8084;
 const contentType = {
 	"css": "text/css",
@@ -29,19 +31,6 @@ const contentType = {
 	"wmv": "video/x-ms-wmv"
 };
 const bufferTypeArr = ["gif", "ico", "jpeg", "jpg", "pdf", "png", "swf", "tiff", "wav", "wma", "wmv"];
-// getIp
-let getIp = () => {
-	let ifaces = require('os').networkInterfaces();
-	let ret = [];
-	for (let dev in ifaces) {
-		ifaces[dev].forEach(details => {
-			if (details.family == 'IPv4' && !details.internal) {
-				ret.push(details.address)
-			}
-		})
-	}
-	return ret.length ? ret[0] : '127.0.0.1'
-};
 //jserver
 if (cluster.isMaster) {
 	for (let i = 0; i < cpuNums; i++) {
@@ -64,11 +53,14 @@ if (cluster.isMaster) {
 		let reqUrl = url.parse('http://' + req.headers.host + req.url, true),
 			hostname = reqUrl.hostname,
 			pathname = reqUrl.pathname,
-			fileType = pathname.match(/(\.[^.]+|)$/)[0].substr(1), //取得后缀名
-			// console.log(fileType)
-			unicode = bufferTypeArr.includes(fileType) ? '' : 'utf-8',
+			fileType = pathname.match(/(\.[^.]+|)$/)[0].substr(1); //取得后缀名
+		if (pathname.indexOf('?') != -1) {
+			fileType = fileType.substr(0, fileType.indexOf('?'));
+		}
+		// console.log(fileType)
+		let unicode = bufferTypeArr.includes(fileType) ? '' : 'utf-8',
 			filePath = path.resolve(__dirname, '../../apps/', PATH[HOST[hostname]], PATH.static);
-		// console.log(reqUrl)
+		// define writeFile fun
 		let writeFile = (fileType, data) => {
 			res.writeHead(200, {
 				"Content-Type": contentType[fileType] + ';charset=utf-8'
@@ -80,6 +72,10 @@ if (cluster.isMaster) {
 			fileType = 'less';
 		}
 		filePath += pathname;
+		//去除参数
+		if (filePath.indexOf('?') != -1) {
+			filePath = filePath.substr(0, filePath.indexOf('?'));
+		}
 		console.log(filePath)
 		if (!fs.existsSync(filePath)) {
 			res.writeHead(404, {
