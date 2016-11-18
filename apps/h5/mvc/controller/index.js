@@ -1,7 +1,7 @@
 const controllerObj = {
-	'index': function() {
+	index: function() {
 		let php = {
-
+			
 		};
 		this.getData(php, data => {
 			data.pageTitle = 'index';

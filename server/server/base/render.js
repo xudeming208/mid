@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 let tplPath = path.resolve(__dirname, '../../../apps/');
 let resultArr = [];
-let quotes = ETC.compress ? "'" : "`";
+let quotes = '`';
 
 // complie
 let complie = (filePath, tpl, content, data) => {
@@ -12,7 +12,6 @@ let complie = (filePath, tpl, content, data) => {
 	ETC.compress && (content = content.replace(/[\r\n\t]+/g, ''));
 	let str = content.replace(/this/g, '_data');
 	let arr = str.split('<%');
-	// console.log(arr)
 	html += "/* " + filePath + " */\n"
 	html += "var getHtml=require('" + __filename + "').getHtml;\n"
 	html += "function _getHtml(_data){\n"

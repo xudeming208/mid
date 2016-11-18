@@ -1,7 +1,7 @@
 module.exports = remoteApi = php => {
 	let testData = {
 		"site": SITE,
-		"test": 'test',
+		"test": 'hello',
 		"arr": [{
 			"title": 'title',
 			"content": 'content'

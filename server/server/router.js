@@ -31,7 +31,7 @@ let route = (req, res) => {
 	}
 	// 获取URL参数
 	console.log('---------------------------------------------');
-	console.log(reqUrl);
+	// console.log(reqUrl);
 	req.__get = {};
 	for (var k in reqUrl.query) {
 		req.__get[k.replace(/[<>%\'\"]/g, '')] = reqUrl.query[k];
@@ -71,7 +71,7 @@ let route = (req, res) => {
 			getData: getData,
 			render: render
 		}
-		console.log(req.headers)
+		// console.log(req.headers)
 		for (let i in extendObj) {
 			modJs['controllerObj'][i] = extendObj[i];
 		}

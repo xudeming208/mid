@@ -33,8 +33,8 @@ if (cluster.isMaster) {
 } else {
 	http.createServer((req, res) => {
 		// res.setHeader("Access-Control-Allow-Origin", "*");
-		// res.setHeader("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
-		// res.setHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+		res.setHeader("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
+		res.setHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
 		// res.setHeader("X-Powered-By", ' 3.2.1');
 		router(req, res);
 	}).listen(port, () => {
