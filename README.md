@@ -1,5 +1,5 @@
 # tirger
-nodejs mvc frame
+nodejs mvc framework
 
 ##start frame
 1. npm install -g pm2 (If you don't have to install installation, please)
@@ -8,7 +8,7 @@ nodejs mvc frame
 3. npm run start
 4. In the browser input **127.0.0.1:8083** or **yourIp:8083**, and then can see the pages（`The default is open the PC pages, if you want to open the H5 pages, configure config`）
 
-##How to use the domain name?
+##How to use the domain name?(You can also start the port 80 (sudo start), but is not recommended)
 * bind `host` => sudo vi /etc/hosts，like this：
 
 ```
