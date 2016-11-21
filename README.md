@@ -8,7 +8,7 @@ nodejs mvc framework
 3. npm run start
 4. In the browser input **127.0.0.1:8083** or **yourIp:8083**, and then can see the pages（`The default is open the PC pages, if you want to open the H5 pages, configure config`）
 
-##How to use the domain name?(You can also start the port 80 (sudo start), but is not recommended)
+##How to use the domain name?
 * bind `host` => sudo vi /etc/hosts，like this：
 
 ```
@@ -25,6 +25,9 @@ server {
     }
 }
 ```
+
+**ps:**
+`You can also start the port 80 (sudo start), but is not recommended`
 
 ##problem
 * If start frame failed, please try `"pm2 delete all"`, then `"npm run start"`
