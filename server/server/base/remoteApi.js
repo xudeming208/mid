@@ -1,4 +1,4 @@
-module.exports = remoteApi = php => {
+module.exports = remoteApi = (php, cbk) => {
 	let testData = {
 		"site": SITE,
 		"test": 'hello',
@@ -13,6 +13,8 @@ module.exports = remoteApi = php => {
 			"content": 'content3'
 		}]
 	}
-
-	return testData
+	//模拟接口延迟
+	setTimeout(function() {
+		cbk(testData)
+	}, 1000)
 }
