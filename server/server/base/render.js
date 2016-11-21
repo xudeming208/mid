@@ -1,7 +1,8 @@
 'use strict'
 const fs = require('fs');
 const path = require('path');
-let tplPath = path.resolve(__dirname, '../../../apps/');
+let appPath = path.resolve(__dirname, '../../../apps/');
+let tplPath = '';
 let resultArr = [];
 let quotes = '`';
 
@@ -68,7 +69,7 @@ let render = function(tpl, data) {
 			return;
 		}
 	}
-	tplPath = path.resolve(tplPath, HOST[this.hostname], PATH.view);
+	tplPath = path.resolve(appPath, HOST[this.hostname], PATH.view);
 	getHtml(tpl, data);
 	this.res.end(resultArr[resultArr.length - 1]);
 }

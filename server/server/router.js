@@ -31,7 +31,7 @@ let route = (req, res) => {
 	}
 	// 获取URL参数
 	console.log('---------------------------------------------');
-	// console.log(reqUrl);
+	console.log(reqUrl);
 	req.__get = {};
 	for (var k in reqUrl.query) {
 		req.__get[k.replace(/[<>%\'\"]/g, '')] = reqUrl.query[k];
@@ -53,12 +53,13 @@ let route = (req, res) => {
 		modParam = mods[2] || null;
 	// console.log(reqUrl.hostname)
 	let modPath = path.resolve(__dirname, '../../apps/', PATH[HOST[hostname]], PATH.controller, modName + '.js');
-	console.log(modPath);
+	// console.log(modPath);
 	if (!fs.existsSync(modPath)) {
 		res.writeHead(404, {
 			'Content-Type': 'text/plain'
 		});
 		res.end('404');
+		console.log('cannot found modPath:\n' + modPath);
 	} else {
 		// console.log(req)
 		let modJs = require(modPath);
@@ -70,7 +71,7 @@ let route = (req, res) => {
 			res: res,
 			getData: getData,
 			render: render
-		}
+		};
 		// console.log(req.headers)
 		for (let i in extendObj) {
 			modJs['controllerObj'][i] = extendObj[i];

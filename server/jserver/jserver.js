@@ -82,6 +82,7 @@ if (cluster.isMaster) {
 				'Content-Type': 'text/plain'
 			});
 			res.end(filePath + ' is lost');
+			console.log(filePath + ' is lost');
 		} else {
 			fs.readFile(filePath, unicode, (err, data) => { //读取内容
 				if (err) {
