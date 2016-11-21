@@ -1,7 +1,7 @@
 # tirger
 nodejs mvc framework
 
-##start frame
+##start framework
 1. npm install -g pm2 
     * If you don't have to install installation, please
 2. cd server
@@ -33,5 +33,5 @@ server {
 `You can also start the port 80 (sudo start), but is not recommended`
 
 ##problem
-* If start frame failed, please try `"pm2 delete all"`, then `"npm run start"`
+* If start framework failed, please try `"npm run stop"`, then `"npm run start"`
 * Contact me: `xudeming208@126.com`
