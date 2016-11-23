@@ -16,5 +16,5 @@ module.exports = remoteApi = (php, cbk) => {
 	//模拟接口延迟
 	setTimeout(function() {
 		cbk(testData)
-	}, 1000)
+	}, 1e3)
 }
