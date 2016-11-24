@@ -18,7 +18,7 @@
   "scripts": {
     "start": "pm2 start server/app.js jserver/jserver.js -i 0",
     "stop": "pm2 delete all",
-    "restart": "pm2 restart all",
+    "restart": "rm -rf tmp && pm2 restart all",
     "logs": "pm2 reload all && pm2 logs"
   },
   "dependencies": {

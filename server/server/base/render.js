@@ -3,13 +3,27 @@ const fs = require('fs');
 const path = require('path');
 let appPath = path.resolve(__dirname, '../../../apps/');
 let tplPath = '';
-let resultArr = [];
+let isWindows = process.platform === 'win32';
 let quotes = '`';
+
+//watchTpl
+function watchTpl(filePath, onChg) {
+	if (isWindows) {
+		fs.watch(filePath, {
+			persistent: true,
+			interval: 10
+		}, onChg);
+	} else {
+		fs.watchFile(filePath, {
+			persistent: true,
+			interval: 10
+		}, onChg);
+	}
+}
 
 // complie
 let complie = (filePath, tpl, content, data) => {
-	let html = '',
-		result = '';
+	let html = '';
 	ETC.compress && (content = content.replace(/[\r\n\t]+/g, ''));
 	let str = content.replace(/this/g, '_data');
 	let arr = str.split('<%');
@@ -44,15 +58,22 @@ let complie = (filePath, tpl, content, data) => {
 	html += 'exports._getHtml=_getHtml' + '\n'
 	let tmpFile = path.resolve(__dirname, '../../tmp/', tpl.replace('.html', '.js'));
 	fs.writeFileSync(tmpFile, html);
-	result = require(tmpFile)._getHtml(data);
-	resultArr.push(result);
-	return result
+	return require(tmpFile)._getHtml(data);
 };
 
 // 获取HTML
 let getHtml = (tpl, data) => {
 	let filePath = path.resolve(tplPath, '.', tpl);
-	return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
+	let tmpFile = path.resolve(__dirname, '../../tmp/', tpl.replace('.html', '.js'));
+	if (fs.existsSync(tmpFile)) {
+		watchTpl(filePath, function() {
+			delete require.cache[tmpFile];
+			return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
+		});
+		return require(tmpFile)._getHtml(data);
+	} else {
+		return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
+	}
 };
 
 // 输出HTML
@@ -70,8 +91,7 @@ let render = function(tpl, data) {
 		}
 	}
 	tplPath = path.resolve(appPath, HOST[this.hostname], PATH.view);
-	getHtml(tpl, data);
-	this.res.end(resultArr[resultArr.length - 1]);
+	this.res.end(getHtml(tpl, data));
 }
 
 exports.getHtml = getHtml;
