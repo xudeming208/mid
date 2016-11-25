@@ -8,7 +8,6 @@ const execFun = (todo, msg, displayProgress, cbk) => {
 	let t = '';
 	let isFirst = true;
 	let progressFun = () => {
-		console.log(92212)
 		process.stdout.write(`'${msg}'\n wait.`);
 		t = setInterval(function() {
 			process.stdout.write('.');
@@ -17,12 +16,9 @@ const execFun = (todo, msg, displayProgress, cbk) => {
 	if (displayProgress) {
 		progressFun();
 	} else {
-		console.log(9)
 		process.stdin.setEncoding('utf8');
 		process.stdin.on('readable', () => {
-			console.log(91)
 			let chunk = process.stdin.read();
-			console.log(chunk)
 			if (chunk !== null) {
 				chunk = chunk.slice(0, -2);
 				if (isFirst) {
@@ -78,10 +74,10 @@ const config = () => {
 			console.log(err);
 		}
 		// exec framework
-		let npmPath = path.resolve(__dirname, './tirger/server');
-		require(npmPath + '/node_modules/colors/safe.js');
+		// let npmPath = path.resolve(__dirname, './tirger/server');
+		// require(npmPath + '/node_modules/colors/safe.js');
 		execFun(['cd tirger/server', 'npm run start'], 'framework start', true, function() {
-			console.log(`In the browser input **127.0.0.1:${serverPort}** or **${ip}:${serverPort}**, and then can see the pages`.green.underline)
+			console.log(`In the browser input **127.0.0.1:${serverPort}** or **${ip}:${serverPort}**, and then can see the pages`)
 		});
 	})
 }
