@@ -4,21 +4,28 @@ const path = require('path');
 let appPath = path.resolve(__dirname, '../../../apps/');
 let tplPath = '';
 let isWindows = process.platform === 'win32';
+let interval = 20;
+let persistent = true;
 let quotes = '`';
 
 //watchTpl
-function watchTpl(filePath, onChg) {
+let watchTpl = (filePath, onChg) => {
 	if (isWindows) {
 		fs.watch(filePath, {
-			persistent: true,
-			interval: 10
+			persistent: persistent,
+			interval: interval
 		}, onChg);
 	} else {
 		fs.watchFile(filePath, {
-			persistent: true,
-			interval: 10
+			persistent: persistent,
+			interval: interval
 		}, onChg);
 	}
+}
+
+// getTmpFile
+let getTmpFile = tpl => {
+	return path.resolve(__dirname, '../../tmp/', tpl.replace('.html', '.js'));
 }
 
 // complie
@@ -28,8 +35,8 @@ let complie = (filePath, tpl, content, data) => {
 	let str = content.replace(/this/g, '_data');
 	let arr = str.split('<%');
 	html += "/* " + filePath + " */\n"
-	html += "var getHtml=require('" + __filename + "').getHtml;\n"
-	html += "function _getHtml(_data){\n"
+	html += "let getHtml = require('" + __filename + "').getHtml;\n"
+	html += "let _getHtml = _data => {\n"
 	html += "let html='';\n"
 	for (let i = 0, len = arr.length; i < len; i++) {
 		let item = arr[i];
@@ -55,26 +62,27 @@ let complie = (filePath, tpl, content, data) => {
 	}
 	html += "return html;"
 	html += "}\n"
-	html += 'exports._getHtml=_getHtml' + '\n'
-	let tmpFile = path.resolve(__dirname, '../../tmp/', tpl.replace('.html', '.js'));
+	html += 'exports._getHtml = _getHtml' + '\n'
+	let tmpFile = getTmpFile(tpl);
 	fs.writeFileSync(tmpFile, html);
 	return require(tmpFile)._getHtml(data);
-};
+}
 
 // 获取HTML
 let getHtml = (tpl, data) => {
 	let filePath = path.resolve(tplPath, '.', tpl);
-	let tmpFile = path.resolve(__dirname, '../../tmp/', tpl.replace('.html', '.js'));
+	let tmpFile = getTmpFile(tpl);
+	//watchTpl
+	watchTpl(filePath, function() {
+		delete require.cache[tmpFile];
+		return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
+	});
 	if (fs.existsSync(tmpFile)) {
-		watchTpl(filePath, function() {
-			delete require.cache[tmpFile];
-			return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
-		});
 		return require(tmpFile)._getHtml(data);
 	} else {
 		return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
 	}
-};
+}
 
 // 输出HTML
 let render = function(tpl, data) {

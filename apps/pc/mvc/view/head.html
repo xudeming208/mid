@@ -1,6 +1,6 @@
 <%
-	var site = this.site || {};
-	var staticPath = this.site.staticPath;
+	let site = this.site || {};
+	let staticPath = this.site.staticPath;
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,10 +11,10 @@
 	<meta name="keywords" content="<%= this.pageKeywords || site.pageKeywords %>" />
 	<%=
 		(function(css){
-			var cssStr='',
-				base =staticPath;
+			let cssStr ='',
+				base = staticPath;
 			css.forEach(function(src){
-				cssStr+='<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css'+site.version+'">'
+				cssStr += '<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css'+site.version+'">'
 			});
 			return cssStr; 
 		})(this._CSSLinks)

@@ -12,7 +12,6 @@ let route = (req, res) => {
 		modUrl = pathname.substr(1).replace(/\/+/g, '/').split('/'),
 		fileType = pathname.match(/(\.[^.]+|)$/)[0]; //取得后缀名
 	console.log(fileType)
-		// ico
 	if (fileType == '.ico') {
 		fs.readFile('./favicon.ico', (err, html) => { //读取内容
 			if (err) {

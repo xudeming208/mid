@@ -1,5 +1,4 @@
 'use strict'
-// console.log(__dirname)
 require('../config/config.js')
 require('colors');
 const cluster = require('cluster');
