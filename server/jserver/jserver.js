@@ -9,28 +9,11 @@ const fs = require('fs');
 const url = require('url');
 const less = require('less');
 const getIp = require('../config/getIp');
+const mime = require("./mime.js");
+const mimeTypes = require("./mime.js").types;
+const mimeBuffer = require("./mime.js").bufferTypeArr;
 const port = ETC.jserverPort || 8084;
-const contentType = {
-	"css": "text/css",
-	"html": "text/html",
-	"js": "text/javascript",
-	"json": "application/json",
-	"svg": "image/svg+xml",
-	"txt": "text/plain",
-	"xml": "text/xml",
-	"gif": "image/gif",
-	"ico": "image/x-icon",
-	"jpeg": "image/jpeg",
-	"jpg": "image/jpeg",
-	"pdf": "application/pdf",
-	"png": "image/png",
-	"swf": "application/x-shockwave-flash",
-	"tiff": "image/tiff",
-	"wav": "audio/x-wav",
-	"wma": "audio/x-ms-wma",
-	"wmv": "video/x-ms-wmv"
-};
-const bufferTypeArr = ["gif", "ico", "jpeg", "jpg", "pdf", "png", "swf", "tiff", "wav", "wma", "wmv"];
+
 //jserver
 if (cluster.isMaster) {
 	for (let i = 0; i < cpuNums; i++) {
@@ -54,40 +37,43 @@ if (cluster.isMaster) {
 			hostname = reqUrl.hostname,
 			pathname = reqUrl.pathname,
 			fileType = pathname.match(/(\.[^.]+|)$/)[0].substr(1); //取得后缀名
+		//去除参数
 		if (pathname.indexOf('?') != -1) {
 			fileType = fileType.substr(0, fileType.indexOf('?'));
+			filePath = filePath.substr(0, filePath.indexOf('?'));
 		}
-		// console.log(fileType)
-		let unicode = bufferTypeArr.includes(fileType) ? '' : 'utf-8',
-			filePath = path.resolve(__dirname, '../../apps/', PATH[HOST[hostname]], PATH.static);
+		// 
+		let filePath = path.resolve(__dirname, '../../apps/', PATH[HOST[hostname]], PATH.static),
+			contentType = mimeTypes[fileType] || 'text/plain',
+			unicode = mimeBuffer.includes(fileType) ? '' : 'utf-8';
+
 		// define writeFile fun
 		let writeFile = (fileType, data) => {
 			res.writeHead(200, {
-				"Content-Type": contentType[fileType] + ';charset=utf-8'
+				"Content-Type": contentType + ';charset=utf-8'
 			});
 			res.end(data);
 		}
+
+		//将CSS的请求转化为Less的请求
 		if (fileType == 'css') {
 			pathname = pathname.replace('/css/', '/less/').replace('.css', '.less');
 			fileType = 'less';
 		}
 		filePath += pathname;
-		//去除参数
-		if (filePath.indexOf('?') != -1) {
-			filePath = filePath.substr(0, filePath.indexOf('?'));
-		}
+
 		console.log(filePath)
 		if (!fs.existsSync(filePath)) {
 			res.writeHead(404, {
-				'Content-Type': 'text/plain'
+				'Content-Type': contentType
 			});
 			res.end(filePath + ' is lost');
 			console.log(filePath + ' is lost');
 		} else {
-			fs.readFile(filePath, unicode, (err, data) => { //读取内容
+			fs.readFile(filePath, unicode, (err, data) => {
 				if (err) {
 					res.writeHead(500, {
-						'Content-Type': 'text/plain'
+						'Content-Type': contentType
 					});
 					res.end(err);
 				}
@@ -101,7 +87,7 @@ if (cluster.isMaster) {
 					}, error => {
 						console.log(error);
 						res.writeHead(500, {
-							'Content-Type': 'text/plain'
+							'Content-Type': contentType
 						});
 						res.end(filePath + 'compile error');
 					})

@@ -9,7 +9,7 @@ html+=`<div class="test">`
 html+= _data.test 
 html+=` world</div><img src="`
 html+= staticPath 
-html+=`/img/index.png" alt=""><img src="//www.baidu.com/img/bd_logo1.png" alt=""><ul>`
+html+=`/img/index.png" alt=""><img src="//www.baidu.com/img/bd_logo1.png" alt=""><video id="bgvideo" width="100%" height="100%"  autoplay src="http://app.inke.com/inke/v/video.mp4" loop="" >您的浏览器不支持video标签，建议更新浏览器版本</video><ul>`
  _data.arr.forEach(function(item){ 
 html+=`<li><h3>`
 html+= item.title 
