@@ -1,4 +1,5 @@
 'use strict'
+const getIp = require('./getIp.js');
 global.CONFIG = require('./config.json');
 global.ETC = CONFIG.etc;
 global.PATH = CONFIG.path;
@@ -18,25 +19,8 @@ let getNowDate = () => {
 
 SITE.version = `${getNowDate()}${PUBDAY}`;
 
-
-// getIp
-let getIp = () => {
-	let ifaces = require('os').networkInterfaces();
-	let ret = [];
-	for (let dev in ifaces) {
-		ifaces[dev].forEach(details => {
-			if (details.family == 'IPv4' && !details.internal) {
-				ret.push(details.address)
-			}
-		})
-	}
-	return ret.length ? ret[0] : '127.0.0.1'
-};
-
-ETC.ip = getIp();
-
-
 // config
+ETC.ip = getIp();
 // let serverPort = Math.random() * 1000 | 0 + 6000;
 // let jserverPort = serverPort + 1;
 let staticPath = `http://${ETC.ip}:${ETC.jserverPort}`;
