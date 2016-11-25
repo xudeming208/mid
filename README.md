@@ -2,7 +2,7 @@
 nodejs mvc framework
 
 ##start framework
-1. npm install -g pm2 
+1. sudo npm install -g pm2 
     * If you don't have to install installation, please
 2. cd server
 3. npm install

@@ -19,7 +19,7 @@ html+=`</p></li>`
  }) 
 html+=`</ul><script src="`
 html+= staticPath 
-html+=`/js/page/index.js`
+html+=`/js/page/index.js?v=`
 html+= site.version 
 html+=`"></script>`
 html+=getHtml('foot.html',_data);

@@ -3,7 +3,10 @@
 		"serverPort": 8083,
 		"jserverPort": 8084,
 		"defaultMod": "index",
+		"defaultPages": "pc",
 		"server": "TIRGER 1.0.0",
+		"ip": "0.0.0.0",
+		"cpuNums": 0,
 		"compress": true
 	},
 	"path": {
@@ -15,14 +18,13 @@
 		"view": "./mvc/view/"
 	},
 	"site": {
-		"staticPath": "http://127.0.0.1:8084",
+		"staticPath": "http://127.0.0.1",
 		"pageTitle": "demo",
 		"pageDescription": "nodejs mvc frame",
 		"pageKeywords": "nodejs mvc frame"
 	},
 	"host": {
 		"127.0.0.1": "pc",
-		"192.168.82.33": "pc",
 		"h5.fedevot.test.com": "h5",
 		"pc.fedevot.test.com": "pc"
 	}

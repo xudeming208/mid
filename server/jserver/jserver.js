@@ -8,11 +8,11 @@ const fs = require('fs');
 const url = require('url');
 const less = require('less');
 const clusterEnable = require('../config/cluster');
-const getIp = require('../config/getIp');
 const mime = require("./mime.js");
 const mimeTypes = require("./mime.js").types;
 const mimeBuffer = require("./mime.js").bufferTypeArr;
-const port = ETC.jserverPort || 8084;
+let port = ETC.jserverPort || 8084;
+let ip = ETC.ip || '127.0.0.1';
 
 //jserver
 if (cluster.isMaster) {
@@ -84,6 +84,6 @@ if (cluster.isMaster) {
 			});
 		}
 	}).listen(port, () => {
-		console.log(`jserver has start on ${getIp()}:${port} at ${new Date().toLocaleString()}`.green.underline);
+		console.log(`jserver has started on ${ip}:${port} at ${new Date().toLocaleString()}`.green.underline);
 	});
 }

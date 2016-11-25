@@ -10,7 +10,7 @@ html+= _data.pageDescription || site.pageDescription
 html+=`" /><meta name="keywords" content="`
 html+= _data.pageKeywords || site.pageKeywords 
 html+=`" />`
-html+=(function(css){let cssStr ='',base = staticPath;css.forEach(function(src){cssStr += '<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css'+site.version+'">'});return cssStr; })(_data._CSSLinks)
+html+=(function(css){let cssStr ='',base = staticPath;css.forEach(function(src){cssStr += '<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css?v='+site.version+'">'});return cssStr; })(_data._CSSLinks)
 html+=`</head><body>`
 return html;}
 exports._getHtml = _getHtml
