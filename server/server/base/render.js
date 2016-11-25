@@ -99,7 +99,19 @@ let render = function(tpl, data) {
 		}
 	}
 	tplPath = path.resolve(appPath, HOST[this.hostname], PATH.view);
-	this.res.end(getHtml(tpl, data));
+	try {
+		this.res.writeHead(200, {
+			'Content-Type': 'text/html;charset=utf-8',
+			'Cache-Control': 'no-cache,no-store',
+			'X-Frame-Options': 'SAMEORIGIN',
+			'X-Xss-Protection': '1; mode=block',
+			'X-Content-Type-Options': 'nosniff',
+			'Server': ETC.server
+		})
+		this.res.end(getHtml(tpl, data) || '');
+	} catch (err) {
+		console.log(err);
+	}
 }
 
 exports.getHtml = getHtml;

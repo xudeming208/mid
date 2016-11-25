@@ -10,24 +10,26 @@ let route = (req, res) => {
 		hostname = reqUrl.hostname,
 		pathname = reqUrl.pathname,
 		modUrl = pathname.substr(1).replace(/\/+/g, '/').split('/'),
-		fileType = pathname.match(/(\.[^.]+|)$/)[0]; //取得后缀名
-	console.log(fileType)
+		fileType = pathname.match(/(\.[^.]+|)$/)[0].substr(1);
+
+	// favicon.ico
 	if (fileType == '.ico') {
-		fs.readFile('./favicon.ico', (err, html) => { //读取内容
+		fs.readFile('./favicon.ico', (err, html) => {
 			if (err) {
 				res.writeHead(500, {
 					'Content-Type': 'text/plain'
 				});
 				res.end(err);
 			}
-			// console.log(data)
 			res.writeHead(200, {
-				"Content-Type": "image/x-icon;charset=utf-8"
+				'Server': ETC.server,
+				'Content-Type': 'image/x-icon;charset=utf-8'
 			});
 			res.end(html);
 		});
 		return;
 	}
+
 	// 获取URL参数
 	console.log('---------------------------------------------');
 	console.log(reqUrl);

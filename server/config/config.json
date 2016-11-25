@@ -3,6 +3,7 @@
 		"serverPort": 8083,
 		"jserverPort": 8084,
 		"defaultMod": "index",
+		"server": "TIRGER 1.0.0",
 		"compress": true
 	},
 	"path": {

@@ -3,11 +3,11 @@ require('../config/config.js')
 require('colors');
 const cluster = require('cluster');
 const path = require('path');
-const cpuNums = ETC.cpuNums || require('os').cpus().length;
 const http = require('http');
 const fs = require('fs');
 const url = require('url');
 const less = require('less');
+const clusterEnable = require('../config/cluster');
 const getIp = require('../config/getIp');
 const mime = require("./mime.js");
 const mimeTypes = require("./mime.js").types;
@@ -16,21 +16,7 @@ const port = ETC.jserverPort || 8084;
 
 //jserver
 if (cluster.isMaster) {
-	for (let i = 0; i < cpuNums; i++) {
-		cluster.fork()
-	}
-
-	cluster.on('death', worker => {
-		console.log('worker ' + worker.pid + ' died')
-		cluster.fork()
-	})
-
-	cluster.on('exit', worker => {
-		let st = new Date
-		st = st.getFullYear() + '-' + (st.getMonth() + 1) + '-' + st.getDate() + ' ' + st.toLocaleTimeString()
-		console.log('worker ' + worker.process.pid + ' died at:', st)
-		cluster.fork()
-	})
+	clusterEnable();
 } else {
 	http.createServer((req, res) => {
 		let reqUrl = url.parse('http://' + req.headers.host + req.url, true),
@@ -50,6 +36,7 @@ if (cluster.isMaster) {
 		// define writeFile fun
 		let writeFile = (fileType, data) => {
 			res.writeHead(200, {
+				'Server': ETC.server,
 				"Content-Type": contentType + ';charset=utf-8'
 			});
 			res.end(data);
