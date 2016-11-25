@@ -69,7 +69,7 @@ const config = () => {
 	content.etc.serverPort = serverPort;
 	content.etc.jserverPort = jserverPort;
 	content.site.staticPath = staticPath;
-	fs.writeFile(fileName, content, 'utf-8', (err) => {
+	fs.writeFile(fileName, JSON.stringify(content), 'utf-8', (err) => {
 		if (err) {
 			console.log(err);
 		}
