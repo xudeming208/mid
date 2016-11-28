@@ -110,9 +110,7 @@ if (cluster.isMaster) {
 							writeFile(fileType, data);
 						}
 					});
-
 				}
-
 			});
 		}
 	}).listen(port, () => {
