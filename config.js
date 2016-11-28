@@ -33,7 +33,6 @@ const execFun = (todo, msg, displayProgress, cbk) => {
 		});
 
 		process.stdin.on('end', () => {
-			console.log(922)
 			progressFun();
 		});
 	}

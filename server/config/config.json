@@ -3,7 +3,7 @@
 		"serverPort": 8083,
 		"jserverPort": 8084,
 		"defaultMod": "index",
-		"defaultPages": "pc",
+		"defaultHost": "pc",
 		"server": "TIRGER 1.0.0",
 		"ip": "0.0.0.0",
 		"cpuNums": 0,

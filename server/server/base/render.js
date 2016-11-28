@@ -1,11 +1,10 @@
 'use strict'
 const fs = require('fs');
 const path = require('path');
-let appPath = path.resolve(__dirname, '../../../apps/');
-let tplPath = '';
 let isWindows = process.platform === 'win32';
 let interval = 20;
 let persistent = true;
+let host = 'pc';
 let quotes = '`';
 
 //watchTpl
@@ -25,7 +24,7 @@ let watchTpl = (filePath, onChg) => {
 
 // getTmpFile
 let getTmpFile = tpl => {
-	return path.resolve(__dirname, '../../tmp/', tpl.replace('.html', '.js'));
+	return path.resolve(__dirname, '../../tmp/', host + tpl.replace('.html', '.js'));
 }
 
 // complie
@@ -70,7 +69,7 @@ let complie = (filePath, tpl, content, data) => {
 
 // 获取HTML
 let getHtml = (tpl, data) => {
-	let filePath = path.resolve(tplPath, '.', tpl);
+	let filePath = path.resolve(__dirname, '../../../apps/', host, PATH.view, '.', tpl);
 	let tmpFile = getTmpFile(tpl);
 	//watchTpl
 	watchTpl(filePath, function() {
@@ -86,6 +85,10 @@ let getHtml = (tpl, data) => {
 
 // 输出HTML
 let render = function(tpl, data) {
+	// mkdir tmp
+	if (!fs.existsSync('../tmp')) {
+		fs.mkdirSync('../tmp');
+	}
 	if (this.req.__get['__pd__']) {
 		//show data  
 		var now = new Date()
@@ -98,7 +101,7 @@ let render = function(tpl, data) {
 			return;
 		}
 	}
-	tplPath = path.resolve(appPath, HOST[this.hostname], PATH.view);
+	host = HOST[this.hostname];
 	try {
 		this.res.writeHead(200, {
 			'Content-Type': 'text/html;charset=utf-8',

@@ -1,7 +1,7 @@
 // clusterEnable
 const cluster = require('cluster');
 const CFonts = require('cfonts');
-const cpuNums = ETC.cpuNums || require('os').cpus().length;
+const cpuNums = +ETC.cpuNums || require('os').cpus().length;
 module.exports = clusterEnable => {
 	for (let i = 0; i < cpuNums; i++) {
 		cluster.fork();

@@ -1,8 +1,8 @@
 const path = require('path');
-const remoteApi = require('./remoteApi.js');
+const remoteApi = require('./remoteApi');
 
 function getData(php, cbk) {
-	const loadModel = require(path.resolve(__dirname, '../../../apps/', HOST[this.hostname], PATH.model, './loadModel.js'));
+	const loadModel = require(path.resolve(__dirname, '../../../apps/', HOST[this.hostname], PATH.model, './loadModel'));
 	// console.dir(php)
 	loadModel(php);
 	// console.dir(php)

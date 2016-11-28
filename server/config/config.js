@@ -1,5 +1,5 @@
 'use strict'
-const getIp = require('./getIp.js');
+const getIp = require('./getIp')();
 global.CONFIG = require('./config.json');
 global.ETC = CONFIG.etc;
 global.PATH = CONFIG.path;
@@ -20,11 +20,7 @@ let getNowDate = () => {
 SITE.version = `${getNowDate()}${PUBDAY}`;
 
 // config
-ETC.ip = getIp();
-// let serverPort = Math.random() * 1000 | 0 + 6000;
-// let jserverPort = serverPort + 1;
+ETC.ip = getIp;
 let staticPath = `http://${ETC.ip}:${ETC.jserverPort}`;
-// ETC.serverPort = serverPort;
-// ETC.jserverPort = jserverPort;
-HOST[ETC.ip] = ETC.defaultPages;
+HOST[ETC.ip] = ETC.defaultHost;
 SITE.staticPath = staticPath;
