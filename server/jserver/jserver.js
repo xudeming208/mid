@@ -8,9 +8,10 @@ const fs = require('fs');
 const url = require('url');
 const less = require('less');
 const clusterEnable = require('../config/cluster');
-const mime = require("./mime");
+const mime = require('./mime');
 const mimeTypes = mime.types;
 const mimeBuffer = mime.bufferTypeArr;
+let maxAge = 60 * 60 * 24 * 180;
 let port = +ETC.jserverPort || 8084;
 let ip = ETC.ip || '127.0.0.1';
 
@@ -43,23 +44,13 @@ if (cluster.isMaster) {
 			contentType = mimeTypes[fileType] || 'text/plain',
 			unicode = mimeBuffer.includes(fileType) ? '' : 'utf-8';
 
-		// define writeFile fun
-		let writeFile = (fileType, data) => {
-			res.writeHead(200, {
-				'Server': ETC.server,
-				"Content-Type": contentType + ';charset=utf-8'
-			});
-			res.end(data);
-		}
-
 		//将CSS的请求转化为Less的请求
 		if (fileType == 'css') {
 			pathname = pathname.replace('/css/', '/less/').replace('.css', '.less');
 			fileType = 'less';
 		}
 		filePath += pathname;
-
-		console.log(filePath)
+		// console.log(filePath)
 		if (!fs.existsSync(filePath)) {
 			res.writeHead(404, {
 				'Content-Type': contentType
@@ -67,30 +58,61 @@ if (cluster.isMaster) {
 			res.end(filePath + ' is lost');
 			console.log(filePath + ' is lost');
 		} else {
-			fs.readFile(filePath, unicode, (err, data) => {
+			// 读取文件的最后修改时间
+			fs.stat(filePath, function(err, stat) {
 				if (err) {
-					res.writeHead(500, {
-						'Content-Type': contentType
+					throw err;
+				}
+				let lastModified = stat.mtime.toUTCString(),
+					ifModifiedSince = 'If-Modified-Since'.toLowerCase(),
+					expires = new Date();
+				expires.setTime(expires.getTime() + maxAge * 1000);
+
+				// define writeFile fun
+				let writeFile = (fileType, data) => {
+					res.writeHead(200, {
+						'Server': ETC.server,
+						'Content-Type': contentType + ';charset=utf-8',
+						'Last-Modified': lastModified,
+						'Expires': expires.toUTCString(),
+						'Cache-Control': 'max-age=' + maxAge
 					});
-					res.end(err);
+					res.end(data);
 				}
-				// less compaile
-				if (fileType == 'less') {
-					less.render(data, {
-						paths: [filePath.substr(0, filePath.lastIndexOf('/'))],
-						compress: ETC.compress
-					}).then(output => {
-						writeFile('css', output && output.css);
-					}, error => {
-						console.log(error);
-						res.writeHead(500, {
-							'Content-Type': contentType
-						});
-						res.end(filePath + 'compile error');
-					})
+
+				// 304
+				if (req.headers[ifModifiedSince] && lastModified == req.headers[ifModifiedSince]) {
+					res.writeHead(304, 'Not Modified');
+					res.end();
 				} else {
-					writeFile(fileType, data);
+					fs.readFile(filePath, unicode, (err, data) => {
+						if (err) {
+							res.writeHead(500, {
+								'Content-Type': contentType
+							});
+							res.end(err);
+						}
+						// less compaile
+						if (fileType == 'less') {
+							less.render(data, {
+								paths: [filePath.substr(0, filePath.lastIndexOf('/'))],
+								compress: ETC.compress
+							}).then(output => {
+								writeFile('css', output && output.css);
+							}, error => {
+								console.log(error);
+								res.writeHead(500, {
+									'Content-Type': contentType
+								});
+								res.end(filePath + 'compile error');
+							})
+						} else {
+							writeFile(fileType, data);
+						}
+					});
+
 				}
+
 			});
 		}
 	}).listen(port, () => {

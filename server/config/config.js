@@ -22,7 +22,7 @@ let getNowDate = () => {
 	return ('' + st.getYear()).slice(1) + leadZero(st.getMonth()) + leadZero(st.getDate()) + leadZero(st.getHours()) + leadZero(st.getMinutes());
 }
 
-SITE.version = `${getNowDate()}${PUBDAY}`;
+// SITE.version = `${getNowDate()}${PUBDAY}`;
 
 // config
 ETC.ip = getIp;
