@@ -1,10 +1,12 @@
 <%#head.html%>
 <%
-	let site = this.site || {};
-	let staticPath = this.site.staticPath;
+	var testData = {
+		's':'pc'
+	}
 %>
 <div class="test"><%= this.test %> world</div>
-<img src="<%= staticPath %>/img/index.png" alt="">
+<div><%= testData.s %></div>
+<img src="<%= this.staticPath %>/img/index.png" alt="">
 <img src="//www.baidu.com/img/bd_logo1.png" alt="">
 <video id="bgvideo" width="100%" height="100%"  autoplay controls src="http://app.inke.com/inke/v/video.mp4" loop="" >您的浏览器不支持video标签，建议更新浏览器版本</video>
 <ul>
@@ -15,5 +17,5 @@
 		</li>
 	<% }) %>
 </ul>
-<script src="<%= staticPath %>/js/page/index.js?v=<%= site.version %>"></script>
+<script src="<%= this.staticPath %>/js/page/index.js?v=<%= this.version %>"></script>
 <%#foot.html%>

@@ -1,10 +1,12 @@
 <%#head.html%>
 <%
-	var site = this.site || {};
-	var staticPath = this.site.staticPath;
+	var testData = {
+		's':'h5'
+	}
 %>
 <div class="test"><%= this.test %></div>
-<img src="<%= staticPath %>/img/index.png" alt="">
+<div><%= testData.s %></div>
+<img src="<%= this.staticPath %>/img/index.png" alt="">
 <img src="//www.baidu.com/img/bd_logo1.png" alt="">
 <ul>
 	<% this.arr.forEach(function(item){ %>
@@ -14,5 +16,5 @@
 		</li>
 	<% }) %>
 </ul>
-<script src="<%= staticPath %>/js/page/index.js?v=<%= site.version %>"></script>
+<script src="<%= this.staticPath %>/js/page/index.js?v=<%= this.version %>"></script>
 <%#foot.html%>

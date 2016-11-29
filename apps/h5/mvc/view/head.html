@@ -1,21 +1,20 @@
-<%
-	var site = this.site || {};
-	var staticPath = this.site.staticPath;
-%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title><%= this.pageTitle || site.pageTitle %></title>
-	<meta name="description" content="<%= this.pageDescription || site.pageDescription %>" />
-	<meta name="keywords" content="<%= this.pageKeywords || site.pageKeywords %>" />
+	<title><%= this.pageTitle %></title>
+	<meta name="description" content="<%= this.pageDescription %>" />
+	<meta name="keywords" content="<%= this.pageKeywords %>" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<meta content="telephone=no" name="format-detection"/>
 	<%=
 		(function(css){
-			var cssStr='',
-				base =staticPath;
+			var cssStr ='',
+				base = this.staticPath;
 			css.forEach(function(src){
-				cssStr+='<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css?v='+site.version+'">'
+				cssStr+='<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css?v='+this.version+'">'
 			});
 			return cssStr; 
 		})(this._CSSLinks)
@@ -35,5 +34,6 @@
 	    doc.addEventListener('DOMContentLoaded', getClientWidth, false);
 	})(document, window);
 	</script>
+	<script type="text/javascript" src="<%= this.staticPath %>/js/fml.js?v=<%= this.version %>"></script>
 </head>
 <body>

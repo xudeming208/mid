@@ -44,6 +44,7 @@ if (cluster.isMaster) {
 			contentType = mimeTypes[fileType] || 'text/plain',
 			unicode = mimeBuffer.includes(fileType) ? '' : 'utf-8';
 
+		console.log(reqUrl)
 		//将CSS的请求转化为Less的请求
 		if (fileType == 'css') {
 			pathname = pathname.replace('/css/', '/less/').replace('.css', '.less');

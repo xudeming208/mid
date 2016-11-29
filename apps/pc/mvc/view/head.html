@@ -1,23 +1,20 @@
-<%
-	let site = this.site || {};
-	let staticPath = this.site.staticPath;
-%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title><%= this.pageTitle || site.pageTitle %></title>
-	<meta name="description" content="<%= this.pageDescription || site.pageDescription %>" />
-	<meta name="keywords" content="<%= this.pageKeywords || site.pageKeywords %>" />
+	<title><%= this.pageTitle %></title>
+	<meta name="description" content="<%= this.pageDescription %>" />
+	<meta name="keywords" content="<%= this.pageKeywords %>" />
 	<%=
 		(function(css){
 			let cssStr ='',
-				base = staticPath;
+				base = this.staticPath;
 			css.forEach(function(src){
-				cssStr += '<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css?v='+site.version+'">'
+				cssStr += '<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css?v='+this.version+'">'
 			});
 			return cssStr; 
 		})(this._CSSLinks)
 	%>
+	<script type="text/javascript" src="<%= this.staticPath %>/js/fml.js?v=<%= this.version %>"></script>
 </head>
 <body>

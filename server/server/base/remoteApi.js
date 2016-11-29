@@ -1,6 +1,5 @@
 module.exports = remoteApi = (php, cbk) => {
 	let testData = {
-		"site": SITE,
 		"test": 'hello',
 		"arr": [{
 			"title": 'title',
@@ -13,6 +12,7 @@ module.exports = remoteApi = (php, cbk) => {
 			"content": 'content3'
 		}]
 	}
+	Object.assign(testData,SITE);
 	//模拟接口延迟
 	setTimeout(function() {
 		cbk(testData)

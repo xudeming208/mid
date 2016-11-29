@@ -63,6 +63,7 @@ let route = (req, res) => {
 		modParam = mods[2] || null;
 	// console.log(reqUrl.hostname)
 	let modPath = path.resolve(__dirname, '../../apps/', PATH[HOST[hostname]], PATH.controller, modName + '.js');
+	console.log(reqUrl)
 	// console.log(modPath);
 	if (!fs.existsSync(modPath)) {
 		res.writeHead(404, {
@@ -82,10 +83,11 @@ let route = (req, res) => {
 			getData: getData,
 			render: render
 		};
-		// console.log(req.headers)
-		for (let i in extendObj) {
-			modJs['controllerObj'][i] = extendObj[i];
-		}
+		// // console.log(req.headers)
+		// for (let i in extendObj) {
+		// 	modJs['controllerObj'][i] = extendObj[i];
+		// }
+		Object.assign(modJs['controllerObj'],extendObj);
 		modJs['controllerObj'][modFun](modParam);
 	}
 }
