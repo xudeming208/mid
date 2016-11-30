@@ -100,6 +100,6 @@ if (cluster.isMaster) {
 			});
 		}
 	}).listen(port, () => {
-		console.log(`jserver has started on ${ip}:${port} at ${new Date().toLocaleString()}`.green.underline);
+		console.log(`the Jserver has started on ${ip}:${port} at ${new Date().toLocaleString()}`.green.underline);
 	});
 }

@@ -24,7 +24,7 @@ let watchTpl = (filePath, onChg) => {
 
 // getTmpFile
 let getTmpFile = tpl => {
-	return path.resolve(__dirname, '../../tmp/', host + tpl.replace('.html', '.js'));
+	return path.resolve(__dirname, '../../tmp/', host + tpl.replace(/\//g,'_').replace('.html', '.js'));
 }
 
 // complie

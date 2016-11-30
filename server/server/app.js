@@ -13,17 +13,17 @@ let ip = ETC.ip || '127.0.0.1';
 // server
 if (cluster.isMaster) {
 	// 重启清除缓存
-	// exec(['cd ../tmp', 'rm -rf *'].join(' && '), function(error, stdout, stderr) {
-	// 	if (error) {
-	// 		console.log(error)
-	// 	}
-	// 	console.log('Clear cache finised');
-	// })
+	exec(['cd ../tmp', 'rm -rf *'].join(' && '), function(error, stdout, stderr) {
+		if (error) {
+			console.log(error)
+		}
+		console.log('Clear cache finised');
+	})
 	clusterEnable();
 } else {
 	http.createServer((req, res) => {
 		router(req, res);
 	}).listen(port, () => {
-		console.log(`Server has start on ${ip}:${port} at ${new Date().toLocaleString()}`.green.underline);
+		console.log(`the Server has started on ${ip}:${port} at ${new Date().toLocaleString()}`.green.underline);
 	});
 }
