@@ -69,7 +69,7 @@ let complie = (filePath, tpl, content, data) => {
 
 // 获取HTML
 let getHtml = (tpl, data) => {
-	let filePath = path.resolve(__dirname, '../../../apps/', host, PATH.view, '.', tpl);
+	let filePath = path.resolve(__dirname, '../', PATH.apps, host, PATH.view, '.', tpl);
 	let tmpFile = getTmpFile(tpl);
 	//watchTpl
 	watchTpl(filePath, function() {

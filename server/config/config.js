@@ -26,6 +26,6 @@ let getNowDate = () => {
 
 // config
 ETC.ip = getIp;
-let staticPath = `http://${ETC.ip}:${ETC.jserverPort}`;
+let staticHost = `http://${ETC.ip}:${ETC.jserverPort}`;
 HOST[ETC.ip] = ETC.defaultHost;
-SITE.staticPath = staticPath;
+SITE.staticHost = staticHost;

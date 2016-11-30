@@ -3,7 +3,7 @@ let getHtml = require('/Users/inke/Documents/xdm/tirger/server/server/base/rende
 let _getHtml = _data => {
 let html='';
 html+=`<script type="text/javascript" src="`
-html+= _data.staticPath 
+html+= _data.staticHost + _data.pcPath 
 html+=`/js/jquery.js?v=`
 html+= _data.version 
 html+=`"></script></body></html>`

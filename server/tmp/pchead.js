@@ -9,9 +9,9 @@ html+= _data.pageDescription
 html+=`" /><meta name="keywords" content="`
 html+= _data.pageKeywords 
 html+=`" />`
-html+=(function(css){let cssStr ='',base = _data.staticPath;css.forEach(function(src){cssStr += '<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css?v='+_data.version+'">'});return cssStr; })(_data._CSSLinks)
+html+=(function(css){let cssStr ='',base = _data.staticHost + _data.pcPath;css.forEach(function(src){cssStr += '<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css?v='+_data.version+'">'});return cssStr; })(_data._CSSLinks)
 html+=`<script type="text/javascript" src="`
-html+= _data.staticPath 
+html+= _data.staticHost + _data.pcPath 
 html+=`/js/fml.js?v=`
 html+= _data.version 
 html+=`"></script></head><body>`

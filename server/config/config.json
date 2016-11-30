@@ -10,6 +10,7 @@
 		"compress": true
 	},
 	"path": {
+		"apps": "../../apps/",
 		"pc": "./pc",
 		"h5": "./h5",
 		"static": "./static",
@@ -18,7 +19,9 @@
 		"view": "./mvc/view/"
 	},
 	"site": {
-		"staticPath": "http://127.0.0.1",
+		"staticHost": "http://127.0.0.1",
+		"pcPath": "/pc/static",
+		"h5Path": "/h5/static",
 		"pageTitle": "demo",
 		"pageDescription": "nodejs mvc frame",
 		"pageKeywords": "nodejs mvc frame"

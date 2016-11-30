@@ -8,13 +8,13 @@
 	<%=
 		(function(css){
 			let cssStr ='',
-				base = this.staticPath;
+				base = this.staticHost + this.pcPath;
 			css.forEach(function(src){
 				cssStr += '<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css?v='+this.version+'">'
 			});
 			return cssStr; 
 		})(this._CSSLinks)
 	%>
-	<script type="text/javascript" src="<%= this.staticPath %>/js/fml.js?v=<%= this.version %>"></script>
+	<script type="text/javascript" src="<%= this.staticHost + this.pcPath %>/js/fml.js?v=<%= this.version %>"></script>
 </head>
 <body>

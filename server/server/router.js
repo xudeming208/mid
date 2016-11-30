@@ -62,14 +62,14 @@ let route = (req, res) => {
 		modFun = mods[1] || 'index',
 		modParam = mods[2] || null;
 	// console.log(reqUrl.hostname)
-	let modPath = path.resolve(__dirname, '../../apps/', PATH[HOST[hostname]], PATH.controller, modName + '.js');
+	let modPath = path.resolve(__dirname, PATH.apps, PATH[HOST[hostname]], PATH.controller, modName + '.js');
 	console.log(reqUrl)
-	// console.log(modPath);
+		// console.log(modPath);
 	if (!fs.existsSync(modPath)) {
 		res.writeHead(404, {
 			'Content-Type': 'text/plain'
 		});
-		res.end('404');
+		res.end('404 Not Found');
 		console.log('cannot found modPath:\n' + modPath);
 	} else {
 		// console.log(req)
@@ -83,11 +83,7 @@ let route = (req, res) => {
 			getData: getData,
 			render: render
 		};
-		// // console.log(req.headers)
-		// for (let i in extendObj) {
-		// 	modJs['controllerObj'][i] = extendObj[i];
-		// }
-		Object.assign(modJs['controllerObj'],extendObj);
+		Object.assign(modJs['controllerObj'], extendObj);
 		modJs['controllerObj'][modFun](modParam);
 	}
 }

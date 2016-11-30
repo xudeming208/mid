@@ -6,7 +6,7 @@
 %>
 <div class="test"><%= this.test %></div>
 <div><%= testData.s %></div>
-<img src="<%= this.staticPath %>/img/index.png" alt="">
+<img src="<%= this.staticHost + this.h5Path %>/img/index.png" alt="">
 <img src="//www.baidu.com/img/bd_logo1.png" alt="">
 <ul>
 	<% this.arr.forEach(function(item){ %>
@@ -16,5 +16,5 @@
 		</li>
 	<% }) %>
 </ul>
-<script src="<%= this.staticPath %>/js/page/index.js?v=<%= this.version %>"></script>
+<script src="<%= this.staticHost + this.h5Path %>/js/page/index.js?v=<%= this.version %>"></script>
 <%#foot.html%>

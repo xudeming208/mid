@@ -10,7 +10,7 @@ html+= _data.test
 html+=`</div><div>`
 html+= testData.s 
 html+=`</div><img src="`
-html+= _data.staticPath 
+html+= _data.staticHost + _data.h5Path 
 html+=`/img/index.png" alt=""><img src="//www.baidu.com/img/bd_logo1.png" alt=""><ul>`
  _data.arr.forEach(function(item){ 
 html+=`<li><h3>`
@@ -20,7 +20,7 @@ html+= item.content
 html+=`</p></li>`
  }) 
 html+=`</ul><script src="`
-html+= _data.staticPath 
+html+= _data.staticHost + _data.h5Path 
 html+=`/js/page/index.js?v=`
 html+= _data.version 
 html+=`"></script>`

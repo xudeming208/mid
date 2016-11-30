@@ -64,10 +64,10 @@ const config = () => {
 	let serverPort = Math.random() * 1000 | 0 + 6000;
 	let jserverPort = serverPort + 1;
 	let ip = require(filePath + '/getIp.js')();
-	let staticPath = `http://${ip}:${jserverPort}`;
+	let staticHost = `http://${ip}:${jserverPort}`;
 	content.etc.serverPort = serverPort;
 	content.etc.jserverPort = jserverPort;
-	content.site.staticPath = staticPath;
+	content.site.staticHost = staticHost;
 	fs.writeFile(fileName, JSON.stringify(content), 'utf-8', (err) => {
 		if (err) {
 			console.log(err);

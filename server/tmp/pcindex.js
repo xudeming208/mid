@@ -10,7 +10,7 @@ html+= _data.test
 html+=` world</div><div>`
 html+= testData.s 
 html+=`</div><img src="`
-html+= _data.staticPath 
+html+= _data.staticHost + _data.pcPath 
 html+=`/img/index.png" alt=""><img src="//www.baidu.com/img/bd_logo1.png" alt=""><video id="bgvideo" width="100%" height="100%"  autoplay controls src="http://app.inke.com/inke/v/video.mp4" loop="" >您的浏览器不支持video标签，建议更新浏览器版本</video><ul>`
  _data.arr.forEach(function(item){ 
 html+=`<li><h3>`
@@ -20,7 +20,7 @@ html+= item.content
 html+=`</p></li>`
  }) 
 html+=`</ul><script src="`
-html+= _data.staticPath 
+html+= _data.staticHost + _data.pcPath 
 html+=`/js/page/index.js?v=`
 html+= _data.version 
 html+=`"></script>`

@@ -20,27 +20,12 @@ if (cluster.isMaster) {
 	clusterEnable();
 } else {
 	http.createServer((req, res) => {
-		try {
-			var reqUrl = url.parse('http://' + req.headers.host + req.url, true);
-		} catch (err) {
-			console.log('Route Parse Error:', req.url)
-			res.writeHead(500, {
-				'Content-Type': 'text/plain'
-			});
-			res.end('url is wrong');
-			return
-		}
-		let hostname = reqUrl.hostname,
-			pathname = reqUrl.pathname,
+		let reqUrl = url.parse(req.url);
+		let pathname = reqUrl.pathname,
 			fileType = pathname.match(/(\.[^.]+|)$/)[0].substr(1); //取得后缀名
-		//去除参数
-		if (pathname.indexOf('?') != -1) {
-			fileType = fileType.substr(0, fileType.indexOf('?'));
-			filePath = filePath.substr(0, filePath.indexOf('?'));
-		}
-		// 
+
 		// console.dir(CONFIG)
-		let filePath = path.resolve(__dirname, '../../apps/', PATH[HOST[hostname]], PATH.static),
+		let filePath = path.resolve(__dirname, PATH.apps),
 			contentType = mimeTypes[fileType] || 'text/plain',
 			unicode = mimeBuffer.includes(fileType) ? '' : 'utf-8';
 
@@ -52,11 +37,11 @@ if (cluster.isMaster) {
 		}
 		filePath += pathname;
 		// console.log(filePath)
-		if (!fs.existsSync(filePath)) {
+		if (!fs.existsSync(filePath) || filePath.match(/\bmvc\b/)) {
 			res.writeHead(404, {
 				'Content-Type': contentType
 			});
-			res.end(filePath + ' is lost');
+			res.end('404 Not Found');
 			console.log(filePath + ' is lost');
 		} else {
 			// 读取文件的最后修改时间
