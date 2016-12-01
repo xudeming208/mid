@@ -2,40 +2,41 @@ const fs = require('fs'),
 	path = require('path'),
 	exec = require('child_process').exec;
 
+//执行之前确保已经全局安装了pm2
 // execFun
-const execFun = (todo, msg, displayProgress, cbk) => {
+const execFun = (todo, msg, cbk) => {
 	!Array.isArray(todo) && (todo = [todo]);
 	let t = '';
-	let isFirst = true;
 	let progressFun = () => {
 		process.stdout.write(`'${msg}'\n wait.`);
 		t = setInterval(function() {
 			process.stdout.write('.');
 		}, 500);
 	}
-	if (displayProgress) {
-		progressFun();
-	} else {
-		process.stdin.setEncoding('utf8');
-		process.stdin.on('readable', () => {
-			let chunk = process.stdin.read();
-			if (chunk !== null) {
-				chunk = chunk.slice(0, -2);
-				if (isFirst) {
-					process.stdout.write(`请再次敲回车确认密码\n`);
-				}
-				isFirst = false;
-			}
-			if (chunk === '') {
-				process.stdin.emit('end');
-				return
-			}
-		});
+	progressFun();
+	// if (displayProgress) {
+	// 	progressFun();
+	// } else {
+	// 	process.stdin.setEncoding('utf8');
+	// 	process.stdin.on('readable', () => {
+	// 		let chunk = process.stdin.read();
+	// 		if (chunk !== null) {
+	// 			chunk = chunk.slice(0, -2);
+	// 			if (isFirst) {
+	// 				process.stdout.write(`请再次敲回车确认密码\n`);
+	// 			}
+	// 			isFirst = false;
+	// 		}
+	// 		if (chunk === '') {
+	// 			process.stdin.emit('end');
+	// 			return
+	// 		}
+	// 	});
 
-		process.stdin.on('end', () => {
-			progressFun();
-		});
-	}
+	// 	process.stdin.on('end', () => {
+	// 		progressFun();
+	// 	});
+	// }
 	exec(todo.join(' && '), function(error, stdout, stderr) {
 		if (error) {
 			console.log(error)
@@ -47,9 +48,9 @@ const execFun = (todo, msg, displayProgress, cbk) => {
 }
 
 // install pm2
-const installPm2 = () => {
-	execFun('sudo npm install -g pm2', 'install pm2', false, installPackage);
-}
+// const installPm2 = () => {
+// 	execFun('sudo npm install -g pm2', 'install pm2', false, installPackage);
+// }
 
 // install package
 const installPackage = () => {
@@ -58,12 +59,12 @@ const installPackage = () => {
 
 // config
 const config = () => {
-	let filePath = path.resolve(__dirname, './tirger/server/config');
-	let fileName = path.resolve(filePath, './config.json');
+	let tirgerPath = path.resolve(__dirname, './tirger/server');
+	let fileName = path.resolve(tirgerPath, './config/config.json');
 	let content = JSON.parse(fs.readFileSync(fileName, 'utf-8'));
 	let serverPort = Math.random() * 1000 | 0 + 6000;
 	let jserverPort = serverPort + 1;
-	let ip = require(filePath + '/getIp.js')();
+	let ip = require(tirgerPath + '/server/server/base/getIp')();
 	let staticHost = `http://${ip}:${jserverPort}`;
 	content.etc.serverPort = serverPort;
 	content.etc.jserverPort = jserverPort;
@@ -75,11 +76,13 @@ const config = () => {
 		// exec framework
 		// let npmPath = path.resolve(__dirname, './tirger/server');
 		// require(npmPath + '/node_modules/colors/safe.js');
-		execFun(['cd tirger/server', 'npm run start'], 'framework start', true, function() {
+		execFun(['cd tirger/server', 'npm run start'], 'framework start', function() {
 			console.log(`In the browser input **127.0.0.1:${serverPort}** or **${ip}:${serverPort}**, and then can see the pages`)
+			let openBrower = require(tirgerPath + '/server/jserver/openBrower');
+			openBrower(`http://${ip}:${serverPort}`);
 		});
 	})
 }
 
 
-execFun('git clone https://github.com/xudeming208/tirger.git', 'git clone', true, installPm2);
+execFun('git clone https://github.com/xudeming208/tirger.git', 'git clone', installPackage);

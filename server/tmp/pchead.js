@@ -2,18 +2,37 @@
 let getHtml = require('/Users/inke/Documents/xdm/tirger/server/server/base/render.js').getHtml;
 let _getHtml = _data => {
 let html='';
-html+=`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>`
+html+=`<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>`
 html+= _data.pageTitle 
-html+=`</title><meta name="description" content="`
+html+=`</title>
+	<meta name="description" content="`
 html+= _data.pageDescription 
-html+=`" /><meta name="keywords" content="`
+html+=`" />
+	<meta name="keywords" content="`
 html+= _data.pageKeywords 
-html+=`" />`
-html+=(function(css){let cssStr ='',base = _data.staticHost + _data.pcPath;css.forEach(function(src){cssStr += '<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css?v='+_data.version+'">'});return cssStr; })(_data._CSSLinks)
-html+=`<script type="text/javascript" src="`
+html+=`" />
+	`
+html+=
+		(function(css){
+			let cssStr ='',
+				base = _data.staticHost + _data.pcPath;
+			css.forEach(function(src){
+				cssStr += '<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css?v='+_data.version+'">'
+			});
+			return cssStr; 
+		})(_data._CSSLinks)
+	
+html+=`
+	<script type="text/javascript" src="`
 html+= _data.staticHost + _data.pcPath 
 html+=`/js/fml.js?v=`
 html+= _data.version 
-html+=`"></script></head><body>`
+html+=`"></script>
+</head>
+<body>`
 return html;}
 exports._getHtml = _getHtml

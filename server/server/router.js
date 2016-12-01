@@ -2,6 +2,7 @@
 const url = require('url');
 const path = require('path');
 const fs = require('fs');
+const watcher = require("./base/watch");
 const getData = require('./base/getData');
 const render = require('./base/render').render;
 
@@ -40,7 +41,7 @@ let route = (req, res) => {
 	// }
 
 	// 获取URL参数
-	console.log('---------------------------------------------');
+	// console.log('---------------------------------------------');
 	// console.log(reqUrl);
 	req.__get = {};
 	for (var k in reqUrl.query) {
@@ -62,9 +63,11 @@ let route = (req, res) => {
 		modFun = mods[1] || 'index',
 		modParam = mods[2] || null;
 	// console.log(reqUrl.hostname)
-	let modPath = path.resolve(__dirname, PATH.apps, PATH[HOST[hostname]], PATH.controller, modName + '.js');
-	console.log(reqUrl)
-		// console.log(modPath);
+	let controllerPath = path.resolve(__dirname, PATH.apps, PATH[HOST[hostname]], PATH.controller),
+		modPath = path.resolve(controllerPath, modName + '.js');
+	// console.log(reqUrl)
+
+	// console.log(modPath);
 	if (!fs.existsSync(modPath)) {
 		res.writeHead(404, {
 			'Content-Type': 'text/plain'
@@ -77,13 +80,16 @@ let route = (req, res) => {
 		// console.log(modJs)
 		// console.log(modFun)
 		let extendObj = {
-			hostname: hostname,
-			req: req,
-			res: res,
-			getData: getData,
-			render: render
+			hostname,
+			req,
+			res,
+			getData,
+			render
 		};
 		Object.assign(modJs['controllerObj'], extendObj);
+		// watcher
+		watcher.takeCare(controllerPath);
+
 		modJs['controllerObj'][modFun](modParam);
 	}
 }

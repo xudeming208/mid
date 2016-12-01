@@ -6,6 +6,8 @@ html+=`<script type="text/javascript" src="`
 html+= _data.staticHost + _data.pcPath 
 html+=`/js/jquery.js?v=`
 html+= _data.version 
-html+=`"></script></body></html>`
+html+=`"></script>
+</body>
+</html>`
 return html;}
 exports._getHtml = _getHtml

@@ -15,9 +15,16 @@ let maxAge = 60 * 60 * 24 * 180;
 let port = +ETC.jserverPort || 8084;
 let ip = ETC.ip || '127.0.0.1';
 
+//自动打开浏览器
+let openBrowerFun = () => {
+	const openBrower = require('./openBrower');
+	openBrower(`http://${ip}:${port-1}`);
+}
+
 //jserver
 if (cluster.isMaster) {
 	clusterEnable();
+	openBrowerFun();
 } else {
 	http.createServer((req, res) => {
 		let reqUrl = url.parse(req.url);
@@ -29,7 +36,7 @@ if (cluster.isMaster) {
 			contentType = mimeTypes[fileType] || 'text/plain',
 			unicode = mimeBuffer.includes(fileType) ? '' : 'utf-8';
 
-		console.log(reqUrl)
+		// console.log(reqUrl)
 		//将CSS的请求转化为Less的请求
 		if (fileType == 'css') {
 			pathname = pathname.replace('/css/', '/less/').replace('.css', '.less');

@@ -1,6 +1,5 @@
 // clusterEnable
 const cluster = require('cluster');
-const CFonts = require('cfonts');
 const cpuNums = +ETC.cpuNums || require('os').cpus().length;
 module.exports = clusterEnable => {
 	for (let i = 0; i < cpuNums; i++) {
@@ -18,6 +17,7 @@ module.exports = clusterEnable => {
 	})
 
 	// CFonts
+	const CFonts = require('cfonts');
 	CFonts.say('TIRGER', {
 		font: '3d',
 		align: 'left',
