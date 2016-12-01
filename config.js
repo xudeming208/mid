@@ -54,7 +54,7 @@ const execFun = (todo, msg, cbk) => {
 
 // install package
 const installPackage = () => {
-	execFun(['cd tirger/server', 'rm -rf node_modules', 'rm -rf tmp', 'npm install'], 'install package', true, config);
+	execFun(['cd tirger/server', 'rm -rf node_modules', 'rm -rf tmp', 'npm install'], 'install package', config);
 }
 
 // config
