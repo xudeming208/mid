@@ -64,7 +64,7 @@ const config = () => {
 	let content = JSON.parse(fs.readFileSync(fileName, 'utf-8'));
 	let serverPort = Math.random() * 1000 | 0 + 6000;
 	let jserverPort = serverPort + 1;
-	let ip = require(tirgerPath + '/server/server/base/getIp')();
+	let ip = require(tirgerPath + '/server/base/getIp')();
 	let staticHost = `http://${ip}:${jserverPort}`;
 	content.etc.serverPort = serverPort;
 	content.etc.jserverPort = jserverPort;
@@ -78,7 +78,7 @@ const config = () => {
 		// require(npmPath + '/node_modules/colors/safe.js');
 		execFun(['cd tirger/server', 'npm run start'], 'framework start', function() {
 			console.log(`In the browser input **127.0.0.1:${serverPort}** or **${ip}:${serverPort}**, and then can see the pages`)
-			let openBrower = require(tirgerPath + '/server/jserver/openBrower');
+			let openBrower = require(tirgerPath + '/jserver/openBrower');
 			openBrower(`http://${ip}:${serverPort}`);
 		});
 	})
