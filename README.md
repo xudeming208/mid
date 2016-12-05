@@ -4,7 +4,7 @@ nodejs mvc framework
 ##start framework
 1. sudo npm install -g pm2 
     * If you haven't installed pm2, please install it
-2. cd server
+2. cd nest
 3. npm install
     * If you find that there have been `node_modules` directory, delete, and then execute the `npm install`
 4. npm run start

@@ -24,7 +24,7 @@ let watchTpl = (filePath, onChg) => {
 
 // getTmpFile
 let getTmpFile = tpl => {
-	return path.resolve(__dirname, '../../tmp/', host + tpl.replace(/\//g,'_').replace('.html', '.js'));
+	return path.resolve(__dirname, '../../../tmp/', host + tpl.replace(/\//g, '_').replace('.html', '.js'));
 }
 
 // complie
@@ -86,8 +86,9 @@ let getHtml = (tpl, data) => {
 // 输出HTML
 let render = function(tpl, data) {
 	// mkdir tmp
-	if (!fs.existsSync('../tmp')) {
-		fs.mkdirSync('../tmp');
+	let tmpPath = path.resolve(__dirname, '../../../tmp');
+	if (!fs.existsSync(tmpPath)) {
+		fs.mkdirSync(tmpPath);
 	}
 	if (this.req.__get['__pd__']) {
 		//show data  

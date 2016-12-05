@@ -16,9 +16,9 @@
     "url": "https://github.com/xudeming208/tirger"
   },
   "scripts": {
-    "start": "pm2 start server/app.js jserver/jserver.js -i 0",
+    "start": "pm2 start server/app.js jserver/jserver.js -i 0 -f",
     "stop": "pm2 delete all",
-    "restart": "rm -rf tmp && pm2 restart all",
+    "restart": "cd .. && rm -rf tmp && cd nest && pm2 restart all",
     "logs": "pm2 reload all && pm2 logs"
   },
   "dependencies": {

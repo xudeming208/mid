@@ -21,9 +21,11 @@ let init = () => {
 
 	// 重启服务清除缓存,包括静态服务器(主要是304)
 	if (ETC.clearCatch) {
+		let tmpPath = path.resolve(__dirname, '../../tmp');
+		// console.log(tmpPath)
 		// server
-		if (fs.existsSync('../tmp')) {
-			exec(['cd ../tmp', 'rm -rf *'].join(' && '), function(error, stdout, stderr) {
+		if (fs.existsSync(tmpPath)) {
+			exec(['cd ' + tmpPath, 'rm -rf *'].join(' && '), function(error, stdout, stderr) {
 				if (error) {
 					console.log(error)
 				}

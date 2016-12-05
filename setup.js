@@ -54,12 +54,12 @@ const execFun = (todo, msg, cbk) => {
 
 // install package
 const installPackage = () => {
-	execFun(['cd tirger/server', 'rm -rf node_modules', 'rm -rf tmp', 'npm install'], 'install package', config);
+	execFun(['cd tirger', 'rm -rf tmp', 'cd nest', 'rm -rf node_modules', 'npm install'], 'install package', config);
 }
 
 // config
 const config = () => {
-	let tirgerPath = path.resolve(__dirname, './tirger/server');
+	let tirgerPath = path.resolve(__dirname, './tirger/nest');
 	let fileName = path.resolve(tirgerPath, './config/config.json');
 	let content = JSON.parse(fs.readFileSync(fileName, 'utf-8'));
 	let serverPort = Math.random() * 1000 | 0 + 6000;
@@ -74,9 +74,9 @@ const config = () => {
 			console.log(err);
 		}
 		// exec framework
-		// let npmPath = path.resolve(__dirname, './tirger/server');
+		// let npmPath = path.resolve(__dirname, './tirger/nest');
 		// require(npmPath + '/node_modules/colors/safe.js');
-		execFun(['cd tirger/server', 'npm run start'], 'framework start', function() {
+		execFun(['cd tirger/nest', 'npm run start'], 'framework start', function() {
 			console.log(`In the browser input **127.0.0.1:${serverPort}** or **${ip}:${serverPort}**, and then can see the pages`)
 			let openBrower = require(tirgerPath + '/jserver/openBrower');
 			openBrower(`http://${ip}:${serverPort}`);

@@ -1,0 +1,36 @@
+{
+	"etc": {
+		"serverPort": 8083,
+		"jserverPort": 8084,
+		"defaultMod": "index",
+		"defaultHost": "pc",
+		"server": "TIRGER 1.0.0",
+		"ip": "192.168.82.33",
+		"clearCatch": true,
+		"compress": true
+	},
+	"path": {
+		"apps": "../../apps/",
+		"pc": "./pc",
+		"h5": "./h5",
+		"static": "./static",
+		"controller": "./mvc/controller/",
+		"model": "./mvc/model/",
+		"view": "./mvc/view/"
+	},
+	"site": {
+		"staticHost": "http://192.168.82.33:8084",
+		"version": "16110513420581.011",
+		"pcPath": "/pc/static",
+		"h5Path": "/h5/static",
+		"pageTitle": "demo",
+		"pageDescription": "nodejs mvc frame",
+		"pageKeywords": "nodejs mvc frame"
+	},
+	"host": {
+		"127.0.0.1": "pc",
+		"h5.fedevot.test.com": "h5",
+		"pc.fedevot.test.com": "pc",
+		"192.168.82.33": "pc"
+	}
+}
