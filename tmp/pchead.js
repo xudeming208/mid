@@ -1,5 +1,5 @@
 /* /Users/inke/Documents/xdm/tirger/apps/pc/mvc/view/head.html */
-let getHtml = require('/Users/inke/Documents/xdm/tirger/server/server/base/render.js').getHtml;
+let getHtml = require('/Users/inke/Documents/xdm/tirger/nest/server/base/render.js').getHtml;
 let _getHtml = _data => {
 let html='';
 html+=`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>`
