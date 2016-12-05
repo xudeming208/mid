@@ -4,6 +4,7 @@ require('colors');
 const cluster = require('cluster');
 const http = require('http');
 const fs = require('fs');
+const path = require('path');
 const exec = require('child_process').exec;
 const clusterEnable = require('../config/cluster');
 const router = require('./router');
@@ -12,7 +13,7 @@ let ip = require('./base/getIp')() || '127.0.0.1';
 
 let init = () => {
 	// config
-	let configPath = '../config/config.json';
+	let configPath = path.resolve(__dirname, '../config/config.json');
 	let content = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
 	content.etc.ip = ip;
 	content.host[ip] = ETC.defaultHost;

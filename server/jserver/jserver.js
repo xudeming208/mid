@@ -16,15 +16,15 @@ let port = +ETC.jserverPort || 8084;
 let ip = ETC.ip || '127.0.0.1';
 
 //自动打开浏览器
-let openBrowerFun = () => {
-	const openBrower = require('./openBrower');
-	openBrower(`http://${ip}:${port-1}`);
-}
+// let openBrowerFun = () => {
+// 	const openBrower = require('./openBrower');
+// 	openBrower(`http://${ip}:${port-1}`);
+// }
 
 //jserver
 if (cluster.isMaster) {
 	clusterEnable();
-	openBrowerFun();
+	// openBrowerFun();
 } else {
 	http.createServer((req, res) => {
 		let reqUrl = url.parse(req.url);
