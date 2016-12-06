@@ -9,11 +9,23 @@ html+= _data.pageDescription
 html+=`" /><meta name="keywords" content="`
 html+= _data.pageKeywords 
 html+=`" />`
-html+=(function(css){let cssStr ='',base = _data.staticHost + _data.pcPath;css.forEach(function(src){cssStr += '<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css?v='+_data.version+'">'});return cssStr; })(_data._CSSLinks)
+html+=(function(link ,cssmods){let cssStr ='',version = _data.version,base = _data.staticHost + _data.pcPath + '/css/';if(link.length){link.map(src => {cssStr += '<link rel="stylesheet" href="' + base + src +'.css?' + version + '">'});return cssStr;}if(cssmods.length){cssmods = '~' + cssmods.join('+');cssStr += '<link rel="stylesheet" href="' + base + cssmods + '?' + version + '">';}return cssStr; })(_data._CSSLinks ,_data._CSSmods)
+html+=``
+ if(_data._CSSstack.length){ 
+html+=`<style>`
+html+= _data._CSSstack.join("\n"); 
+html+=`</style>`
+ } 
 html+=`<script type="text/javascript" src="`
 html+= _data.staticHost + _data.pcPath 
 html+=`/js/fml.js?v=`
 html+= _data.version 
-html+=`"></script></head><body>`
+html+=`"></script><script>fml.setOptions({'sversion' : '`
+html+= _data.version 
+html+=`','defer' : `
+html+= _data.JS_Defer 
+html+=`,'modulebase' : '`
+html+= _data.staticHost + _data.pcPath 
+html+=`' + '/js/'});</script></head><body>`
 return html;}
 exports._getHtml = _getHtml

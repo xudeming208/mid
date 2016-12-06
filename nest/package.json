@@ -1,9 +1,9 @@
 {
-  "name": "app",
+  "name": "tirger",
   "version": "1.0.0",
-  "author": "徐德明",
+  "author": "xudeming",
   "email": "xudeming208@126.com",
-  "description": "nodejs MVC 框架",
+  "description": "nodejs MVC framework",
   "bin": {
     "app": "app"
   },

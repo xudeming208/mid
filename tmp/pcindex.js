@@ -25,15 +25,11 @@ html+=`</h3><p>`
 html+= item.content 
 html+=`</p></li>`
  }) 
-html+=`</ul><script src="`
-html+= _data.staticHost + _data.pcPath 
-html+=`/js/page/index.js?v=`
-html+= _data.version 
-html+=`"></script><script src="`
-html+= _data.staticHost + _data.pcPath 
-html+=`/js/page/test/test.js?v=`
-html+= _data.version 
-html+=`"></script>`
+html+=`</ul>`
+ _data.useModule( [ 'page/index' ] ) 
+html+=``
+ _data.useModule( [ 'page/test/test' ] ) 
+html+=``
 html+=getHtml('foot.html',_data);
 html+=``
 return html;}

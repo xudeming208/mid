@@ -84,7 +84,7 @@ let getHtml = (tpl, data) => {
 }
 
 // 输出HTML
-let render = function(tpl, data) {
+let render = function(tpl, data = {}) {
 	// mkdir tmp
 	let tmpPath = path.resolve(__dirname, '../../../tmp');
 	if (!fs.existsSync(tmpPath)) {
@@ -103,6 +103,17 @@ let render = function(tpl, data) {
 		}
 	}
 	host = HOST[this.hostname];
+	['_JSLinks', '_CSSLinks', '_JSstack', '_CSSstack', '_JSmods', '_CSSmods'].map(function(item) {
+		if (!data.hasOwnProperty(item)) {
+			data[item] = [];
+		}
+	});
+	data.useModule = this.useModule.bind(data);
+	//combo css
+	if (ETC.combo) {
+		data._CSSmods = [].concat(data._CSSLinks);
+		data._CSSLinks.length = 0;
+	}
 	try {
 		this.res.writeHead(200, {
 			'Content-Type': 'text/html;charset=utf-8',

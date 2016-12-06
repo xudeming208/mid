@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const watcher = require("./base/watch");
 const getData = require('./base/getData');
+const useModule = require('./base/useModule');
 const render = require('./base/render').render;
 
 let route = (req, res) => {
@@ -84,6 +85,7 @@ let route = (req, res) => {
 			req,
 			res,
 			getData,
+			useModule,
 			render
 		};
 		Object.assign(modJs['controllerObj'], extendObj);

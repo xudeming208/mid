@@ -6,15 +6,33 @@
 	<meta name="description" content="<%= this.pageDescription %>" />
 	<meta name="keywords" content="<%= this.pageKeywords %>" />
 	<%=
-		(function(css){
+		(function(link ,cssmods){
 			let cssStr ='',
-				base = this.staticHost + this.pcPath;
-			css.forEach(function(src){
-				cssStr += '<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css?v='+this.version+'">'
-			});
+				version = this.version,
+				base = this.staticHost + this.pcPath + '/css/';
+			if(link.length){
+				link.map(src => {
+					cssStr += '<link rel="stylesheet" href="' + base + src +'.css?' + version + '">'
+				});
+				return cssStr;
+			}
+			if(cssmods.length){
+				cssmods = '~' + cssmods.join('+');
+				cssStr += '<link rel="stylesheet" href="' + base + cssmods + '?' + version + '">';
+			}
 			return cssStr; 
-		})(this._CSSLinks)
+		})(this._CSSLinks ,this._CSSmods)
 	%>
+	<% if(this._CSSstack.length){ %>
+		<style><%= this._CSSstack.join("\n"); %></style>
+	<% } %>
 	<script type="text/javascript" src="<%= this.staticHost + this.pcPath %>/js/fml.js?v=<%= this.version %>"></script>
+	<script>
+		fml.setOptions({
+			'sversion' : '<%= this.version %>',
+			'defer' : <%= this.JS_Defer %>,
+			'modulebase' : '<%= this.staticHost + this.pcPath %>' + '/js/'
+		});
+	</script>
 </head>
 <body>

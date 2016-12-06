@@ -14,7 +14,7 @@ let ip = require('./base/getIp')() || '127.0.0.1';
 let init = () => {
 	// config
 	let configPath = path.resolve(__dirname, '../config/config.json');
-	let content = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+	let content = require(configPath);
 	content.etc.ip = ip;
 	content.host[ip] = ETC.defaultHost;
 	content.site.staticHost = `http://${ip}:${ETC.jserverPort}`;
@@ -40,7 +40,7 @@ let init = () => {
 				if (t < 10) t = '0' + t
 				return t
 			}
-			return ('' + st.getYear()).slice(1) + leadZero(st.getMonth()) + leadZero(st.getDate()) + leadZero(st.getHours()) + leadZero(st.getMinutes()) + leadZero(st.getSeconds());
+			return leadZero(st.getMonth()) + leadZero(st.getDate()) + leadZero(st.getHours()) + leadZero(st.getMinutes()) + leadZero(st.getSeconds());
 		}
 		content.site.version = `${getNowDate()}${PUBDAY}`;
 	}

@@ -1,2 +1,3 @@
-'use strict'
-document.write('test2')
+fml.define("page/test/test", [], function(require, exports) {
+	console.log(111)
+});

@@ -61,7 +61,7 @@ const installPackage = () => {
 const config = () => {
 	let tirgerPath = path.resolve(__dirname, './tirger/nest');
 	let fileName = path.resolve(tirgerPath, './config/config.json');
-	let content = JSON.parse(fs.readFileSync(fileName, 'utf-8'));
+	let content = require(fileName);
 	let serverPort = Math.random() * 1000 | 0 + 6000;
 	let jserverPort = serverPort + 1;
 	let ip = require(tirgerPath + '/server/base/getIp')();

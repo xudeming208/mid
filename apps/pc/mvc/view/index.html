@@ -20,6 +20,6 @@
 		</li>
 	<% }) %>
 </ul>
-<script src="<%= this.staticHost + this.pcPath %>/js/page/index.js?v=<%= this.version %>"></script>
-<script src="<%= this.staticHost + this.pcPath %>/js/page/test/test.js?v=<%= this.version %>"></script>
+<% this.useModule( [ 'page/index' ] ) %>
+<% this.useModule( [ 'page/test/test' ] ) %>
 <%#foot.html%>

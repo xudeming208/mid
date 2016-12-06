@@ -5,7 +5,7 @@ const controllerObj = {
 		};
 		this.getData(php, data => {
 			data.pageTitle = 'index';
-			data._CSSLinks = ['index', 'index2'];
+			data._CSSLinks = ['page/index', 'page/index2'];
 			this.render('index.html', data);
 		})
 	}

@@ -1,3 +1,29 @@
-<script type="text/javascript" src="<%= this.staticHost + this.pcPath %>/js/jquery.js?v=<%= this.version %>"></script>
+<%= (function(link , jsmods){
+	let str = '';
+	let version = this.version;
+	let base = this.staticHost + this.pcPath + '/js/';
+	if (link.length) {
+		link.unshift('jquery');
+		link.map(src => {
+			str += '<script src="' + base + src + '.js?' + version + '"></script>';
+		});
+		return str;
+	}
+	if (jsmods.length) {
+		jsmods.unshift('jquery');
+		jsmods = '~' + jsmods.join('+');
+		str += '<script  src="' + base + jsmods + '?' + version + '"></script>';
+	}
+	return str;
+})(this._JSLinks ,this._JSmods) %>
+
+<script>
+	<% if (this._JSstack.length) { %>
+		<%= this._JSstack.join(";\n"); %>
+	<% }
+	if (this.JS_Defer) { %>    
+		;fml.iLoad();
+	<%}%>
+</script>
 </body>
 </html>
