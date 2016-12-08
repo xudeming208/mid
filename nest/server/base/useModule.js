@@ -1,3 +1,4 @@
+'use strict'
 const Base = require('./base');
 let jsDepCache = {};
 let isFirst = true;
