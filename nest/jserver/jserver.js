@@ -27,25 +27,14 @@ let ip = ETC.ip || '127.0.0.1';
 // 	openBrower(`http://${ip}:${port-1}`);
 // }
 
-
-let finised = () => {
-	clearTimeout(timer);
-}
-
 // loadFile
 let loadFile = (req, res, filePath, fileType) => {
 	let unicode = mimeBuffer.includes(fileType) ? '' : 'utf-8';
-
-	timer = setTimeout(function() {
-		console.log('timeout: ', filePath);
-		res.end('timeout: ', filePath);
-	}, ETC.saticTime);
 
 	// define writeFile fun
 	let writeFile = (fileType, data) => {
 		res.write(data);
 		res.end();
-		finised();
 	}
 
 	fs.readFile(filePath, unicode, (err, data) => {
@@ -102,7 +91,6 @@ if (cluster.isMaster) {
 			});
 			res.end('404 Not Found');
 			console.log(filePath + ' is lost');
-			finised();
 		} else {
 			// 读取文件的最后修改时间
 			fs.stat(filePath, function(err, stat) {
@@ -118,7 +106,6 @@ if (cluster.isMaster) {
 				if (req.headers[ifModifiedSince] && lastModified == req.headers[ifModifiedSince]) {
 					res.writeHead(304, 'Not Modified');
 					res.end();
-					finised();
 				} else {
 					res.writeHead(200, {
 						'Server': ETC.server,

@@ -77,6 +77,7 @@ let getHtml = (tpl, data) => {
 		return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
 	});
 	if (fs.existsSync(tmpFile)) {
+		// delete require.cache[tmpFile];
 		return require(tmpFile)._getHtml(data);
 	} else {
 		return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
@@ -92,7 +93,7 @@ let render = function(tpl, data = {}) {
 	}
 	if (this.req.__get['__pd__']) {
 		//show data  
-		var now = new Date()
+		let now = new Date()
 		if (this.req.__get['__pd__'] == '/rb/' + (now.getMonth() + now.getDate() + 1)) {
 			this.res.writeHead(200, {
 				'Content-Type': 'text/plain',

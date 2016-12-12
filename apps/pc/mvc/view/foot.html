@@ -3,14 +3,14 @@
 	let version = this.version;
 	let base = this.staticHost + this.pcPath + '/js/';
 	if (link.length) {
-		link.unshift('jquery');
+		!link.includes('jquery') && link.unshift('jquery');
 		link.map(src => {
 			str += '<script src="' + base + src + '.js?' + version + '"></script>';
 		});
 		return str;
 	}
 	if (jsmods.length) {
-		jsmods.unshift('jquery');
+		!jsmods.includes('jquery') && jsmods.unshift('jquery');
 		jsmods = '~' + jsmods.join('+');
 		str += '<script  src="' + base + jsmods + '?' + version + '"></script>';
 	}

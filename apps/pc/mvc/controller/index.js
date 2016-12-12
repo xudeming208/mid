@@ -1,7 +1,7 @@
 const controllerObj = {
 	index: function() {
 		let php = {
-
+			'busi': 'busi::/mobile/mobile_share_api?liveid=1481105372291334&uid=5778280&openid='
 		};
 		this.getData(php, data => {
 			data.pageTitle = 'index';

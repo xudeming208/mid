@@ -2,25 +2,20 @@
 <%
 	var testData = {
 		's':'pc'
-	}
+	};
+	var busi = this.busi || {};
+	var busiData = busi.data || {};
+	var wx = busiData.wx || {};
 %>
-<div class="test"><%= this.test %> world</div>
 <div><%= testData.s %></div>
 <img src="<%= this.staticHost + this.pcPath %>/img/index.png" alt="">
-<img src="<%= this.staticHost + this.pcPath %>/img/test/test.jpg" alt="">
-<a href="http://pc.fedevot.test.com:8083/">link</a>
-<div id="link">div-link</div>
-<%#test/test.html%>
 <img src="//www.baidu.com/img/bd_logo1.png" alt="">
-<%#test/test2/test2.html%>
-<video id="bgvideo" width="100%" height="100%" controls src="http://app.inke.com/inke/v/video.mp4" loop="" >您的浏览器不支持video标签，建议更新浏览器版本</video>
+
+
 <ul>
-	<% this.arr.forEach(function(item){ %>
-		<li>
-			<h3><%= item.title %></h3>
-			<p><%= item.content %></p>
-		</li>
-	<% }) %>
+	<% for(var i in wx){ %>
+		<p><%= wx[i] %></p>
+	<% } %>
 </ul>
 <% this.useModule( [ 'page/index' ] ) %>
 <% this.useModule( [ 'page/test/test' ] ) %>
