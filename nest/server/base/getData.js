@@ -13,4 +13,4 @@ function getData(php, cbk) {
 }
 
 
-module.exports = getData
+module.exports = getData;
