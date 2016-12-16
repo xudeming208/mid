@@ -33,5 +33,5 @@ server {
 `You can also start the port 80 (sudo start), but is not recommended`
 
 ##problem
-* If start framework failed, please try `"npm run stop"`, then `"npm run start"`
+* If start framework failed, please try `"npm run stop"`, then `"npm run start"` or `"npm run start -f"`
 * Contact me: `xudeming208@126.com`
