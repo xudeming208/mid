@@ -136,3 +136,7 @@ if (cluster.isMaster) {
 		console.log(`the Jserver has started on ${ip}:${port} at ${new Date().toLocaleString()}`.green.underline);
 	});
 }
+
+process.on('uncaughtException', function (err) {
+    console.log(err)
+})
