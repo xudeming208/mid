@@ -38,32 +38,39 @@ let loadFile = (req, res, filePath, fileType) => {
 		res.write(data);
 		res.end();
 	}
-
-	fs.readFile(filePath, unicode, (err, data) => {
-		if (err) {
-			res.writeHead(500, {
+	if (!fs.existsSync(filePath) || filePath.match(/\bmvc\b/)) {
+			res.writeHead(404, {
 				'Content-Type': contentType
 			});
-			res.end(err);
-		}
-		// less compaile
-		if (fileType == 'less') {
-			less.render(data, {
-				paths: [filePath.substr(0, filePath.lastIndexOf('/'))],
-				compress: ETC.compress
-			}).then(output => {
-				writeFile('css', output && output.css);
-			}, error => {
-				console.log(error);
+			res.end('404 Not Found');
+			console.log(filePath + ' is lost');
+	} else {
+		fs.readFile(filePath, unicode, (err, data) => {
+			if (err) {
 				res.writeHead(500, {
 					'Content-Type': contentType
 				});
-				res.end(filePath + 'compile error');
-			})
-		} else {
-			writeFile(fileType, data);
-		}
-	});
+				res.end(err);
+			}
+			// less compaile
+			if (fileType == 'less') {
+				less.render(data, {
+					paths: [filePath.substr(0, filePath.lastIndexOf('/'))],
+					compress: ETC.compress
+				}).then(output => {
+					writeFile('css', output && output.css);
+				}, error => {
+					console.log(error);
+					res.writeHead(500, {
+						'Content-Type': contentType
+					});
+					res.end(filePath + 'compile error');
+				})
+			} else {
+				writeFile(fileType, data);
+			}
+		});
+	}
 }
 
 //jserver
@@ -87,58 +94,50 @@ if (cluster.isMaster) {
 			fileType = 'less';
 		}
 		filePath += pathname;
-		if (!fs.existsSync(filePath) || filePath.match(/\bmvc\b/)) {
-			res.writeHead(404, {
-				'Content-Type': contentType
-			});
-			res.end('404 Not Found');
-			console.log(filePath + ' is lost');
-		} else {
-			// 读取文件的最后修改时间
-			fs.stat(filePath, function(err, stat) {
-				if (err) {
-					throw err;
+		// 读取文件的最后修改时间
+		fs.stat(filePath, function(err, stat) {
+			if (err) {
+				throw err;
+			}
+			let lastModified = stat.mtime.toUTCString(),
+				ifModifiedSince = 'If-Modified-Since'.toLowerCase(),
+				expires = new Date();
+			expires.setTime(expires.getTime() + maxAge * 1000);
+			// 304
+			if (req.headers[ifModifiedSince] && lastModified == req.headers[ifModifiedSince]) {
+				res.writeHead(304, 'Not Modified');
+				res.end();
+			} else {
+				res.writeHead(200, {
+					'Server': ETC.server,
+					'Content-Type': contentType + ';charset=utf-8',
+					'Last-Modified': lastModified,
+					'Expires': expires.toUTCString(),
+					'Cache-Control': 'max-age=' + maxAge
+				});
+				//cache，第二个用户不再IO
+				if(staticCache.hasOwnProperty(filePath)){
+					console.log(staticCache[filePath]);
+					res.end(staticCache[filePath]);
+					return;
 				}
-				let lastModified = stat.mtime.toUTCString(),
-					ifModifiedSince = 'If-Modified-Since'.toLowerCase(),
-					expires = new Date();
-				expires.setTime(expires.getTime() + maxAge * 1000);
-				// 304
-				if (req.headers[ifModifiedSince] && lastModified == req.headers[ifModifiedSince]) {
-					res.writeHead(304, 'Not Modified');
-					res.end();
+				if (fileType) {
+					loadFile(req, res, filePath, fileType);
 				} else {
-					res.writeHead(200, {
-						'Server': ETC.server,
-						'Content-Type': contentType + ';charset=utf-8',
-						'Last-Modified': lastModified,
-						'Expires': expires.toUTCString(),
-						'Cache-Control': 'max-age=' + maxAge
-					});
-					//cache，第二个用户不再IO
-					if(staticCache.hasOwnProperty(filePath)){
-						console.log(staticCache[filePath]);
-						res.end(staticCache[filePath]);
-						return;
-					}
-					if (fileType) {
-						loadFile(req, res, filePath, fileType);
-					} else {
-						// let pathArr = pathname.split('~'),
-						// 	pathStr = pathArr[0],
-						// 	blocks = pathArr[1].split('+'),
-						// 	type = 'css';
-						// if (pathStr.match(/\bjs\b/g)) {
-						// 	type = 'js';
-						// }
-						// blocks.map(mod => {
-						// 	// console.log(pathStr + mod + '.' + type)
-						// 	loadFile(req, res, filePath, type);
-						// })
-					}
+					// let pathArr = pathname.split('~'),
+					// 	pathStr = pathArr[0],
+					// 	blocks = pathArr[1].split('+'),
+					// 	type = 'css';
+					// if (pathStr.match(/\bjs\b/g)) {
+					// 	type = 'js';
+					// }
+					// blocks.map(mod => {
+					// 	// console.log(pathStr + mod + '.' + type)
+					// 	loadFile(req, res, filePath, type);
+					// })
 				}
-			});
-		}
+			}
+		});
 	}).listen(port, () => {
 		console.log(`the Jserver has started on ${ip}:${port} at ${new Date().toLocaleString()}`.green.underline);
 	});
