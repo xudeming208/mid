@@ -15,6 +15,7 @@ const clusterEnable = require('../config/cluster');
 const mime = require('./mime');
 const mimeTypes = mime.types;
 const mimeBuffer = mime.bufferTypeArr;
+let staticCache = {};
 let timer = '';
 let maxAge = 60 * 60 * 24 * 180;
 let port = +ETC.jserverPort || 8084;
@@ -33,6 +34,7 @@ let loadFile = (req, res, filePath, fileType) => {
 
 	// define writeFile fun
 	let writeFile = (fileType, data) => {
+		staticCache[fileType] = data;
 		res.write(data);
 		res.end();
 	}
@@ -101,7 +103,6 @@ if (cluster.isMaster) {
 					ifModifiedSince = 'If-Modified-Since'.toLowerCase(),
 					expires = new Date();
 				expires.setTime(expires.getTime() + maxAge * 1000);
-
 				// 304
 				if (req.headers[ifModifiedSince] && lastModified == req.headers[ifModifiedSince]) {
 					res.writeHead(304, 'Not Modified');
@@ -114,20 +115,26 @@ if (cluster.isMaster) {
 						'Expires': expires.toUTCString(),
 						'Cache-Control': 'max-age=' + maxAge
 					});
+					//cache，第二个用户不再IO
+					if(staticCache.hasOwnProperty(filePath)){
+						console.log(staticCache[filePath]);
+						res.end(staticCache[filePath]);
+						return;
+					}
 					if (fileType) {
 						loadFile(req, res, filePath, fileType);
 					} else {
-						let pathArr = pathname.split('~'),
-							pathStr = pathArr[0],
-							blocks = pathArr[1].split('+'),
-							type = 'css';
-						if (pathStr.match(/\bjs\b/g)) {
-							type = 'js';
-						}
-						blocks.map(mod => {
-							// console.log(pathStr + mod + '.' + type)
-							loadFile(req, res, filePath, type);
-						})
+						// let pathArr = pathname.split('~'),
+						// 	pathStr = pathArr[0],
+						// 	blocks = pathArr[1].split('+'),
+						// 	type = 'css';
+						// if (pathStr.match(/\bjs\b/g)) {
+						// 	type = 'js';
+						// }
+						// blocks.map(mod => {
+						// 	// console.log(pathStr + mod + '.' + type)
+						// 	loadFile(req, res, filePath, type);
+						// })
 					}
 				}
 			});
