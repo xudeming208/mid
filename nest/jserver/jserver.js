@@ -34,7 +34,7 @@ let loadFile = (req, res, filePath, fileType) => {
 
 	// define writeFile fun
 	let writeFile = (fileType, data) => {
-		staticCache[fileType] = data;
+		staticCache[filePath] = data;
 		res.write(data);
 		res.end();
 	}
