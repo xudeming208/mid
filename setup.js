@@ -75,8 +75,6 @@ const config = () => {
 			console.log(err);
 		}
 		// exec framework
-		// let npmPath = path.resolve(__dirname, './tirger/nest');
-		// require(npmPath + '/node_modules/colors/safe.js');
 		execFun(['cd tirger/nest', 'npm run start'], 'framework start', function() {
 			console.log(`In the browser input **127.0.0.1:${serverPort}** or **${ip}:${serverPort}**, and then can see the pages`)
 			let openBrower = require(tirgerPath + '/jserver/openBrower');
