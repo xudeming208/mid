@@ -34,7 +34,7 @@ let complie = (filePath, tpl, content, data) => {
 	let str = content.replace(/this/g, '_data');
 	let arr = str.split('<%');
 	html += "/* " + filePath + " */\n"
-	html += "let getHtml = require('" + __filename + "').getHtml;\n"
+	html += "let getHtml = require('" + (isWindows ? __filename.replace(/\\/g, '/') : __filename) + "').getHtml;\n"
 	html += "let _getHtml = _data => {\n"
 	html += "let html='';\n"
 	for (let i = 0, len = arr.length; i < len; i++) {
