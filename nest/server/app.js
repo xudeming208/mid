@@ -1,8 +1,4 @@
 'use strict'
-const events = require("events");
-const mEmitter = new events.EventEmitter;
-mEmitter.setMaxListeners(0);
-
 require('../config/config')
 require('colors');
 const cluster = require('cluster');

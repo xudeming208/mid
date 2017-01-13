@@ -1,8 +1,4 @@
 'use strict'
-const events = require("events");
-const mEmitter = new events.EventEmitter;
-mEmitter.setMaxListeners(0);
-
 require('../config/config')
 require('colors');
 const cluster = require('cluster');
@@ -31,19 +27,24 @@ let ip = ETC.ip || '127.0.0.1';
 // loadFile
 let loadFile = (req, res, filePath, fileType) => {
 	let unicode = mimeBuffer.includes(fileType) ? '' : 'utf-8';
-
+	//cache，第二个用户不再IO
+	if (staticCache.hasOwnProperty(filePath)) {
+		// console.log(staticCache[filePath]);
+		res.end(staticCache[filePath]);
+		return;
+	}
 	// define writeFile fun
-	let writeFile = (fileType, data) => {
+	let writeFile = (data) => {
 		staticCache[filePath] = data;
 		res.write(data);
 		res.end();
 	}
 	if (!fs.existsSync(filePath) || filePath.match(/\bmvc\b/)) {
-			res.writeHead(404, {
-				'Content-Type': contentType
-			});
-			res.end('404 Not Found');
-			console.log(filePath + ' is lost');
+		res.writeHead(404, {
+			'Content-Type': contentType
+		});
+		res.end('404 Not Found');
+		console.log(filePath + ' is lost');
 	} else {
 		fs.readFile(filePath, unicode, (err, data) => {
 			if (err) {
@@ -58,7 +59,7 @@ let loadFile = (req, res, filePath, fileType) => {
 					paths: [filePath.substr(0, filePath.lastIndexOf('/'))],
 					compress: ETC.compress
 				}).then(output => {
-					writeFile('css', output && output.css);
+					writeFile(output && output.css);
 				}, error => {
 					console.log(error);
 					res.writeHead(500, {
@@ -67,7 +68,7 @@ let loadFile = (req, res, filePath, fileType) => {
 					res.end(filePath + 'compile error');
 				})
 			} else {
-				writeFile(fileType, data);
+				writeFile(data);
 			}
 		});
 	}
@@ -115,12 +116,6 @@ if (cluster.isMaster) {
 					'Expires': expires.toUTCString(),
 					'Cache-Control': 'max-age=' + maxAge
 				});
-				//cache，第二个用户不再IO
-				if(staticCache.hasOwnProperty(filePath)){
-					console.log(staticCache[filePath]);
-					res.end(staticCache[filePath]);
-					return;
-				}
 				if (fileType) {
 					loadFile(req, res, filePath, fileType);
 				} else {
@@ -143,6 +138,6 @@ if (cluster.isMaster) {
 	});
 }
 
-process.on('uncaughtException', function (err) {
-    console.log(err)
+process.on('uncaughtException', function(err) {
+	console.log(err)
 })
