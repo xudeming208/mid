@@ -2,11 +2,11 @@ const http = require('http'),
 	querystring = require('querystring');
 let apiData = {};
 module.exports = remoteApi = (self, req, res, php, cbk) => {
-	for (let phpAttr in php) {
-		let remoteUri = php[phpAttr],
+	for (let phpKey in php) {
+		let remoteUri = php[phpKey],
 			hostSource,
 			reqHeaders = {},
-			defaultHost = 'busi';
+			defaultApiHost = 'busi';
 
 		if (remoteUri.indexOf('::') > 0) {
 			remoteUri = remoteUri.split('::');
@@ -15,8 +15,8 @@ module.exports = remoteApi = (self, req, res, php, cbk) => {
 		}
 		let host = API[hostSource];
 		if (!host) {
-			console.log(`url: ${req.url};api ${host} is not configed`);
-			host = defaultHost;
+			console.log(`${remoteUri} is not configed`);
+			host = defaultApiHost;
 		}
 		let proxyHeaders = {};
 		reqHeaders.reqHost = req.headers.host;
@@ -46,7 +46,7 @@ module.exports = remoteApi = (self, req, res, php, cbk) => {
 			let res_state = response.statusCode;
 			if (200 != res_state && 400 != res_state && 4000 > res_state) {
 				console.log('error', 'api', remoteUri, 'STATUS: ', res_state)
-				apiData[phpAttr] = false;
+				apiData[phpKey] = false;
 				cbk(Object.assign(SITE,apiData));
 				return;
 			}
@@ -58,7 +58,7 @@ module.exports = remoteApi = (self, req, res, php, cbk) => {
 				result = Buffer.concat(buff);
 				if (400 == res_state) {
 					console.log('error', 'api', remoteUri, '400: ', result)
-					apiData[phpAttr] = false;
+					apiData[phpKey] = false;
 					cbk(Object.assign(SITE,apiData));
 					return;
 				}
@@ -70,24 +70,24 @@ module.exports = remoteApi = (self, req, res, php, cbk) => {
 				} catch (err) {
 					console.log('error', 'api', remoteUri, 'API ERROR:', result_orgin)
 				}
-				apiData[phpAttr] = result;
+				apiData[phpKey] = result;
 				cbk(Object.assign(SITE,apiData));
 				return;
 			});
 		});
 		request.on('error', e => {
 			console.log('error', 'api', remoteUri, e.message)
-			apiData[phpAttr] = false;
+			apiData[phpKey] = false;
 			cbk(Object.assign(SITE,apiData));
 		});
 		request_timer = setTimeout(() => {
 			request_timer = null
 			request.abort();
 			console.log('error', 'api', remoteUri, 'Request Timeout')
-			apiData[phpAttr] = false;
+			apiData[phpKey] = false;
 			cbk(Object.assign(SITE,apiData));
 			return;
-		}, ETC.apiTime);
+		}, ETC.apiTimeOut);
 
 
 		// request.write(self.req.__get);

@@ -16,7 +16,7 @@ let init = () => {
 	let configPath = path.resolve(__dirname, '../config/config.json');
 	let content = require(configPath);
 	content.etc.ip = ip;
-	content.host[ip] = ETC.defaultHost;
+	content.host[ip] = ETC.defaultPage;
 	content.site.staticHost = `http://${ip}:${ETC.jserverPort}`;
 
 	// 重启服务清除缓存,包括静态服务器(主要是304)
@@ -61,6 +61,6 @@ if (cluster.isMaster) {
 	});
 }
 
-process.on('uncaughtException', function (err) {
-    console.log(err)
+process.on('uncaughtException', function(err) {
+	console.log(err)
 })

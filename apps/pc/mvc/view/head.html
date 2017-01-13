@@ -26,7 +26,7 @@
 	<% if(this._CSSstack.length){ %>
 		<style><%= this._CSSstack.join("\n"); %></style>
 	<% } %>
-	<script type="text/javascript" src="<%= this.staticHost + this.pcPath %>/js/fml.js?v=<%= this.version %>"></script>
+	<script type="text/javascript" src="<%= this.staticHost %>/common/js/fml.js?v=<%= this.version %>"></script>
 	<script>
 		fml.setOptions({
 			'sversion' : '<%= this.version %>',

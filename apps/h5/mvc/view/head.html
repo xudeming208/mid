@@ -11,15 +11,26 @@
 	<meta content="telephone=no" name="format-detection"/>
 	<link rel="dns-prefetch" href="//img.inke.cn/">
 	<%=
-		(function(css){
-			var cssStr ='',
-				base = this.staticHost + this.h5Path;
-			css.forEach(function(src){
-				cssStr+='<link rel="stylesheet" href="'+base+'/css/page/'+src+'.css?v='+this.version+'">'
-			});
+		(function(link ,cssmods){
+			let cssStr ='',
+				version = this.version,
+				base = this.staticHost + this.h5Path + '/css/';
+			if(link.length){
+				link.map(src => {
+					cssStr += '<link rel="stylesheet" href="' + base + src +'.css?' + version + '">'
+				});
+				return cssStr;
+			}
+			if(cssmods.length){
+				cssmods = '~' + cssmods.join('+');
+				cssStr += '<link rel="stylesheet" href="' + base + cssmods + '?' + version + '">';
+			}
 			return cssStr; 
-		})(this._CSSLinks)
+		})(this._CSSLinks ,this._CSSmods)
 	%>
+	<% if(this._CSSstack.length){ %>
+		<style><%= this._CSSstack.join("\n"); %></style>
+	<% } %>
 	<script>
 	(function(doc, win) {
 	    var docEl = doc.documentElement,
@@ -35,6 +46,13 @@
 	    doc.addEventListener('DOMContentLoaded', getClientWidth, false);
 	})(document, window);
 	</script>
-	<script type="text/javascript" src="<%= this.staticHost + this.h5Path %>/js/fml.js?v=<%= this.version %>"></script>
+	<script type="text/javascript" src="<%= this.staticHost %>/common/js/fml.js?v=<%= this.version %>"></script>
+	<script>
+		fml.setOptions({
+			'sversion' : '<%= this.version %>',
+			'defer' : <%= this.JS_Defer %>,
+			'modulebase' : '<%= this.staticHost + this.h5Path %>' + '/js/'
+		});
+	</script>
 </head>
 <body>

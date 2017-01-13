@@ -4,17 +4,8 @@
 		's':'h5'
 	}
 %>
-<div class="test"><%= this.test %></div>
 <div><%= testData.s %></div>
 <img src="<%= this.staticHost + this.h5Path %>/img/index.png" alt="">
 <img src="//www.baidu.com/img/bd_logo1.png" alt="">
-<ul>
-	<% this.arr.forEach(function(item){ %>
-		<li>
-			<h3><%= item.title %></h3>
-			<p><%= item.content %></p>
-		</li>
-	<% }) %>
-</ul>
-<script src="<%= this.staticHost + this.h5Path %>/js/page/index.js?v=<%= this.version %>"></script>
+<% this.useModule( [ 'page/index' ] ) %>
 <%#foot.html%>

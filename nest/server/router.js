@@ -9,47 +9,54 @@ const redirectTo = require('./base/redirectTo');
 const render = require('./base/render').render;
 
 let route = (req, res) => {
-	try {
-		var reqUrl = url.parse('http://' + req.headers.host + req.url, true);
-	} catch (err) {
-		console.log('Route Parse Error:', req.url)
-		res.writeHead(500, {
-			'Content-Type': 'text/plain'
-		});
-		res.end('url is wrong');
-		return
-	}
-	let hostname = reqUrl.hostname,
-		pathname = reqUrl.pathname,
-		modUrl = pathname.substr(1).replace(/\/+/g, '/').split('/'),
-		fileType = pathname.match(/(\.[^.]+|)$/)[0].substr(1);
-
-	console.log(pathname)
-	// favicon.ico
-	// if (fileType == '.ico') {
-	// 	fs.readFile('./favicon.ico', (err, html) => {
-	// 		if (err) {
-	// 			res.writeHead(500, {
-	// 				'Content-Type': 'text/plain'
-	// 			});
-	// 			res.end(err);
-	// 		}
-	// 		res.writeHead(200, {
-	// 			'Server': ETC.server,
-	// 			'Content-Type': 'image/x-icon;charset=utf-8'
-	// 		});
-	// 		res.end(html);
+	// try {
+	// 	var reqUrl = url.parse('http://' + req.headers.host + req.url, true);
+	// } catch (err) {
+	// 	console.log('Route Parse Error:', req.url)
+	// 	res.writeHead(500, {
+	// 		'Content-Type': 'text/plain'
 	// 	});
-	// 	return;
+	// 	res.end('url is wrong');
+	// 	return
 	// }
+	// let hostname = reqUrl.hostname,
+	// 	pathname = reqUrl.pathname,
+	// 	modUrl = pathname.substr(1).replace(/\/+/g, '/').split('/');
+
+	console.log((req.url).split('?'))
+	let reqUrl = req.url,
+		hostname = req.headers.host.split(':')[0],
+		reqUrlArr = reqUrl.split('?'),
+		modUrl = reqUrlArr[0].substr(1).replace(/\/+/g, '/').split('/'),
+		reqQuery = reqUrlArr[1] && reqUrlArr[1].split('&') || [];
+
+	// favicon.ico
+	if (reqUrl == '/favicon.ico') {
+		fs.readFile('./' + reqUrl, (err, html) => {
+			if (err) {
+				res.writeHead(500, {
+					'Content-Type': 'text/plain'
+				});
+				res.end(err);
+			}
+			res.writeHead(200, {
+				'Server': ETC.server,
+				'Content-Type': 'image/x-icon;charset=utf-8'
+			});
+			res.end(html);
+		});
+		return;
+	}
 
 	// 获取URL参数
 	// console.log('---------------------------------------------');
 	// console.log(reqUrl);
 	req.__get = {};
-	for (var k in reqUrl.query) {
-		req.__get[k.replace(/[<>%\'\"]/g, '')] = reqUrl.query[k];
-	}
+	reqQuery.forEach(function(query) {
+		let queryArr = query.split('=');
+		req.__get[queryArr[0]] = queryArr[1];
+	});
+	// console.log(req.__get)
 	/*
 	url 格式 [/ 地址/...]模块文件名/方法名/[参数] 
 	3 mod/fn/param
@@ -71,12 +78,15 @@ let route = (req, res) => {
 	// console.log(reqUrl)
 
 	// console.log(modPath);
-	if (!fs.existsSync(modPath)) {
+	let notFoundFun = (modPath) => {
 		res.writeHead(404, {
 			'Content-Type': 'text/plain'
 		});
 		res.end('404 Not Found');
 		console.log('cannot found modPath:\n' + modPath);
+	}
+	if (!fs.existsSync(modPath)) {
+		notFoundFun(modPath);
 	} else {
 		// console.log(req)
 		let modJs = require(modPath);
@@ -91,11 +101,17 @@ let route = (req, res) => {
 			redirectTo,
 			render
 		};
-		Object.assign(modJs['controllerObj'], extendObj);
+		let modJsObj = modJs['controllerObj'];
+		Object.assign(modJsObj, extendObj);
 		// watcher
 		watcher.takeCare(controllerPath);
 
-		modJs['controllerObj'][modFun](modParam);
+		let fn = modJsObj[modFun];
+		if (fn && typeof fn === 'function') {
+			fn.call(modJsObj, modParam);
+		} else {
+			notFoundFun(fn);
+		}
 	}
 }
 module.exports = route;

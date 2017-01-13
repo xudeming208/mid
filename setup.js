@@ -4,6 +4,7 @@ const fs = require('fs'),
 	exec = require('child_process').exec;
 
 //执行之前确保已经全局安装了pm2
+//参考之前的hornbill本地环境的配置
 // execFun
 const execFun = (todo, msg, cbk) => {
 	!Array.isArray(todo) && (todo = [todo]);
