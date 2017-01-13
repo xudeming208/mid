@@ -18,7 +18,7 @@ module.exports = clusterEnable => {
 
 	// CFonts
 	const CFonts = require('cfonts');
-	CFonts.say('TIRGER', {
+	CFonts.say('MID', {
 		font: '3d',
 		align: 'left',
 		colors: ['white', 'black'],

@@ -55,17 +55,17 @@ const execFun = (todo, msg, cbk) => {
 
 // install package
 const installPackage = () => {
-	execFun(['cd tirger', 'rm -rf tmp', 'cd nest', 'rm -rf node_modules', 'npm install'], 'install package', config);
+	execFun(['cd mid', 'rm -rf tmp', 'cd nest', 'rm -rf node_modules', 'npm install'], 'install package', config);
 }
 
 // config
 const config = () => {
-	let tirgerPath = path.resolve(__dirname, './tirger/nest');
-	let fileName = path.resolve(tirgerPath, './config/config.json');
+	let midPath = path.resolve(__dirname, './mid/nest');
+	let fileName = path.resolve(midPath, './config/config.json');
 	let content = require(fileName);
 	let serverPort = Math.random() * 1000 | 0 + 6000;
 	let jserverPort = serverPort + 1;
-	let ip = require(tirgerPath + '/server/base/getIp')();
+	let ip = require(midPath + '/server/base/getIp')();
 	let staticHost = `http://${ip}:${jserverPort}`;
 	content.etc.serverPort = serverPort;
 	content.etc.jserverPort = jserverPort;
@@ -75,13 +75,13 @@ const config = () => {
 			console.log(err);
 		}
 		// exec framework
-		execFun(['cd tirger/nest', 'npm run start'], 'framework start', function() {
+		execFun(['cd mid/nest', 'npm run start'], 'framework start', function() {
 			console.log(`In the browser input **127.0.0.1:${serverPort}** or **${ip}:${serverPort}**, and then can see the pages`)
-			let openBrower = require(tirgerPath + '/jserver/openBrower');
+			let openBrower = require(midPath + '/jserver/openBrower');
 			openBrower(`http://${ip}:${serverPort}`);
 		});
 	})
 }
 
 
-execFun('git clone https://github.com/xudeming208/tirger.git', 'git clone', installPackage);
+execFun('git clone https://github.com/xudeming208/mid.git', 'git clone', installPackage);

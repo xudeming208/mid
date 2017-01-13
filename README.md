@@ -1,4 +1,4 @@
-# tirger
+# mid
 nodejs mvc framework
 
 ##start framework
