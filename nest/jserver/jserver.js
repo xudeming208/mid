@@ -57,7 +57,7 @@ let loadFile = (req, res, filePath, fileType) => {
 			if (fileType == 'less') {
 				less.render(data, {
 					paths: [filePath.substr(0, filePath.lastIndexOf('/'))],
-					compress: ETC.compress
+					compress: !ETC.debug
 				}).then(output => {
 					writeFile(output && output.css);
 				}, error => {

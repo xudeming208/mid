@@ -8,17 +8,17 @@
 	<%=
 		(function(link ,cssmods){
 			let cssStr ='',
-				version = this.version,
+				version = this.version || '',
 				base = this.staticHost + this.pcPath + '/css/';
 			if(link.length){
 				link.map(src => {
-					cssStr += '<link rel="stylesheet" href="' + base + src +'.css?' + version + '">'
+					cssStr += '<link rel="stylesheet" href="' + base + src +'.css' + version + '">'
 				});
 				return cssStr;
 			}
 			if(cssmods.length){
 				cssmods = '~' + cssmods.join('+');
-				cssStr += '<link rel="stylesheet" href="' + base + cssmods + '?' + version + '">';
+				cssStr += '<link rel="stylesheet" href="' + base + cssmods + version + '">';
 			}
 			return cssStr; 
 		})(this._CSSLinks ,this._CSSmods)
@@ -26,11 +26,11 @@
 	<% if(this._CSSstack.length){ %>
 		<style><%= this._CSSstack.join("\n"); %></style>
 	<% } %>
-	<script type="text/javascript" src="<%= this.staticHost %>/fml.js?v=<%= this.version %>"></script>
+	<script type="text/javascript" src="<%= this.staticHost %>/fml.js<%= this.version || '' %>"></script>
 	<script>
 		fml.setOptions({
-			'sversion' : '<%= this.version %>',
-			'defer' : <%= this.JS_Defer %>,
+			'sversion' : '<%= this.version || '' %>',
+			'defer' : <%= this.jsDefer %>,
 			'modulebase' : '<%= this.staticHost + this.pcPath %>' + '/js/'
 		});
 	</script>

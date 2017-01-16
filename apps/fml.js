@@ -101,7 +101,7 @@
                  _scriptStack.push(moduleName); 
 			}       
          }else {
-            scriptUrl = host + moduleName + '.js?' + options.sversion ;
+            scriptUrl = host + moduleName + '.js' + options.sversion ;
             _urlModArr[scriptUrl] = moduleId;
 
             loadScript(scriptUrl , function(){

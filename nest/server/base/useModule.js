@@ -15,7 +15,8 @@ function useModule(modules) {
     let blockKey = md5(modules.toString()),
         getAllModules = mod => {
             !this._JSmods.includes(mod) && this._JSmods.push(mod);
-            if (!ETC.combo) {
+            // combo
+            if (ETC.debug) {
                 !this._JSLinks.includes(mod) && this._JSLinks.push(mod);
                 this._JSmods.length = 0;
             }
@@ -41,7 +42,7 @@ function useModule(modules) {
 
     this._JSstack = this._JSstack.concat(fullModulesInvoke);
 
-    if (!SITE.JS_Defer) {
+    if (!SITE.jsDefer) {
         return;
     }
 

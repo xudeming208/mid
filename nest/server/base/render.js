@@ -30,7 +30,7 @@ let getTmpFile = tpl => {
 // complie
 let complie = (filePath, tpl, content, data) => {
 	let html = '';
-	ETC.compress && (content = content.replace(/[\r\n\t]+/g, ''));
+	!ETC.debug && (content = content.replace(/[\r\n\t]+/g, ''));
 	let str = content.replace(/this/g, '_data');
 	let arr = str.split('<%');
 	html += "/* " + filePath + " */\n"
@@ -111,7 +111,7 @@ let render = function(tpl, data = {}) {
 	});
 	data.useModule = this.useModule.bind(data);
 	//combo css
-	if (ETC.combo) {
+	if (!ETC.debug) {
 		data._CSSmods = [].concat(data._CSSLinks);
 		data._CSSLinks.length = 0;
 	}
