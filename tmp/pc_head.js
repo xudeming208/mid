@@ -18,7 +18,7 @@ html+=`</style>`
  } 
 html+=`<script type="text/javascript" src="`
 html+= _data.staticHost 
-html+=`/common/js/fml.js?v=`
+html+=`/fml.js?v=`
 html+= _data.version 
 html+=`"></script><script>fml.setOptions({'sversion' : '`
 html+= _data.version 
