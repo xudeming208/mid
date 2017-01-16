@@ -8,8 +8,10 @@
     "app": "app"
   },
   "keywords": [
-    "node.js",
-    "javascript"
+    "nodejs",
+    "javascript",
+    "mvc",
+    "framework"
   ],
   "repository": {
     "type": "git",
