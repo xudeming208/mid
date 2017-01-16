@@ -1,4 +1,5 @@
 'use strict'
+//后续做成npm包
 const fs = require('fs'),
 	path = require('path'),
 	exec = require('child_process').exec;
