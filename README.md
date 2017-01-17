@@ -7,8 +7,8 @@ nodejs mvc framework
 3. ~~npm install~~
 4. ~~npm run start~~
 5. ~~In the browser input **127.0.0.1:8083** or **yourIp:8083**, and then can see the pages~~
-    ~~* `The default is open the PC pages, if you want to open the H5 pages, configure config`~~
-2. node setup
+    * ~~`The default is open the PC pages, if you want to open the H5 pages, configure config`~~
+6. node setup
 
 ##Nginx
 * bind `host` => sudo vi /etc/hosts，like this：
