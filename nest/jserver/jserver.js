@@ -12,7 +12,6 @@ const mime = require('./mime');
 const mimeTypes = mime.types;
 const mimeBuffer = mime.bufferTypeArr;
 let staticCache = {};
-let timer = '';
 let maxAge = 60 * 60 * 24 * 180;
 let port = +ETC.jserverPort || 8084;
 let ip = ETC.ip || '127.0.0.1';

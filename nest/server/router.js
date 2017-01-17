@@ -102,6 +102,7 @@ let route = (req, res) => {
 			render
 		};
 		let modJsObj = modJs['controllerObj'];
+		// merge
 		Object.assign(modJsObj, extendObj);
 		// watcher
 		watcher.takeCare(controllerPath);
