@@ -1,0 +1,34 @@
+{
+  "apps": [{
+    //http://www.cnblogs.com/chyingp/p/pm2-documentation.html
+    //http://pm2.keymetrics.io/docs/usage/pm2-doc-single-page/
+    // Application #1
+    "name": "server",
+    "script": "server/app.js",
+    "args": ["--toto=heya coco", "-d", "1"],
+    "watch": true,
+    "node_args": "--harmony",
+    "merge_logs": true,
+    "cwd": "/this/is/a/path/to/start/script",
+    "env": {
+      "NODE_ENV": "development",
+      "AWESOME_SERVICE_API_TOKEN": "xxx"
+    },
+    "env_production": {
+      "NODE_ENV": "production"
+    },
+    "env_staging": {
+      "NODE_ENV": "staging",
+      "TEST": true
+    }
+  }, {
+    // Application #2
+    "name": "jserver/jserver.js",
+    "script": "api.js",
+    "instances": 4,
+    "exec_mode": "cluster_mode",
+    "error_file": "./examples/child-err.log",
+    "out_file": "./examples/child-out.log",
+    "pid_file": "./examples/child.pid"
+  }]
+}

@@ -18,9 +18,9 @@
     "url": "https://github.com/xudeming208/mid"
   },
   "scripts": {
-    "start": "pm2 start server/app.js jserver/jserver.js -i 0 -f",
+    "start": "pm2 start server/app.js jserver/jserver.js -i max -f",
     "stop": "pm2 delete all",
-    "restart": "cd .. && rm -rf tmp && cd nest && pm2 restart all",
+    "restart": "cd .. && rm -rf tmp/* && cd nest && pm2 restart all",
     "logs": "pm2 reload all && pm2 logs"
   },
   "dependencies": {

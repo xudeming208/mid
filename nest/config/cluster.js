@@ -2,7 +2,7 @@
 const cluster = require('cluster');
 const cpuNums = +ETC.cpuNums || require('os').cpus().length;
 module.exports = clusterEnable => {
-	for (let i = 0; i < cpuNums; i++) {
+	for (let i = cpuNums; i--;) {
 		cluster.fork();
 	}
 	cluster.on('death', worker => {

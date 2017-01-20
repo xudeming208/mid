@@ -2,6 +2,7 @@ const http = require('http'),
 	querystring = require('querystring');
 let apiData = {};
 module.exports = remoteApi = (self, req, res, php, cbk) => {
+	let phpLen = Object.keys(php).length;
 	for (let phpKey in php) {
 		let remoteUri = php[phpKey],
 			hostSource,
@@ -40,6 +41,7 @@ module.exports = remoteApi = (self, req, res, php, cbk) => {
 		// console.log(options);
 		let request_timer;
 		let request = http.request(options, response => {
+			phpLen--;
 			request_timer && clearTimeout(request_timer);
 			request_timer = null;
 
@@ -47,7 +49,7 @@ module.exports = remoteApi = (self, req, res, php, cbk) => {
 			if (200 != res_state && 400 != res_state && 4000 > res_state) {
 				console.log('error', 'api', remoteUri, 'STATUS: ', res_state)
 				apiData[phpKey] = false;
-				cbk(Object.assign(SITE,apiData));
+				hasFinished(phpLen, cbk);
 				return;
 			}
 			let result = '';
@@ -59,7 +61,7 @@ module.exports = remoteApi = (self, req, res, php, cbk) => {
 				if (400 == res_state) {
 					console.log('error', 'api', remoteUri, '400: ', result)
 					apiData[phpKey] = false;
-					cbk(Object.assign(SITE,apiData));
+					hasFinished(phpLen, cbk);
 					return;
 				}
 
@@ -71,21 +73,23 @@ module.exports = remoteApi = (self, req, res, php, cbk) => {
 					console.log('error', 'api', remoteUri, 'API ERROR:', result_orgin)
 				}
 				apiData[phpKey] = result;
-				cbk(Object.assign(SITE,apiData));
+				hasFinished(phpLen, cbk);
 				return;
 			});
 		});
 		request.on('error', e => {
-			console.log('error', 'api', remoteUri, e.message)
+			console.log('error', 'api', remoteUri, e.message);
+			phpLen--;
 			apiData[phpKey] = false;
-			cbk(Object.assign(SITE,apiData));
+			hasFinished(phpLen, cbk);
 		});
 		request_timer = setTimeout(() => {
 			request_timer = null
 			request.abort();
-			console.log('error', 'api', remoteUri, 'Request Timeout')
+			console.log('error', 'api', remoteUri, 'Request Timeout');
+			phpLen--;
 			apiData[phpKey] = false;
-			cbk(Object.assign(SITE,apiData));
+			hasFinished(phpLen, cbk);
 			return;
 		}, ETC.apiTimeOut);
 
@@ -93,5 +97,12 @@ module.exports = remoteApi = (self, req, res, php, cbk) => {
 		// request.write(self.req.__get);
 		request.end();
 
+	}
+}
+
+let hasFinished = (phpLen, cbk) => {
+	//确保数据都返回完再callback
+	if (phpLen == 0) {
+		cbk(Object.assign(SITE, apiData));
 	}
 }
