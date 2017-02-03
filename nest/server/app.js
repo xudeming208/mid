@@ -1,6 +1,5 @@
 'use strict'
 require('../config/config')
-require('colors');
 const cluster = require('cluster');
 const http = require('http');
 const fs = require('fs');
@@ -56,16 +55,21 @@ let init = () => {
 	fs.writeFileSync(configPath, JSON.stringify(content), 'utf-8');
 }
 
-init();
 
 // server
 if (cluster.isMaster) {
 	clusterEnable();
 } else {
+	init();
 	http.createServer((req, res) => {
 		router(req, res);
 	}).listen(port, () => {
-		console.log(`the Server has started on ${ip}:${port} at ${new Date().toLocaleString()}`.green.underline);
+		if (ETC.debug) {
+			require('colors');
+			console.log(`the Server has started on`, `${ip}:${port}`.green.underline, `at`, `${new Date().toLocaleString()}`.green.underline);
+		} else {
+			console.log(`the Server has started on ${ip}:${port} at ${new Date().toLocaleString()}`);
+		}
 	});
 }
 

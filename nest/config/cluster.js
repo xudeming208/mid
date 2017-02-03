@@ -17,15 +17,17 @@ module.exports = clusterEnable => {
 	})
 
 	// CFonts
-	const CFonts = require('cfonts');
-	CFonts.say('MID', {
-		font: '3d',
-		align: 'left',
-		colors: ['white', 'black'],
-		background: 'Black',
-		letterSpacing: 1,
-		lineHeight: 1,
-		space: true,
-		maxLength: '0'
-	});
+	if (ETC.debug) {
+		let CFonts = require('cfonts');
+		CFonts.say('MID', {
+			font: '3d',
+			align: 'left',
+			colors: ['white', 'black'],
+			background: 'Black',
+			letterSpacing: 1,
+			lineHeight: 1,
+			space: true,
+			maxLength: '0'
+		});
+	}
 }

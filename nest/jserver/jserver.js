@@ -1,6 +1,5 @@
 'use strict'
 require('../config/config')
-require('colors');
 const cluster = require('cluster');
 const path = require('path');
 const http = require('http');
@@ -18,9 +17,11 @@ let ip = ETC.ip || '127.0.0.1';
 
 
 //自动打开浏览器
-// let openBrowerFun = () => {
-// 	const openBrower = require('./openBrower');
-// 	openBrower(`http://${ip}:${port-1}`);
+// if (ETC.debug) {
+// 	let openBrowerFun = () => {
+// 		const openBrower = require('./openBrower');
+// 		openBrower(`http://${ip}:${port-1}`);
+// 	}
 // }
 
 // loadFile
@@ -133,7 +134,12 @@ if (cluster.isMaster) {
 			}
 		});
 	}).listen(port, () => {
-		console.log(`the Jserver has started on ${ip}:${port} at ${new Date().toLocaleString()}`.green.underline);
+		if (ETC.debug) {
+			require('colors');
+			console.log(`the Jserver has started on`, `${ip}:${port}`.green.underline, `at`, `${new Date().toLocaleString()}`.green.underline);
+		} else {
+			console.log(`the Jserver has started on ${ip}:${port} at ${new Date().toLocaleString()}`);
+		}
 	});
 }
 
