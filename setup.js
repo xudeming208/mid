@@ -45,7 +45,7 @@ const execFun = (todo, msg, cbk) => {
 			console.log(error)
 		}
 		t && clearInterval(t);
-		console.log(`\n '${msg}' finised`);
+		console.log(`\n '${msg}' finised\n\n`);
 		cbk && typeof cbk == 'function' && cbk();
 	})
 }
