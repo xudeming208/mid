@@ -32,12 +32,14 @@ let route = (req, res) => {
 
 	// favicon.ico
 	if (reqUrl == '/favicon.ico') {
-		fs.readFile('./' + reqUrl, (err, html) => {
+		let icoPath = path.resolve(__dirname, '../', 'favicon.ico');
+		fs.readFile(icoPath, (err, html) => {
 			if (err) {
 				res.writeHead(500, {
 					'Content-Type': 'text/plain'
 				});
-				res.end(err);
+				// console.log(err);
+				res.end(JSON.stringify(err));
 			}
 			res.writeHead(200, {
 				'Server': ETC.server,

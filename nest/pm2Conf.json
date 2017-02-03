@@ -1,25 +1,25 @@
 {
-  "apps": [{
-    //http://www.cnblogs.com/chyingp/p/pm2-documentation.html
-    //http://pm2.keymetrics.io/docs/usage/pm2-doc-single-page/
-    // Application #1
-    "name": "server",
-    "script": "./server/app.js",
-    "instances": 0,
-    "merge_logs": true,
-    "exec_mode": "cluster_mode",
-    "error_file": "./examples/child-err.log",
-    "out_file": "./examples/child-out.log",
-    "pid_file": "./examples/child.pid"
-  }, {
-    // Application #2
-    "name": "jserver",
-    "script": "./jserver/jserver.js",
-    "instances": 0,
-    "merge_logs": true,
-    "exec_mode": "cluster_mode",
-    "error_file": "./examples/child-err.log",
-    "out_file": "./examples/child-out.log",
-    "pid_file": "./examples/child.pid"
-  }]
+    "apps": [{
+        //http://www.cnblogs.com/chyingp/p/pm2-documentation.html
+        //http://pm2.keymetrics.io/docs/usage/pm2-doc-single-page/
+        // Application #1
+        "name": "server",
+        "script": "./server/app.js",
+        "instances": 0,
+        "merge_logs": true,
+        "exec_mode": "cluster_mode",
+        "error_file": "../logs/child-err.log",
+        "out_file": "../logs/child-out.log",
+        "pid_file": "../logs/child.pid"
+    }, {
+        // Application #2
+        "name": "jserver",
+        "script": "./jserver/jserver.js",
+        "instances": 0,
+        "merge_logs": true,
+        "exec_mode": "cluster_mode",
+        "error_file": "../logs/child-err.log",
+        "out_file": "../logs/child-out.log",
+        "pid_file": "../logs/child.pid"
+    }]
 }
