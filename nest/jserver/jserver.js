@@ -50,7 +50,7 @@ let loadFile = (req, res, filePath, fileType) => {
 				res.writeHead(500, {
 					'Content-Type': contentType
 				});
-				res.end(err);
+				res.end(JSON.stringify(err));
 			}
 			// less compaile
 			if (fileType == 'less') {

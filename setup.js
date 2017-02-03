@@ -11,41 +11,18 @@ const execFun = (todo, msg, cbk) => {
 	!Array.isArray(todo) && (todo = [todo]);
 	let t = '';
 	let progressFun = () => {
-		process.stdout.write(`'${msg}'\n wait.`);
+		process.stdout.write(`\n"${msg}" starting\n wait.`);
 		t = setInterval(function() {
 			process.stdout.write('.');
 		}, 500);
 	}
 	progressFun();
-	// if (displayProgress) {
-	// 	progressFun();
-	// } else {
-	// 	process.stdin.setEncoding('utf8');
-	// 	process.stdin.on('readable', () => {
-	// 		let chunk = process.stdin.read();
-	// 		if (chunk !== null) {
-	// 			chunk = chunk.slice(0, -2);
-	// 			if (isFirst) {
-	// 				process.stdout.write(`请再次敲回车确认密码\n`);
-	// 			}
-	// 			isFirst = false;
-	// 		}
-	// 		if (chunk === '') {
-	// 			process.stdin.emit('end');
-	// 			return
-	// 		}
-	// 	});
-
-	// 	process.stdin.on('end', () => {
-	// 		progressFun();
-	// 	});
-	// }
 	exec(todo.join(' && '), function(error, stdout, stderr) {
 		if (error) {
-			console.log(error)
+			console.dir(error);
 		}
 		t && clearInterval(t);
-		console.log(`\n '${msg}' finised\n\n`);
+		console.log(`\n"${msg}" finised\n`);
 		cbk && typeof cbk == 'function' && cbk();
 	})
 }
@@ -78,7 +55,19 @@ const config = () => {
 		}
 		// exec framework
 		execFun(['cd mid/nest', 'npm run start'], 'framework start', function() {
-			console.log(`In the browser input **127.0.0.1:${serverPort}** or **${ip}:${serverPort}**, and then can see the pages`)
+			const CFonts = require('./mid/nest/node_modules/cfonts');
+			require('./mid/nest/node_modules/colors');
+			CFonts.say('MID', {
+				font: '3d',
+				align: 'left',
+				colors: ['white', 'black'],
+				background: 'Black',
+				letterSpacing: 1,
+				lineHeight: 1,
+				space: true,
+				maxLength: '0'
+			});
+			console.log(`In the browser input`, `127.0.0.1:${serverPort}`.green.underline, `or`, `${ip}:${serverPort}`.green.underline, `, and then can see the pages.\n`);
 			let openBrower = require(midPath + '/jserver/openBrower');
 			openBrower(`http://${ip}:${serverPort}`);
 		});

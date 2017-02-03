@@ -33,7 +33,10 @@ let mapDir = (dir, ext) => {
         files.forEach(file => {
             file = dir + '/' + file;
             fs.lstat(file, (err, stats) => {
-                if (err) return;
+                if (err) {
+                    console.dir(err);
+                    return;
+                }
                 if (stats.isDirectory()) {
                     mapDir(file, ext);
                 } else if (stats.isFile()) {

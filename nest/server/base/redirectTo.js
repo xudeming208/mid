@@ -15,8 +15,7 @@ function redirectTo(url, proxyArgs) {
 			'Cache-Control': 'no-cache,must-revalidate,no-store',
 			'Pragma': 'no-cache'
 		});
-		this.res.write('');
-		this.res.end();
+		this.res.end('');
 	} catch (err) {
 		console.log('write res error', err, new Date, '')
 	}

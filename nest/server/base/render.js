@@ -126,7 +126,7 @@ let render = function(tpl, data = {}) {
 		})
 		this.res.end(getHtml(tpl, data) || '');
 	} catch (err) {
-		console.log(err);
+		console.dir(err);
 	}
 }
 
