@@ -1,3 +1,5 @@
+#配置文件相关说明
+
 ##defaultPage：
 	- 表示用真实IP地址（不是127.0.0.1或者localhost）访问的页面（PC or H5）
 
