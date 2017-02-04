@@ -19,8 +19,8 @@
   },
   "scripts": {
     "start": "pm2 start pm2Conf.json",
-    "stop": "pm2 delete all",
-    "restart": "cd .. && rm -rf tmp/* && cd nest && pm2 restart pm2Conf.json",
+    "stop": "cd .. && rm -rf tmp/* && rm -rf logs/* && pm2 delete all",
+    "restart": "pm2 restart pm2Conf.json",
     "logs": "cd ../logs && tail -f child-out.log"
   },
   "dependencies": {

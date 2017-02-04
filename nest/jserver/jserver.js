@@ -35,7 +35,7 @@ let loadFile = (req, res, filePath, fileType) => {
 	}
 	// define writeFile fun
 	let writeFile = (data) => {
-		staticCache[filePath] = data;
+		!ETC.debug && (staticCache[filePath] = data);
 		res.write(data);
 		res.end();
 	}
@@ -109,13 +109,19 @@ if (cluster.isMaster) {
 				res.writeHead(304, 'Not Modified');
 				res.end();
 			} else {
-				res.writeHead(200, {
+				let headerObj = {
 					'Server': ETC.server,
 					'Content-Type': contentType + ';charset=utf-8',
 					'Last-Modified': lastModified,
 					'Expires': expires.toUTCString(),
 					'Cache-Control': 'max-age=' + maxAge
-				});
+				}
+				if (ETC.debug) {
+					delete headerObj['Last-Modified'];
+					delete headerObj['Expires'];
+					headerObj['Cache-Control'] = 'no-cache,no-store';
+				}
+				res.writeHead(200, headerObj);
 				if (fileType) {
 					loadFile(req, res, filePath, fileType);
 				} else {

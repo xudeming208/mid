@@ -51,7 +51,7 @@ const config = () => {
 	content.site.staticHost = staticHost;
 	fs.writeFile(fileName, JSON.stringify(content), 'utf-8', (err) => {
 		if (err) {
-			console.log(err);
+			console.dir(err);
 		}
 		// exec framework
 		execFun(['cd mid/nest', 'npm run start'], 'framework start', function() {

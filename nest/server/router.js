@@ -2,7 +2,7 @@
 const url = require('url');
 const path = require('path');
 const fs = require('fs');
-const watcher = require("./base/watch");
+const watchFile = require("./base/watchFile");
 const getData = require('./base/getData');
 const useModule = require('./base/useModule');
 const redirectTo = require('./base/redirectTo');
@@ -23,11 +23,11 @@ let route = (req, res) => {
 	// 	pathname = reqUrl.pathname,
 	// 	modUrl = pathname.substr(1).replace(/\/+/g, '/').split('/');
 
-	console.log((req.url).split('?'))
+	// console.log((req.url).split('?'))
 	let reqUrl = req.url,
 		hostname = req.headers.host.split(':')[0],
 		reqUrlArr = reqUrl.split('?'),
-		modUrl = reqUrlArr[0].substr(1).replace(/\/+/g, '/').split('/'),
+		modUrl = reqUrlArr[0].substr(1).replace(/\/+/g, '/').split('/') || [],
 		reqQuery = reqUrlArr[1] && reqUrlArr[1].split('&') || [];
 
 	// favicon.ico
@@ -65,11 +65,11 @@ let route = (req, res) => {
 	2 mod/../param
 	1 mod
 	*/
-	// console.log(modUrl)
+	console.log('modurl:', modUrl)
 	if (modUrl.length < 3) {
 		modUrl.splice(1, 0, 'index');
 	}
-	// console.log(modUrl)
+	console.log('modUrl:', modUrl);
 	let mods = modUrl.splice(-3),
 		modName = mods[0] || ETC.defaultMod,
 		modFun = mods[1] || 'index',
@@ -92,6 +92,10 @@ let route = (req, res) => {
 	} else {
 		// console.log(req)
 		let modJs = require(modPath);
+		// watchFile
+		watchFile(modPath, function() {
+			delete require.cache[modPath];
+		});
 		// console.log(modJs)
 		// console.log(modFun)
 		let extendObj = {
@@ -106,8 +110,6 @@ let route = (req, res) => {
 		let modJsObj = modJs['controllerObj'];
 		// merge
 		Object.assign(modJsObj, extendObj);
-		// watcher
-		watcher.takeCare(controllerPath);
 
 		let fn = modJsObj[modFun];
 		if (fn && typeof fn === 'function') {

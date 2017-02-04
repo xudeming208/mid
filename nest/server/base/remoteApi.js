@@ -103,6 +103,9 @@ module.exports = remoteApi = (self, req, res, php, cbk) => {
 let hasFinished = (phpLen, cbk) => {
 	//确保数据都返回完再callback
 	if (phpLen == 0) {
+		let siteOrgin = JSON.stringify(SITE);
 		cbk(Object.assign(SITE, apiData));
+		//Object.assign改变SITE后，还原SIZE
+		SITE = JSON.parse(siteOrgin);
 	}
 }

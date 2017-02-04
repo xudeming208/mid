@@ -25,17 +25,17 @@ let init = () => {
 	content.site.staticHost = `http://${ip}:${ETC.jserverPort}`;
 
 	// 重启服务清除缓存,包括静态服务器(主要是304或者from cache，通过更改版本号)
-	let tmpPath = path.resolve(__dirname, '../../tmp');
+	// let tmpPath = path.resolve(__dirname, '../../tmp');
 	// console.log(tmpPath)
 	// server
-	if (fs.existsSync(tmpPath)) {
-		exec(['cd ' + tmpPath, 'rm -rf *'].join(' && '), function(error, stdout, stderr) {
+	// if (fs.existsSync(tmpPath)) {
+		exec(['cd ../.. ', 'rm -rf tmp/*', 'rm -rf logs/*'].join(' && '), function(error, stdout, stderr) {
 			if (error) {
 				console.log(error)
 			}
 			console.log('Clear cache finised');
 		})
-	}
+	// }
 	// jserver
 	if (!ETC.debug) {
 		let PUBDAY = 81.011;

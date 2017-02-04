@@ -2,12 +2,8 @@ const path = require('path');
 const remoteApi = require('./remoteApi');
 
 function isEmpey(obj) {
-	for (let key in obj) {
-		if (obj.hasOwnProperty(key)) {
-			return false;
-		}
-	}
-	return true;
+	let arr = Object.keys(obj);
+	return arr.length ? false : true;
 }
 
 function getData(php, cbk) {
