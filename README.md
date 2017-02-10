@@ -1,5 +1,6 @@
 # mid
 nodejs mvc framework
+用nodejs开发的一套MVC框架
 
 ##Usage
 1. sudo npm install -g pm2
@@ -14,12 +15,12 @@ nodejs mvc framework
 6. node setup
 
 ##Nginx
-* bind `host` => sudo vi /etc/hosts，like this：
+* 绑定host `host` => sudo vi /etc/hosts，如下：
 
 ```
 127.0.0.1 h5.fedevot.test.com pc.fedevot.test.com
 ```
-* install `nginx` and config，like this：
+* 安装 `nginx` 然后配置如下：
 
 ```
 server {
@@ -32,7 +33,7 @@ server {
 ```
 
 **ps:**
-`You can also start the port 80 (sudo start), but is not recommended`
+	当然你也可以以80端口启动node服务，然后用sudo启动，但是不推荐这样。
 
 ##配置文件相关说明
 
