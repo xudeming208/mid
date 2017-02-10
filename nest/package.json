@@ -24,10 +24,12 @@
     "logs": "cd ../logs && tail -f child-out.log"
   },
   "dependencies": {
-    "less": "^2.7.1"
+    "less": "^2.7.1",
+    "chokidar": "^1.6.1"
   },
   "devDependencies": {
     "cfonts": "^1.1.1",
+    "chokidar": "^1.6.1",
     "colors": "^1.1.2",
     "less": "^2.7.1",
     "open": "^0.0.5"
