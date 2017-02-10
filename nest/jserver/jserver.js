@@ -41,7 +41,7 @@ let loadFile = (req, res, filePath, fileType) => {
 	}
 	if (!fs.existsSync(filePath) || filePath.match(/\bmvc\b/)) {
 		res.writeHead(404, {
-			'Content-Type': contentType
+			'Content-Type': 'text/plain'
 		});
 		res.end('404 Not Found');
 		console.log(filePath + ' is lost');
@@ -49,7 +49,7 @@ let loadFile = (req, res, filePath, fileType) => {
 		fs.readFile(filePath, unicode, (err, data) => {
 			if (err) {
 				res.writeHead(500, {
-					'Content-Type': contentType
+					'Content-Type': 'text/plain'
 				});
 				res.end(JSON.stringify(err));
 			}
@@ -63,7 +63,7 @@ let loadFile = (req, res, filePath, fileType) => {
 				}, error => {
 					console.log(error);
 					res.writeHead(500, {
-						'Content-Type': contentType
+						'Content-Type': 'text/plain'
 					});
 					res.end(filePath + 'compile error');
 				})
@@ -105,23 +105,26 @@ if (cluster.isMaster) {
 				expires = new Date();
 			expires.setTime(expires.getTime() + maxAge * 1000);
 			// 304
+			// chrome增加了from memory cache和from disk cache，所以开发模式下光禁止304是不行的
+			// if (!ETC.debug && req.headers[ifModifiedSince] && lastModified == req.headers[ifModifiedSince]) {
 			if (req.headers[ifModifiedSince] && lastModified == req.headers[ifModifiedSince]) {
 				res.writeHead(304, 'Not Modified');
 				res.end();
 			} else {
-				let headerObj = {
+				let resHeader = {
 					'Server': ETC.server,
 					'Content-Type': contentType + ';charset=utf-8',
 					'Last-Modified': lastModified,
 					'Expires': expires.toUTCString(),
 					'Cache-Control': 'max-age=' + maxAge
-				}
+				};
+				// chrome增加了from memory cache和from disk cache，所以开发模式下光禁止304是不行的
 				if (ETC.debug) {
-					delete headerObj['Last-Modified'];
-					delete headerObj['Expires'];
-					headerObj['Cache-Control'] = 'no-cache,no-store';
+					delete resHeader['Last-Modified'];
+					delete resHeader['Expires'];
+					resHeader['Cache-Control'] = 'no-cache,no-store';
 				}
-				res.writeHead(200, headerObj);
+				res.writeHead(200, resHeader);
 				if (fileType) {
 					loadFile(req, res, filePath, fileType);
 				} else {
@@ -150,6 +153,6 @@ if (cluster.isMaster) {
 }
 
 process.on('uncaughtException', function(err) {
-	console.log(err);
+	console.dir(err);
 	process.exit(1);
 })

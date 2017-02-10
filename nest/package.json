@@ -5,7 +5,7 @@
   "email": "xudeming208@126.com",
   "description": "nodejs MVC framework",
   "bin": {
-    "app": "app"
+    "app": "./server/app.js"
   },
   "keywords": [
     "nodejs",
@@ -20,14 +20,14 @@
   "scripts": {
     "start": "pm2 start pm2Conf.json",
     "stop": "cd .. && rm -rf tmp/* && rm -rf logs/* && pm2 delete all",
-    "restart": "pm2 restart pm2Conf.json",
+    "restart": "npm run stop && npm run start",
     "logs": "cd ../logs && tail -f child-out.log"
   },
   "dependencies": {
     "less": "^2.7.1"
   },
   "devDependencies": {
-    "cfonts": "^1.0.2",
+    "cfonts": "^1.1.1",
     "colors": "^1.1.2",
     "less": "^2.7.1",
     "open": "^0.0.5"
