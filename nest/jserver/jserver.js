@@ -65,7 +65,7 @@ let loadFile = (req, res, filePath, fileType) => {
 					res.writeHead(500, {
 						'Content-Type': 'text/plain'
 					});
-					res.end(filePath + 'compile error');
+					res.end(`"${filePath}": compile error`);
 				})
 			} else {
 				writeFile(data);

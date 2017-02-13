@@ -7,6 +7,7 @@ const getData = require('./base/getData');
 const useModule = require('./base/useModule');
 const redirectTo = require('./base/redirectTo');
 const render = require('./base/render').render;
+const base = require('./base/base');
 
 let route = (req, res) => {
 	// try {
@@ -74,7 +75,9 @@ let route = (req, res) => {
 		modName = mods[0] || ETC.defaultMod,
 		modFun = mods[1] || 'index',
 		modParam = mods[2] || null;
-	// console.log(reqUrl.hostname)
+
+	console.log('hostname:', hostname);
+
 	let controllerPath = path.resolve(__dirname, PATH.apps, PATH[HOST[hostname]], PATH.controller),
 		modPath = path.resolve(controllerPath, modName + '.js');
 	// console.log(reqUrl)
@@ -107,9 +110,11 @@ let route = (req, res) => {
 			redirectTo,
 			render
 		};
-		let modJsObj = modJs['controllerObj'];
+		let modJsObj = modJs['controlObj'];
 		// merge
 		Object.assign(modJsObj, extendObj);
+		// BASE(常用的工具函数集合)
+		global.BASE = base.call(modJsObj);
 
 		let fn = modJsObj[modFun];
 		if (fn && typeof fn === 'function') {

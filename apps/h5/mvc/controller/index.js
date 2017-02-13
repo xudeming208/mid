@@ -1,4 +1,4 @@
-const controllerObj = {
+const controlObj = {
 	index: function() {
 		let php = {
 			
@@ -12,4 +12,4 @@ const controllerObj = {
 }
 
 
-exports.controllerObj = controllerObj;
+exports.controlObj = controlObj;

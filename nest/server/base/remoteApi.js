@@ -1,92 +1,146 @@
 const http = require('http'),
-	querystring = require('querystring');
+	querystring = require('querystring'),
+	cookie = require('./cookie.js');
 let apiData = {};
-module.exports = remoteApi = (self, req, res, php, cbk) => {
+module.exports = remoteApi = (req, res, php, cbk) => {
 	let phpLen = Object.keys(php).length;
 	for (let phpKey in php) {
-		let remoteUri = php[phpKey],
-			hostSource,
-			reqHeaders = {},
-			defaultApiHost = 'busi';
+		let remoteObj = php[phpKey];
+		if (({}).toString.call(remoteObj) === '[object String]') {
+			remoteObj = {
+				'path': remoteObj
+			}
+		}
+		let protocol = remoteObj['protocol'] && (remoteObj['protocol'] + ':') || 'http:',
+			path = remoteObj['path'] || '',
+			method = remoteObj['method'] && remoteObj['method'].toUpperCase() || 'GET',
+			port = remoteObj['port'] || 80,
+			remoteData = querystring.stringify(remoteObj['data'] || {}),
+			hostSource = 'web',
+			reqHeaders = {};
 
-		if (remoteUri.indexOf('::') > 0) {
-			remoteUri = remoteUri.split('::');
-			hostSource = remoteUri[0];
-			remoteUri = remoteUri[1];
+		if (path.indexOf('::') > 0) {
+			path = path.split('::');
+			hostSource = path[0];
+			path = path[1];
 		}
 		let host = API[hostSource];
+		//config.json api中找不到host的时候
 		if (!host) {
-			console.log(`${remoteUri} is not configed`);
-			host = defaultApiHost;
+			console.log(`"${hostSource}": is not configed in config.json -> api`);
+			phpLen--;
+			apiData[phpKey] = false;
+			hasFinished(phpLen, cbk);
+			continue;
 		}
-		let proxyHeaders = {};
 		reqHeaders.reqHost = req.headers.host;
 		reqHeaders.requrl = req.url;
 		reqHeaders.targetEnd = hostSource;
-		reqHeaders['Content-Length'] = Buffer.byteLength(querystring.stringify(self.req.__get), 'utf8');
-		let proxyDomain = ['XREF', 'seashell', 'clientIp', 'referer', 'cookie', 'user-agent'];
-		for (let i = 0, j = proxyDomain.length; i < j; i++) {
-			if (req.headers.hasOwnProperty(proxyDomain[i])) {
-				proxyHeaders[proxyDomain[i]] = req.headers[proxyDomain[i]]
+		let proxyDomain = ['XREF', 'seashell', 'clientIp', 'referer', 'cookie', 'user-agent', 'async'];
+		proxyDomain.forEach((item) => {
+			if (req.headers.hasOwnProperty(item)) {
+				reqHeaders[item] = req.headers[item];
 			}
+		});
+
+		if (method === 'GET') {
+			if (remoteData) {
+				path = path.trim();
+				path += (path.indexOf('?') > 0 ? '&' : '?') + remoteData;
+			}
+			remoteData = '';
+		} else {
+			reqHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
 		}
+
+		reqHeaders['Content-Length'] = Buffer.byteLength(remoteData, 'utf8');
+
+		console.log('reqHeaders:', reqHeaders);
+
 		let options = {
+			protocol: protocol,
 			host: host,
-			port: 80,
-			headers: proxyHeaders,
-			path: remoteUri,
-			agent: false,
-			method: 'GET',
+			port: port,
+			headers: reqHeaders,
+			path: path,
+			// agent: false,
+			method: method,
 		};
 		// console.log(options);
 		let request_timer;
-		let request = http.request(options, response => {
+		let httpRequest = http.request(options, response => {
 			phpLen--;
 			request_timer && clearTimeout(request_timer);
 			request_timer = null;
 
 			let res_state = response.statusCode;
 			if (200 != res_state && 400 != res_state && 4000 > res_state) {
-				console.log('error', 'api', remoteUri, 'STATUS: ', res_state)
+				console.log('error', 'api', path, 'STATUS: ', res_state);
 				apiData[phpKey] = false;
 				hasFinished(phpLen, cbk);
 				return;
 			}
-			let result = '';
-			let buff = []
+			let result = '',
+				buff = [];
 			response.on('data', chunk => {
-				buff.push(chunk)
+				buff.push(chunk);
 			}).on('end', () => {
 				result = Buffer.concat(buff);
 				if (400 == res_state) {
-					console.log('error', 'api', remoteUri, '400: ', result)
+					console.log('error', 'api', path, '400: ', result);
 					apiData[phpKey] = false;
 					hasFinished(phpLen, cbk);
 					return;
 				}
-
-				if ('""' == result) result = false
-				try {
-					let result_orgin = result;
-					result = result ? (JSON.parse(result) || result) : false
-				} catch (err) {
-					console.log('error', 'api', remoteUri, 'API ERROR:', result_orgin)
+				if ('""' == result) {
+					result = false;
 				}
+				if (ETC.debug) {
+					try {
+						let result_orgin = result;
+						result = result ? (JSON.parse(result) || result) : false;
+					} catch (err) {
+						console.log('error', 'api', path, 'API ERROR:', result_orgin);
+					}
+				} else {
+					try {
+						result = result ? (JSON.parse(result) || result) : false;
+					} catch (err) {
+						console.log('error', 'api', path, 'API ERROR:', result);
+						result = false;
+					}
+				}
+				// setCookie
+				['set-cookie'].forEach((proxyKey) => {
+					if (proxyKey in response.headers) {
+						let pdVal = response.headers[proxyKey];
+						if (!pdVal) {
+							return
+						}
+						if ('set-cookie' == proxyKey) {
+							let cookieSet = cookie.getHandler(req, res);
+							pdVal.forEach((val) => {
+								cookieSet.set(val);
+							})
+						} else
+							res.setHeader(proxyKey, pdVal);
+					}
+				})
+				
 				apiData[phpKey] = result;
 				hasFinished(phpLen, cbk);
 				return;
 			});
-		});
-		request.on('error', e => {
-			console.log('error', 'api', remoteUri, e.message);
+		}).on('error', e => {
+			console.log('error', 'api', path, e.message);
 			phpLen--;
 			apiData[phpKey] = false;
 			hasFinished(phpLen, cbk);
 		});
 		request_timer = setTimeout(() => {
 			request_timer = null
-			request.abort();
-			console.log('error', 'api', remoteUri, 'Request Timeout');
+			httpRequest.abort();
+			console.log('error', 'api', path, 'Request Timeout');
 			phpLen--;
 			apiData[phpKey] = false;
 			hasFinished(phpLen, cbk);
@@ -94,8 +148,8 @@ module.exports = remoteApi = (self, req, res, php, cbk) => {
 		}, ETC.apiTimeOut);
 
 
-		// request.write(self.req.__get);
-		request.end();
+		httpRequest.write(remoteData);
+		httpRequest.end();
 
 	}
 }

@@ -5,7 +5,7 @@
 		"defaultPage": "pc",
 		"defaultMod": "index",
 		"server": "MID 1.0.0",
-		"ip": "172.20.118.120",
+		"ip": "172.20.119.163",
 		"apiTimeOut": 5000,
 		"cpuNums": 1,
 		"debug": true
@@ -20,7 +20,7 @@
 		"view": "./mvc/view/"
 	},
 	"site": {
-		"staticHost": "http://172.20.118.120:8084",
+		"staticHost": "http://172.20.119.163:8084",
 		"jsDefer": true,
 		"pcPath": "/pc/static",
 		"h5Path": "/h5/static",
@@ -32,9 +32,10 @@
 		"127.0.0.1": "pc",
 		"h5.fedevot.test.com": "h5",
 		"pc.fedevot.test.com": "pc",
-		"172.20.118.120": "pc"
+		"172.20.119.163": "pc"
 	},
 	"api": {
-		"busi": "webapi.busi.inke.com"
+		"web": "webapi.busi.inke.com",
+		"inke": "webapi.busi.inke.cn"
 	}
 }

@@ -21,23 +21,35 @@ let complie = (filePath, tpl, content, data) => {
 	tplStr += "let _getHtml = _data => {\n"
 	tplStr += "let html='';\n"
 	for (let i = 0, len = arr.length; i < len; i++) {
-		let item = arr[i];
+		// let item = arr[i].trim();
+		let item = arr[i].replace(/^\s*/g, '');
 		if (!item) {
 			continue;
 		}
 		if (item.indexOf('%>') > 0) {
-			let rightArr = item.split('%>');
+			let rightArr = item.split('%>'),
+				rightArr0 = rightArr[0],
+				rightArr1 = rightArr[1];
 			switch (item.substr(0, 1)) {
 				case '=':
-					tplStr += "html+=" + rightArr[0].substr(1) + "\n";
+					// '<%== val %>' 防止XSS
+					switch (item.substr(1, 1)) {
+						case '=':
+							let encodeStr = BASE.htmlEncode(rightArr0.substr(2));
+							tplStr += "html+=" + quotes + encodeStr + quotes + "\n";
+							break;
+						default:
+							tplStr += "html+=" + rightArr0.substr(1) + "\n";
+							break;
+					}
 					break;
 				case '#':
-					tplStr += "html+=getHtml('" + rightArr[0].substr(1) + "',_data);\n"
+					tplStr += "html+=getHtml('" + rightArr0.substr(1) + "',_data);\n"
 					break;
 				default:
-					tplStr += rightArr[0] + "\n";
+					tplStr += rightArr0 + "\n";
 			}
-			tplStr += "html+=" + quotes + rightArr[1] + quotes + "\n";
+			tplStr += "html+=" + quotes + rightArr1 + quotes + "\n";
 		} else {
 			tplStr += "html+=" + quotes + item + quotes + "\n";
 		}
@@ -69,23 +81,6 @@ let getHtml = (tpl, data) => {
 
 // 输出HTML
 let render = function(tpl, data = {}) {
-	// mkdir tmp
-	let tmpPath = path.resolve(__dirname, '../../../tmp');
-	if (!fs.existsSync(tmpPath)) {
-		fs.mkdirSync(tmpPath);
-	}
-	if (this.req.__get['__pd__']) {
-		//show data  
-		let now = new Date();
-		if (this.req.__get['__pd__'] == '/rb/' + (now.getMonth() + now.getDate() + 1)) {
-			this.res.writeHead(200, {
-				'Content-Type': 'text/plain',
-				'Cache-Control': 'no-cache,no-store'
-			});
-			this.res.end(JSON.stringify(data));
-			return;
-		}
-	}
 	host = HOST[this.hostname];
 	['_JSLinks', '_CSSLinks', '_JSstack', '_CSSstack', '_JSmods', '_CSSmods'].map(function(item) {
 		if (!data.hasOwnProperty(item)) {
@@ -95,8 +90,26 @@ let render = function(tpl, data = {}) {
 	data.useModule = this.useModule.bind(data);
 	//combo css
 	if (!ETC.debug) {
-		data._CSSmods = [].concat(data._CSSLinks);
+		// data._CSSmods = [].concat(data._CSSLinks);
+		data._CSSmods.push(...data._CSSLinks);
 		data._CSSLinks.length = 0;
+	}
+	// mkdir tmp
+	let tmpPath = path.resolve(__dirname, '../../../tmp');
+	if (!fs.existsSync(tmpPath)) {
+		fs.mkdirSync(tmpPath);
+	}
+	if (this.req.__get['__pd__']) {
+		//show data
+		let now = new Date();
+		if (this.req.__get['__pd__'] == '/rb/' + (now.getMonth() + now.getDate() + 1)) {
+			this.res.writeHead(200, {
+				'Content-Type': 'text/plain',
+				'Cache-Control': 'no-cache,no-store'
+			});
+			this.res.end(JSON.stringify(data));
+			return;
+		}
 	}
 	try {
 		this.res.writeHead(200, {

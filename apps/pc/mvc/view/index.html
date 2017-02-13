@@ -6,18 +6,43 @@
 	var busi = this.busi || {}
 	var busiData = busi.data || {};
 	var wx = busiData.wx || {};
+
+	var list=this.list || {}
+	var inkeData=list.data || {}
+	var hotlists=inkeData.hotlists || []
 %>
 <div><%= testData.s %></div>
+
+<p>md5:<%= BASE.md5('asdasd') %></p>
+
+<p>当前浏览器是：<%= Object.keys(this.browers) %></p>
+
+
+<p>XSS:<%== <script>alert(9)</script> %></p>
+
 <%#test/test2/test2.html%>
 <img src="<%= this.staticHost + this.pcPath %>/img/index.png" alt="">
 <img src="//www.baidu.com/img/bd_logo1.png" alt="">
 
-
+<!-- 这是注释 -->
 <ul>
 	<% for(var i in wx){ %>
-		<p><%= wx[i] %></p>
+		<li><%= wx[i] %></li>
 	<% } %>
 </ul>
+
+
+
+<ul>
+	<% hotlists.forEach(function(item,index){ %>
+		<% for(var j in item){ %>
+			<li><span><%= j %></span> : <%= item[j] %></li>
+		<% } %>
+	<% }) %>
+</ul>
+
+
+
 <% this.useModule( [ 'page/index' ] ) %>
 <% this.useModule( [ 'page/test/test' ] ) %>
 <%#foot.html%>

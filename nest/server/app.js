@@ -31,7 +31,7 @@ let init = () => {
 	// if (fs.existsSync(tmpPath)) {
 		exec(['cd ../.. ', 'rm -rf tmp/*', 'rm -rf logs/*'].join(' && '), function(error, stdout, stderr) {
 			if (error) {
-				console.log(error)
+				console.dir(error);
 			}
 			console.log('Clear cache finised');
 		})

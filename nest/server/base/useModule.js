@@ -32,7 +32,8 @@ function useModule(modules) {
 
     if (isFirst) {
         isFirst = false;
-        modules = this._JSLinks.concat(modules);
+        // modules = this._JSLinks.concat(modules);
+        modules.unshift(...this._JSLinks);
         this._JSLinks.length = 0;
     }
 
@@ -40,7 +41,8 @@ function useModule(modules) {
         return `fml.use('${mod.trim()}');`
     })
 
-    this._JSstack = this._JSstack.concat(fullModulesInvoke);
+    // this._JSstack = this._JSstack.concat(fullModulesInvoke);
+    this._JSstack.push(...fullModulesInvoke);
 
     if (!SITE.jsDefer) {
         return;

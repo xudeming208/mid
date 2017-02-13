@@ -1,16 +1,27 @@
-const controllerObj = {
+const controlObj = {
 	index: function(arg) {
 		arg in this ? this[arg]() : this["main"]();
 	},
 	main: function(arg) {
+		let tools = BASE.loadModel('./tools');
 		let php = {};
-		if (arg == 1) {
+		// if (arg == 1) {
 			php = {
-				'busi': 'busi::/mobile/mobile_share_api?liveid=1481105372291334&uid=5778280&openid=',
-				'busi2': 'busi::/mobile/mobile_share_api?liveid=1481105372291334&uid=5778280&openid='
+				'busi': {
+					'protocol': 'http',
+					'path': '/mobile/mobile_share_api',
+					'method': 'post',
+					'port': 80,
+					'data': {
+						'liveid': '1481105372291334',
+						'uid': '5778280'
+					}
+				},
+				'list': 'inke::/web/live_hotlist_pc'
 			};
-		}
+		// }
 		this.getData(php, data => {
+			data.browers = tools.getBrowser(this.req);
 			data.pageTitle = 'index';
 			data._CSSLinks = ['page/index', 'page/index2'];
 			this.render('index.html', data);
@@ -21,12 +32,11 @@ const controllerObj = {
 
 		};
 		this.getData(php, data => {
-			data.pageTitle = 'test33';
-			data._CSSLinks = ['page/index'];
-			this.render('index.html', data);
+			data.pageTitle = 'test';
+			this.render('test.html', data);
 		})
 	}
 }
 
 
-exports.controllerObj = controllerObj;
+exports.controlObj = controlObj;

@@ -1,4 +1,4 @@
-const controllerObj = {
+const controlObj = {
 	index: function(arg) {
 		let php = {};
 		if (this.req.__get.d == 1) {
@@ -16,4 +16,4 @@ const controllerObj = {
 }
 
 
-exports.controllerObj = controllerObj;
+exports.controlObj = controlObj;
