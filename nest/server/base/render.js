@@ -35,7 +35,7 @@ let complie = (filePath, tpl, content, data) => {
 					// '<%== val %>' 防止XSS
 					switch (item.substr(1, 1)) {
 						case '=':
-							let encodeStr = BASE.htmlEncode(rightArr0.substr(2));
+							let encodeStr = TOOLS.htmlEncode(rightArr0.substr(2));
 							tplStr += "html+=" + quotes + encodeStr + quotes + "\n";
 							break;
 						default:

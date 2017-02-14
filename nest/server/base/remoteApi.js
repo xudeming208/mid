@@ -6,7 +6,7 @@ module.exports = remoteApi = (req, res, php, cbk) => {
 	let phpLen = Object.keys(php).length;
 	for (let phpKey in php) {
 		let remoteObj = php[phpKey];
-		if (({}).toString.call(remoteObj) === '[object String]') {
+		if (TOOLS.isString(remoteObj)) {
 			remoteObj = {
 				'path': remoteObj
 			}
@@ -55,19 +55,21 @@ module.exports = remoteApi = (req, res, php, cbk) => {
 
 		reqHeaders['Content-Length'] = Buffer.byteLength(remoteData, 'utf8');
 
-		console.log('reqHeaders:', reqHeaders);
+		// console.log('reqHeaders:', reqHeaders);
 
-		let options = {
-			protocol: protocol,
-			host: host,
-			port: port,
-			headers: reqHeaders,
-			path: path,
-			// agent: false,
-			method: method,
-		};
-		// console.log(options);
-		let request_timer;
+		let startTime = Date.now(),
+			request_timer,
+			options = {
+				protocol: protocol,
+				host: host,
+				port: port,
+				headers: reqHeaders,
+				path: path,
+				// agent: false,
+				method: method,
+			};
+		console.log('API request options:\n', options, '\n');
+
 		let httpRequest = http.request(options, response => {
 			phpLen--;
 			request_timer && clearTimeout(request_timer);
@@ -110,6 +112,15 @@ module.exports = remoteApi = (req, res, php, cbk) => {
 						result = false;
 					}
 				}
+
+				// API request time
+				let runlong = Date.now() - startTime;
+				console.log(`INFO: "${host}${path}" request time is ${runlong}ms`);
+
+				if (runlong > 500) {
+					console.log(`WARNING: "${host}${path}" request time is ${runlong}ms > 500ms`);
+				}
+
 				// setCookie
 				['set-cookie'].forEach((proxyKey) => {
 					if (proxyKey in response.headers) {
@@ -126,7 +137,7 @@ module.exports = remoteApi = (req, res, php, cbk) => {
 							res.setHeader(proxyKey, pdVal);
 					}
 				})
-				
+
 				apiData[phpKey] = result;
 				hasFinished(phpLen, cbk);
 				return;

@@ -2,14 +2,14 @@ const path = require('path');
 const remoteApi = require('./remoteApi');
 
 function getData(php, cbk) {
-	const loadModel = BASE.loadModel('./loadModel');
+	const loadModel = TOOLS.loadModel('./loadModel');
 	let self = this,
 		req = self.req,
 		res = self.res;
 	// console.dir(php)
 	loadModel(php);
 	// console.dir(php)
-	if (BASE.isEmpey(php)) {
+	if (TOOLS.isEmpey(php)) {
 		return cbk(SITE);
 	}
 	remoteApi(req, res, php, cbk);

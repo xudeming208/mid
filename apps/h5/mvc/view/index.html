@@ -5,7 +5,9 @@
 	}
 %>
 <div><%= testData.s %></div>
+
+<p>os: <%= JSON.stringify(TOOLS.os) %></p>
 <img src="<%= this.staticHost + this.h5Path %>/img/index.png" alt="">
-<img src="//www.baidu.com/img/bd_logo1.png" alt="">
+<!-- <img src="//www.baidu.com/img/bd_logo1.png" alt=""> -->
 <% this.useModule( [ 'page/index' ] ) %>
 <%#foot.html%>

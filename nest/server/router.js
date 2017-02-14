@@ -7,29 +7,23 @@ const getData = require('./base/getData');
 const useModule = require('./base/useModule');
 const redirectTo = require('./base/redirectTo');
 const render = require('./base/render').render;
-const base = require('./base/base');
+const tools = require('./base/tools');
 
 let route = (req, res) => {
-	// try {
-	// 	var reqUrl = url.parse('http://' + req.headers.host + req.url, true);
-	// } catch (err) {
-	// 	console.log('Route Parse Error:', req.url)
-	// 	res.writeHead(500, {
-	// 		'Content-Type': 'text/plain'
-	// 	});
-	// 	res.end('url is wrong');
-	// 	return
-	// }
-	// let hostname = reqUrl.hostname,
-	// 	pathname = reqUrl.pathname,
-	// 	modUrl = pathname.substr(1).replace(/\/+/g, '/').split('/');
-
-	// console.log((req.url).split('?'))
-	let reqUrl = req.url,
-		hostname = req.headers.host.split(':')[0],
-		reqUrlArr = reqUrl.split('?'),
-		modUrl = reqUrlArr[0].substr(1).replace(/\/+/g, '/').split('/') || [],
-		reqQuery = reqUrlArr[1] && reqUrlArr[1].split('&') || [];
+	try {
+		var reqUrl = url.parse('http://' + req.headers.host + req.url, true);
+	} catch (err) {
+		console.log(`Route Parse Error: ${req.url}`);
+		res.writeHead(500, {
+			'Content-Type': 'text/plain'
+		});
+		res.end('url is wrong');
+		return;
+	}
+	let hostname = reqUrl.hostname,
+		pathname = reqUrl.pathname,
+		modUrl = pathname.substr(1).replace(/\/+/g, '/').split('/'),
+		reqQuery = reqUrl.query || {};
 
 	// favicon.ico
 	if (reqUrl == '/favicon.ico') {
@@ -52,76 +46,88 @@ let route = (req, res) => {
 	}
 
 	// 获取URL参数
-	// console.log('---------------------------------------------');
-	// console.log(reqUrl);
 	req.__get = {};
-	reqQuery.forEach(function(query) {
-		let queryArr = query.split('=');
-		req.__get[queryArr[0]] = queryArr[1];
-	});
-	// console.log(req.__get)
+	for (let key in reqQuery) {
+		req.__get[key.replace(/[<>%\'\"]/g, '')] = reqQuery[key];
+	}
+
+	console.log(`query: `, req.__get);
+
 	/*
 	url 格式 [/ 地址/...]模块文件名/方法名/[参数] 
 	3 mod/fn/param
 	2 mod/../param
 	1 mod
 	*/
-	console.log('modurl:', modUrl)
+
 	if (modUrl.length < 3) {
 		modUrl.splice(1, 0, 'index');
 	}
-	console.log('modUrl:', modUrl);
+
 	let mods = modUrl.splice(-3),
 		modName = mods[0] || ETC.defaultMod,
-		modFun = mods[1] || 'index',
-		modParam = mods[2] || null;
+		modFun = mods.length >= 2 ? mods[1] : 'index',
+		modParam = mods.length >= 3 ? mods[2] : null;
 
-	console.log('hostname:', hostname);
+	if (modParam) {
+		modParam = decodeURIComponent(modParam);
+	}
+
+	console.log(`hostname: ${hostname}`);
 
 	let controllerPath = path.resolve(__dirname, PATH.apps, PATH[HOST[hostname]], PATH.controller),
 		modPath = path.resolve(controllerPath, modName + '.js');
-	// console.log(reqUrl)
 
-	// console.log(modPath);
+	// notFoundFun
 	let notFoundFun = (modPath) => {
 		res.writeHead(404, {
 			'Content-Type': 'text/plain'
 		});
 		res.end('404 Not Found');
-		console.log('cannot found modPath:\n' + modPath);
+		console.log(`cannot found modPath: ${modPath}`);
 	}
 	if (!fs.existsSync(modPath)) {
 		notFoundFun(modPath);
-	} else {
-		// console.log(req)
-		let modJs = require(modPath);
-		// watchFile
-		watchFile(modPath, function() {
-			delete require.cache[modPath];
-		});
-		// console.log(modJs)
-		// console.log(modFun)
-		let extendObj = {
+		return;
+	}
+
+	let modJs = require(modPath);
+	// watchFile
+	watchFile(modPath, function() {
+		delete require.cache[modPath];
+	});
+
+	let modJsObj = modJs['controlObj'],
+		extendObj = {
 			hostname,
 			req,
 			res,
 			getData,
 			useModule,
 			redirectTo,
-			render
+			render,
+			tools
 		};
-		let modJsObj = modJs['controlObj'];
-		// merge
-		Object.assign(modJsObj, extendObj);
-		// BASE(常用的工具函数集合)
-		global.BASE = base.call(modJsObj);
 
-		let fn = modJsObj[modFun];
-		if (fn && typeof fn === 'function') {
+	// merge
+	Object.assign(modJsObj, extendObj);
+
+	// TOOLS(常用的工具函数集合)，代码和模板中都可以使用，例如：TOOLS.md5(str)
+	global.TOOLS = modJsObj.tools();
+
+	let fn = modJsObj[modFun];
+	if (fn && typeof fn === 'function') {
+		try {
 			fn.call(modJsObj, modParam);
-		} else {
-			notFoundFun(fn);
+		} catch (err) {
+			res.writeHead(500, {
+				'Content-Type': 'text/plain'
+			});
+			res.end('err: ', err);
+			console.log('err: ', err);
 		}
+	} else {
+		notFoundFun(fn);
 	}
 }
 module.exports = route;

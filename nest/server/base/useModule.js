@@ -3,16 +3,12 @@ const cryto = require('crypto');
 let jsDepCache = {};
 let isFirst = true;
 
-let md5 = str => {
-    return str ? cryto.createHash('md5').update(str.toString()).digest('hex') : '';
-}
-
 function useModule(modules) {
     if (!Array.isArray(modules)) {
         modules = [modules];
     }
 
-    let blockKey = md5(modules.toString()),
+    let blockKey = TOOLS.md5(modules.toString()),
         getAllModules = mod => {
             !this._JSmods.includes(mod) && this._JSmods.push(mod);
             // combo
@@ -25,7 +21,7 @@ function useModule(modules) {
     if (jsDepCache.hasOwnProperty(blockKey)) {
         let jss = jsDepCache[blockKey];
         if (false !== jss) {
-            jss.map(getAllModules)
+            jss.map(getAllModules);
         }
         return;
     }

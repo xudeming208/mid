@@ -13,16 +13,18 @@
 %>
 <div><%= testData.s %></div>
 
-<p>md5:<%= BASE.md5('asdasd') %></p>
+<p>md5:<%= TOOLS.md5('asdasd') %></p>
 
-<p>当前浏览器是：<%= Object.keys(this.browers) %></p>
+<p>os :<%= JSON.stringify(TOOLS.os) %></p>
+
+<p>当前浏览器是：<%= TOOLS.browser %></p>
 
 
 <p>XSS:<%== <script>alert(9)</script> %></p>
 
 <%#test/test2/test2.html%>
 <img src="<%= this.staticHost + this.pcPath %>/img/index.png" alt="">
-<img src="//www.baidu.com/img/bd_logo1.png" alt="">
+<!-- <img src="//www.baidu.com/img/bd_logo1.png" alt=""> -->
 
 <!-- 这是注释 -->
 <ul>

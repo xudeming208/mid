@@ -87,7 +87,7 @@ if (cluster.isMaster) {
 		// console.dir(CONFIG)
 		let filePath = path.resolve(__dirname, PATH.apps),
 			contentType = mimeTypes[fileType] || 'text/plain';
-		console.log(reqUrl)
+		// console.log(reqUrl)
 
 		//将CSS的请求转化为Less的请求
 		if (fileType == 'css') {

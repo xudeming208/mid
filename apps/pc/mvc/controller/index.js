@@ -3,7 +3,6 @@ const controlObj = {
 		arg in this ? this[arg]() : this["main"]();
 	},
 	main: function(arg) {
-		let tools = BASE.loadModel('./tools');
 		let php = {};
 		// if (arg == 1) {
 			php = {
@@ -21,7 +20,6 @@ const controlObj = {
 			};
 		// }
 		this.getData(php, data => {
-			data.browers = tools.getBrowser(this.req);
 			data.pageTitle = 'index';
 			data._CSSLinks = ['page/index', 'page/index2'];
 			this.render('index.html', data);
@@ -35,7 +33,15 @@ const controlObj = {
 			data.pageTitle = 'test';
 			this.render('test.html', data);
 		})
-	}
+	},
+	test2: function() {
+		let php = {
+
+		};
+		this.getData(php, data => {
+			this.redirectTo('http://www.baidu.com', true);
+		})
+	},
 }
 
 
