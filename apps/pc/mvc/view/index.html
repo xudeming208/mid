@@ -22,9 +22,13 @@
 
 <p>XSS:<%== <script>alert(9)</script> %></p>
 
+<p><a href="javascript:;" id="get">get方式ajax</a></p>
+
+<p><a href="javascript:;" id="post">post方式ajax</a></p>
+
 <%#test/test2/test2.html%>
 <img src="<%= this.staticHost + this.pcPath %>/img/index.png" alt="">
-<!-- <img src="//www.baidu.com/img/bd_logo1.png" alt=""> -->
+<img src="//www.baidu.com/img/bd_logo1.png" alt="">
 
 <!-- 这是注释 -->
 <ul>
@@ -32,6 +36,7 @@
 		<li><%= wx[i] %></li>
 	<% } %>
 </ul>
+
 
 
 
@@ -43,7 +48,9 @@
 	<% }) %>
 </ul>
 
-
+<script type="text/html" id="pageTpl">
+	
+</script>
 
 <% this.useModule( [ 'page/index' ] ) %>
 <% this.useModule( [ 'page/test/test' ] ) %>

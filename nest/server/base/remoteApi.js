@@ -2,7 +2,7 @@ const http = require('http'),
 	querystring = require('querystring'),
 	cookie = require('./cookie.js');
 let apiData = {};
-module.exports = remoteApi = (req, res, php, cbk) => {
+module.exports = remoteApi = (req, res, isAjax, php, cbk) => {
 	let phpLen = Object.keys(php).length;
 	for (let phpKey in php) {
 		let remoteObj = php[phpKey];
@@ -30,7 +30,7 @@ module.exports = remoteApi = (req, res, php, cbk) => {
 			console.log(`"${hostSource}": is not configed in config.json -> api`);
 			phpLen--;
 			apiData[phpKey] = false;
-			hasFinished(phpLen, cbk);
+			hasFinished(phpLen, phpKey, isAjax, cbk);
 			continue;
 		}
 		reqHeaders.reqHost = req.headers.host;
@@ -79,7 +79,7 @@ module.exports = remoteApi = (req, res, php, cbk) => {
 			if (200 != res_state && 400 != res_state && 4000 > res_state) {
 				console.log('error', 'api', path, 'STATUS: ', res_state);
 				apiData[phpKey] = false;
-				hasFinished(phpLen, cbk);
+				hasFinished(phpLen, phpKey, isAjax, cbk);
 				return;
 			}
 			let result = '',
@@ -91,7 +91,7 @@ module.exports = remoteApi = (req, res, php, cbk) => {
 				if (400 == res_state) {
 					console.log('error', 'api', path, '400: ', result);
 					apiData[phpKey] = false;
-					hasFinished(phpLen, cbk);
+					hasFinished(phpLen, phpKey, isAjax, cbk);
 					return;
 				}
 				if ('""' == result) {
@@ -139,14 +139,14 @@ module.exports = remoteApi = (req, res, php, cbk) => {
 				})
 
 				apiData[phpKey] = result;
-				hasFinished(phpLen, cbk);
+				hasFinished(phpLen, phpKey, isAjax, cbk);
 				return;
 			});
 		}).on('error', e => {
 			console.log('error', 'api', path, e.message);
 			phpLen--;
 			apiData[phpKey] = false;
-			hasFinished(phpLen, cbk);
+			hasFinished(phpLen, phpKey, isAjax, cbk);
 		});
 		request_timer = setTimeout(() => {
 			request_timer = null
@@ -154,23 +154,27 @@ module.exports = remoteApi = (req, res, php, cbk) => {
 			console.log('error', 'api', path, 'Request Timeout');
 			phpLen--;
 			apiData[phpKey] = false;
-			hasFinished(phpLen, cbk);
+			hasFinished(phpLen, phpKey, isAjax, cbk);
 			return;
 		}, ETC.apiTimeOut);
 
-
+		// 写入数据到请求主体 post
 		httpRequest.write(remoteData);
 		httpRequest.end();
 
 	}
 }
 
-let hasFinished = (phpLen, cbk) => {
+let hasFinished = (phpLen, phpKey, isAjax, cbk) => {
 	//确保数据都返回完再callback
 	if (phpLen == 0) {
-		let siteOrgin = JSON.stringify(SITE);
-		cbk(Object.assign(SITE, apiData));
-		//Object.assign改变SITE后，还原SIZE
-		SITE = JSON.parse(siteOrgin);
+		if (isAjax) {
+			cbk(apiData[phpKey]);
+		} else {
+			let siteOrgin = JSON.stringify(SITE);
+			cbk(Object.assign(SITE, apiData));
+			//Object.assign改变SITE后，还原SIZE
+			SITE = JSON.parse(siteOrgin);
+		}
 	}
 }

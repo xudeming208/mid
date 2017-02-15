@@ -1,4 +1,3 @@
-const path = require('path');
 const remoteApi = require('./remoteApi');
 
 function getData(php, cbk) {
@@ -12,7 +11,7 @@ function getData(php, cbk) {
 	if (TOOLS.isEmpey(php)) {
 		return cbk(SITE);
 	}
-	remoteApi(req, res, php, cbk);
+	remoteApi(req, res, false, php, cbk);
 }
 
 

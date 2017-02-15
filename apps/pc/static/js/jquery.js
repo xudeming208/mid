@@ -10728,29 +10728,37 @@
     return jQuery;
 }));
 
-(function(){
-    var ntNotice = false
-    jQuery.ajaxSetup({
-        'beforeSend' : function(XMLHttpRequest){
-            var nt = Meilishuo.config.nt
-            if (nt) XMLHttpRequest.setRequestHeader('nt' , nt)
-        },
-        'complete' : function(res){
-            var nt = res.getResponseHeader('nt')
-            if (nt) Meilishuo.config.nt = nt
-        },
-        'error' : function(res){
-            switch (res.status){
-                case 461:
-                    if (!ntNotice) {
-                        window.location = window.location.href
-                    }
-                    ntNotice = true
-                    break;
-                case 4022:
-                    break;
-            }
-        }
-    })
-})();
+// (function(){
+//     var ntNotice = false
+//     jQuery.ajaxSetup({
+//         'beforeSend' : function(XMLHttpRequest){
+//             var nt = Meilishuo.config.nt
+//             if (nt) XMLHttpRequest.setRequestHeader('nt' , nt)
+//         },
+//         'complete' : function(res){
+//             var nt = res.getResponseHeader('nt')
+//             if (nt) Meilishuo.config.nt = nt
+//         },
+//         'error' : function(res){
+//             switch (res.status){
+//                 case 461:
+//                     if (!ntNotice) {
+//                         window.location = window.location.href
+//                     }
+//                     ntNotice = true
+//                     break;
+//                 case 4022:
+//                     break;
+//             }
+//         }
+//     })
+// })();
+
+// http://www.w3school.com.cn/jquery/ajax_ajaxsend.asp
+// $("div").ajaxSend(function(e,xhr,opt){
+//   $(this).html("Requesting " + opt.url);
+// });
+
+
+
 

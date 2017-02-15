@@ -42,6 +42,13 @@ const controlObj = {
 			this.redirectTo('http://www.baidu.com', true);
 		})
 	},
+	aj: function(args) {
+		let php = {
+			'busi': '/mobile/mobile_share_api',
+			'list': 'inke::/web/live_hotlist_pc'
+		};
+		this.ajaxTo(php, args);
+	}
 }
 
 

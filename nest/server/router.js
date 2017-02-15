@@ -2,11 +2,13 @@
 const url = require('url');
 const path = require('path');
 const fs = require('fs');
+const querystring = require('querystring');
 const watchFile = require("./base/watchFile");
 const getData = require('./base/getData');
 const useModule = require('./base/useModule');
 const redirectTo = require('./base/redirectTo');
 const render = require('./base/render').render;
+const ajaxTo = require('./base/ajaxTo');
 const tools = require('./base/tools');
 
 let route = (req, res) => {
@@ -45,8 +47,9 @@ let route = (req, res) => {
 		return;
 	}
 
-	// 获取URL参数
+	// 获取参数
 	req.__get = {};
+	req.__post = {}
 	for (let key in reqQuery) {
 		req.__get[key.replace(/[<>%\'\"]/g, '')] = reqQuery[key];
 	}
@@ -106,6 +109,7 @@ let route = (req, res) => {
 			useModule,
 			redirectTo,
 			render,
+			ajaxTo,
 			tools
 		};
 
@@ -116,18 +120,39 @@ let route = (req, res) => {
 	global.TOOLS = modJsObj.tools();
 
 	let fn = modJsObj[modFun];
-	if (fn && typeof fn === 'function') {
-		try {
-			fn.call(modJsObj, modParam);
-		} catch (err) {
-			res.writeHead(500, {
-				'Content-Type': 'text/plain'
-			});
-			res.end('err: ', err);
-			console.log('err: ', err);
+
+	let toExe = () => {
+		if (fn && typeof fn === 'function') {
+			try {
+				fn.call(modJsObj, modParam);
+			} catch (err) {
+				res.writeHead(500, {
+					'Content-Type': 'text/plain'
+				});
+				res.end('err: ', err);
+				console.log('err: ', err);
+			}
+		} else {
+			notFoundFun(fn);
 		}
+	}
+
+	// post
+	if ('POST' == req.method) {
+		let data = '';
+		req.addListener('data', chunk => {
+				data += chunk;
+				if (data.length > 1e6) {
+					req.connection.destroy()
+				}
+			})
+			.addListener('end', () => {
+				data = querystring.parse(data);
+				req.__post = data;
+				toExe();
+			})
 	} else {
-		notFoundFun(fn);
+		toExe();
 	}
 }
 module.exports = route;

@@ -61,8 +61,8 @@ exports.getHandler = function ( req, res ) {
     }
 
     return {
-        set: set,
-        get: get,
+        set,
+        get,
         clear
     }
 }

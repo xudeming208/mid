@@ -116,6 +116,7 @@ if (cluster.isMaster) {
 					'Content-Type': contentType + ';charset=utf-8',
 					'Last-Modified': lastModified,
 					'Expires': expires.toUTCString(),
+					// 'Access-Control-Allow-Origin': '*',
 					'Cache-Control': 'max-age=' + maxAge
 				};
 				// chrome增加了from memory cache和from disk cache，所以开发模式下光禁止304是不行的

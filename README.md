@@ -50,7 +50,7 @@ server {
 ###apiTimeOut：
 	- 表示的访问接口的超时时间
 
-##debug(还未完成)：
+##debug(部分未完成)：
 	- 此字段为true时：HTML不压缩，CSS和JS不合并及压缩，静态资源不缓存（包括内存的缓存及浏览器的缓存）；生产环境需将debug设为false
 
 ##FAQ
