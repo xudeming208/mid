@@ -81,7 +81,7 @@
         var scriptUrl;
         var moduleId = getIdFromId(moduleName);
         if (_moduleCache.hasOwnProperty(moduleId) ) {
-			var mod = _moduleCache[moduleId];
+      var mod = _moduleCache[moduleId];
             fn && fn.call(mod , mod);    
             return ;
             }
@@ -96,10 +96,10 @@
                 }    
              }
          if (_defer) {
-			if (!_scriptStackHash.hasOwnProperty(moduleName) ) {
+      if (!_scriptStackHash.hasOwnProperty(moduleName) ) {
                  _scriptStackHash[moduleName] = true;
                  _scriptStack.push(moduleName); 
-			}       
+      }       
          }else {
             scriptUrl = host + moduleName + '.js' + options.sversion ;
             _urlModArr[scriptUrl] = moduleId;
@@ -172,17 +172,17 @@
              }
 
         moduleid = getIdFromId(moduleid);
-		if (_moduleCache.hasOwnProperty(moduleid)) {
-			console.log(moduleid + ' dumb define')
-			return
-		}
+    if (_moduleCache.hasOwnProperty(moduleid)) {
+      console.log(moduleid + ' dumb define')
+      return
+    }
         if (!moduleid && document.attachEvent && !~UA.indexOf('Opera') ) {
             var _idFromSrc = getAnonymousId();
             }
 
          var defineFn = function() {
-			 if (!moduleid) moduleid = _idFromSrc||defineFn.id ;
-			 if (moduleid && _moduleCache.hasOwnProperty(moduleid)) return;
+       if (!moduleid) moduleid = _idFromSrc||defineFn.id ;
+       if (moduleid && _moduleCache.hasOwnProperty(moduleid)) return;
              var exports = {};
              var _export = factor(require , exports);
              if (_export ) exports = _export;
@@ -348,52 +348,52 @@
                 })(toLoadMod)  );
             }
         }
-	/*
-	window.onerror = function(errormsg,url,linenumber){
-		fml.debug(url +':'+ linenumber +':'+errormsg);
-		}
-	*/
+  /*
+  window.onerror = function(errormsg,url,linenumber){
+    fml.debug(url +':'+ linenumber +':'+errormsg);
+    }
+  */
 
-	var _event_stacks = {}
-	function eventProxy(proxyName , fn){
-		if (! (proxyName in _event_stacks))_event_stacks[proxyName] = []
-		if (fn && typeof fn == 'function') _event_stacks[proxyName].push(fn)
-		}
-	function fireProxy(proxyName , data , once){
-		if (! (proxyName in _event_stacks)) return
-		var statcks= _event_stacks[proxyName]
-		if (!statcks || !statcks.length) return
-		for (var i = 0 , j= statcks.length ; i <j ; i++){
-			statcks[i](data)
-			}
-		if (once) delete _event_stacks[proxyName]
-		return true
-		}
-	function loadCss(css,callBack){
+  var _event_stacks = {}
+  function eventProxy(proxyName , fn){
+    if (! (proxyName in _event_stacks))_event_stacks[proxyName] = []
+    if (fn && typeof fn == 'function') _event_stacks[proxyName].push(fn)
+    }
+  function fireProxy(proxyName , data , once){
+    if (! (proxyName in _event_stacks)) return
+    var statcks= _event_stacks[proxyName]
+    if (!statcks || !statcks.length) return
+    for (var i = 0 , j= statcks.length ; i <j ; i++){
+      statcks[i](data)
+      }
+    if (once) delete _event_stacks[proxyName]
+    return true
+    }
+  function loadCss(css,callBack){
         var l = document.createElement('link');
-		l.setAttribute('rel','stylesheet');
-		l.setAttribute('rev','stylesheet');
-		l.setAttribute('href',css);
+    l.setAttribute('rel','stylesheet');
+    l.setAttribute('rev','stylesheet');
+    l.setAttribute('href',css);
         head.appendChild(l);
-		var img = document.createElement('img');
+    var img = document.createElement('img');
         img.onerror = function(){
             if(callBack) callBack();
         }
         img.src = css;
-	}
+  }
     global.fml = {
         version : 0.8 ,
         vars : {},
-		eventProxy : eventProxy,
-		fireProxy : fireProxy,
-		on : eventProxy,
-		emit : fireProxy,
-		debug :function(){
-			window.console && window.console.log.apply &&window.console.log.apply(console, arguments);
-			},
-		getOption : function(key){
-			return options[key];
-			},
+    eventProxy : eventProxy,
+    fireProxy : fireProxy,
+    on : eventProxy,
+    emit : fireProxy,
+    debug :function(){
+      window.console && window.console.log.apply &&window.console.log.apply(console, arguments);
+      },
+    getOption : function(key){
+      return options[key];
+      },
         setOptions : setOptions,
         use : function(m,f){
             if (is_array(m)) loadMuchModule(m,f);
@@ -403,16 +403,16 @@
         iLoad : function(){ 
             if (!_defer) return;
             _defer = false;
-			var sl = _scriptStack.length;
-			for(var i =0; i< sl; i++){
-				loadModule(_scriptStack[i] );
-				}
-			_scriptStack = []; 
-			_scriptStack = {};
+      var sl = _scriptStack.length;
+      for(var i =0; i< sl; i++){
+        loadModule(_scriptStack[i] );
+        }
+      _scriptStack = []; 
+      _scriptStack = {};
             
             },
         loadScript : loadScript,
-		loadCss: loadCss,
+    loadCss: loadCss,
         alias : function(){ return this}
        }
  })(this);

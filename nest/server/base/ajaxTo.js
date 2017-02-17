@@ -12,12 +12,12 @@ function ajaxTo(php, args) {
 		phpObj = {};
 
 	if (!php[args]) {
-		console.log(`can't find ${args} in ${JSON.stringify(php)}`);
 		res.writeHead(404, {
 			'Content-Type': 'text/plain',
 			'Cache-Control': 'no-cache,no-store',
 			'Server': ETC.server
 		})
+		console.log(`can't find ${args} in ${JSON.stringify(php)}`);
 		res.end(`can't find ${args} in ${JSON.stringify(php)}`);
 		return;
 	}

@@ -1,7 +1,6 @@
 #TODO
 	- 待完成的功能
 
-##ajax请求功能已经完成，还需要完成ajax模板渲染
 
 ##weiget
 
@@ -21,7 +20,7 @@ weiget
 <%= requireFn('block/banner.html')({
 	'data' : [],
 	'config':{},
-	'hide_btn':false,
+	'css':'',
 	'_JSstack' : this._JSstack ,'_JSmods' :  this._JSmods
 });%>
 ```

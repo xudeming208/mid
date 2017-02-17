@@ -22,7 +22,7 @@ function tools() {
 			return ({}).toString.call(obj) === '[object Object]';
 		},
 		isArray: obj => {
-			return ({}).toString.call(obj) === '[object Array]';
+			return Array.isArray(obj) || ({}).toString.call(obj) === '[object Array]';
 		},
 		isString: obj => {
 			return ({}).toString.call(obj) === '[object String]';

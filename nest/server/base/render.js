@@ -14,8 +14,8 @@ let getTmpFile = tpl => {
 // complie
 let complie = (filePath, tpl, content, data) => {
 	let tplStr = '';
-	let str = content.replace(/this/g, '_data');
-	let arr = str.split('<%');
+	// let str = content.replace(/this/g, '_data');
+	let arr = content.split('<%');
 	tplStr += "/* " + filePath + " */\n"
 	tplStr += "let getHtml = require('" + (isWindows ? __filename.replace(/\\/g, '/') : __filename) + "').getHtml;\n"
 	tplStr += "let _getHtml = _data => {\n"
@@ -28,7 +28,7 @@ let complie = (filePath, tpl, content, data) => {
 		}
 		if (item.indexOf('%>') > 0) {
 			let rightArr = item.split('%>'),
-				rightArr0 = rightArr[0],
+				rightArr0 = rightArr[0].replace(/this\./g, '_data.'),
 				rightArr1 = rightArr[1];
 			switch (item.substr(0, 1)) {
 				case '=':
@@ -47,7 +47,7 @@ let complie = (filePath, tpl, content, data) => {
 					tplStr += "html+=getHtml('" + rightArr0.substr(1) + "',_data);\n"
 					break;
 				default:
-					tplStr += rightArr0 + "\n";
+					tplStr += ";" + rightArr0 + "\n";
 			}
 			tplStr += "html+=" + quotes + rightArr1 + quotes + "\n";
 		} else {
@@ -99,8 +99,8 @@ let render = function(tpl, data = {}) {
 	if (!fs.existsSync(tmpPath)) {
 		fs.mkdirSync(tmpPath);
 	}
+	//show data
 	if (this.req.__get['__pd__']) {
-		//show data
 		let now = new Date();
 		if (this.req.__get['__pd__'] == '/rb/' + (now.getMonth() + now.getDate() + 1)) {
 			this.res.writeHead(200, {
@@ -112,6 +112,7 @@ let render = function(tpl, data = {}) {
 		}
 	}
 	try {
+		let html = getHtml(tpl, data);
 		this.res.writeHead(200, {
 			'Content-Type': 'text/html;charset=utf-8',
 			'Cache-Control': 'no-cache,no-store',
@@ -119,12 +120,16 @@ let render = function(tpl, data = {}) {
 			'X-Xss-Protection': '1; mode=block',
 			'X-Content-Type-Options': 'nosniff',
 			'Server': ETC.server
-		})
-		let html = getHtml(tpl, data) || '';
+		});
 		!ETC.debug && (html = html.replace(/[\r\n\t]+/g, ''));
 		this.res.end(html);
-	} catch (err) {
-		console.dir(err);
+	} catch (e) {
+		console.dir(e);
+		this.res.writeHead(503, {
+			'Content-Type': 'text/plain',
+			'Cache-Control': 'no-cache,no-store'
+		})
+		this.res.end('oops! complie error!');
 	}
 }
 

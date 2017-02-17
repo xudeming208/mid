@@ -24,6 +24,8 @@
 
 <p><a href="javascript:;" id="get">get方式ajax</a></p>
 
+<div id="ajaxContent"></div>
+
 <p><a href="javascript:;" id="post">post方式ajax</a></p>
 
 <%#test/test2/test2.html%>
@@ -41,6 +43,7 @@
 
 
 <ul>
+	<% (hotlists.length >3) && (hotlists.length = 3) %>
 	<% hotlists.forEach(function(item,index){ %>
 		<% for(var j in item){ %>
 			<li><span><%= j %></span> : <%= item[j] %></li>
@@ -48,8 +51,20 @@
 	<% }) %>
 </ul>
 
+<p>this is a test</p>
+
 <script type="text/html" id="pageTpl">
-	
+<!-- 这是注释 -->
+	<ul>
+		<li>this is a test</li>
+		<li>win-width:<?= $(window).width()+'px' ?></li>
+		<? (this.hotlists.length >3) && (this.hotlists.length = 3) ?>
+		<? this.hotlists.forEach(function(item,index){ ?>
+			<? for(var j in item){ ?>
+				<li><span><?= j ?></span> : <?= item[j] ?></li>
+			<? } ?>
+		<? }) ?>
+	</ul>
 </script>
 
 <% this.useModule( [ 'page/index' ] ) %>
