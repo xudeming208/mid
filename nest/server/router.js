@@ -78,7 +78,7 @@ let route = (req, res) => {
 
 	console.log(`hostname: ${hostname}`);
 
-	let controllerPath = path.resolve(__dirname, PATH.apps, PATH[HOST[hostname]], PATH.controller),
+	let controllerPath = path.resolve(__dirname, PATH.apps, HOST[hostname], PATH.controller),
 		modPath = path.resolve(controllerPath, modName + '.js');
 
 	// notFoundFun

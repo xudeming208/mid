@@ -21,6 +21,7 @@ const controlObj = {
 		// }
 		this.getData(php, data => {
 			data.pageTitle = 'index';
+			//实际情况不推荐CSS数组写法，而可以利用less的@import
 			data._CSSLinks = ['page/index', 'page/index2'];
 			this.render('index.html', data);
 		})

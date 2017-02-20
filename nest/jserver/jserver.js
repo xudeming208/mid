@@ -84,6 +84,26 @@ if (cluster.isMaster) {
 		let pathname = reqUrl.pathname,
 			fileType = pathname.match(/(\.[^.]+|)$/)[0].substr(1); //取得后缀名
 
+		// favicon.ico
+		if (reqUrl.pathname == '/favicon.ico') {
+			let icoPath = path.resolve(__dirname, '../', 'favicon.ico');
+			fs.readFile(icoPath, (err, html) => {
+				if (err) {
+					res.writeHead(500, {
+						'Content-Type': 'text/plain'
+					});
+					// console.log(err);
+					res.end(JSON.stringify(err));
+				}
+				res.writeHead(200, {
+					'Server': ETC.server,
+					'Content-Type': 'image/x-icon;charset=utf-8'
+				});
+				res.end(html);
+			});
+			return;
+		}
+
 		// console.dir(CONFIG)
 		let filePath = path.resolve(__dirname, PATH.apps),
 			contentType = mimeTypes[fileType] || 'text/plain';

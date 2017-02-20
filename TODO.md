@@ -36,7 +36,7 @@ weiget
 ##版本号（或者MD5）的的解决方案
 
 
-##commonJS，模块化的问题
+##commonJS.js，模块化的问题
 
 
 ##eslint

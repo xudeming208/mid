@@ -6,7 +6,14 @@
 %>
 <div><%= testData.s %></div>
 
-<p>os: <%= JSON.stringify(TOOLS.os) %></p>
+<p>md5:<%= TOOLS.md5('asdasd') %></p>
+
+<p>os :<%= JSON.stringify(TOOLS.os) %></p>
+
+<p>当前浏览器是：<%= TOOLS.browser %></p>
+
+
+<p>XSS:<%== <script>alert(9)</script> %></p>
 <img src="<%= this.staticHost + this.h5Path %>/img/index.png" alt="">
 <!-- <img src="//www.baidu.com/img/bd_logo1.png" alt=""> -->
 <% this.useModule( [ 'page/index' ] ) %>
