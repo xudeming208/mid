@@ -1,8 +1,12 @@
 <%#head.html%>
-test page
-<script type="text/javascript">
-	// ==防止XSS
-	// fml.vars.xss = '<%== this.xss %>'
-	fml.vars.xss = '<%= this.xss %>'
-</script>
+<p>this is a test page</p>
+<p>当前浏览器是：<%= TOOLS.browser %></p>
+<%= requireWidget('widget/banner.html',{
+	'model' : this,
+	'data':this.banner,
+	'config':{
+		"autoTime":1800
+	}
+});%>
+<% this.useModule( [ 'page/test' ] ) %>
 <%#foot.html%>

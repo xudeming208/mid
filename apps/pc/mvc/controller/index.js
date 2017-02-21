@@ -21,8 +21,7 @@ const controlObj = {
 		// }
 		this.getData(php, data => {
 			data.pageTitle = 'index';
-			//实际情况不推荐CSS数组写法，而可以利用less的@import
-			data._CSSLinks = ['page/index', 'page/index2'];
+			data._CSSLinks = ['page/index'];
 			data.banner = [{
 				'href': '#',
 				'src': 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2706547558,1569356033&fm=23&gp=0.jpg'
@@ -36,19 +35,19 @@ const controlObj = {
 			this.render('index.html', data);
 		})
 	},
-	test: function() {
-		//http://127.0.0.1:8083/index/test/?xss=%27;alert(%27xss%27);%27
+	xss: function() {
+		//http://127.0.0.1:8083/index/xss/?xss=%27;alert(%27xss%27);%27
 		let php = {
 
 		};
 		let xss=this.req.__get.xss;
 		this.getData(php, data => {
-			data.pageTitle = 'test';
+			data.pageTitle = 'xss';
 			data.xss = xss;
-			this.render('test.html', data);
+			this.render('xss.html', data);
 		})
 	},
-	test2: function() {
+	redirect: function() {
 		let php = {
 
 		};

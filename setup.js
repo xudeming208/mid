@@ -68,8 +68,8 @@ const config = () => {
 				maxLength: '0'
 			});
 			console.log(`In the browser input`, `127.0.0.1:${serverPort}`.green.underline, `or`, `${ip}:${serverPort}`.green.underline, `, and then can see the pages.\n`);
-			let openBrower = require(midPath + '/jserver/openBrower');
-			openBrower(`http://${ip}:${serverPort}`);
+			let openBrowser = require(midPath + '/jserver/openBrowser');
+			openBrowser(`http://${ip}:${serverPort}`);
 		});
 	})
 }

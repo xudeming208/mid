@@ -23,7 +23,7 @@
  
 <p>XSS:<%== '<script type="text/javascript">alert("XSS")</script>' %></p>
 
-<p>XSS可以看<a href="http://127.0.0.1:8083/index/test/?xss=%27;alert(%27xss%27);%27" target="_blank">http://127.0.0.1:8083/index/test/?xss=%27;alert(%27xss%27);%27</a></p>
+<p>XSS可以看<a href="http://127.0.0.1:8083/index/xss/?xss=%27;alert(%27xss%27);%27" target="_blank">http://127.0.0.1:8083/index/xss/?xss=%27;alert(%27xss%27);%27</a></p>
 
 <p><a href="javascript:;" id="get">get方式ajax</a></p>
 
@@ -50,7 +50,6 @@
 	}
 });%>
 
-<%#test/test2/test2.html%>
 <img src="<%= this.staticHost + this.pcPath %>/img/index.png" alt="">
 <img src="//www.baidu.com/img/bd_logo1.png" alt="">
 
@@ -88,5 +87,4 @@
 	</ul>
 </script>
 <% this.useModule( [ 'page/index' ] ) %>
-<% this.useModule( [ 'page/test/test' ] ) %>
 <%#foot.html%>

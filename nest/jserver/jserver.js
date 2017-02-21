@@ -19,8 +19,8 @@ let ip = ETC.ip || '127.0.0.1';
 //自动打开浏览器
 // if (ETC.debug) {
 // 	let openBrowerFun = () => {
-// 		const openBrower = require('./openBrower');
-// 		openBrower(`http://${ip}:${port-1}`);
+// 		const openBrowser = require('./openBrowser');
+// 		openBrowser(`http://${ip}:${port-1}`);
 // 	}
 // }
 
