@@ -19,12 +19,12 @@
 	6. node setup
 
 ##Nginx
-1. 绑定host `host` => sudo vi /etc/hosts，如下：
+* 绑定host `host` => sudo vi /etc/hosts，如下：
 
 ```
 127.0.0.1 h5.fedevot.test.com pc.fedevot.test.com
 ```
-2. 安装 `nginx` 然后配置如下：
+* 安装 `nginx` 然后配置如下：
 
 ```
 server {

@@ -84,13 +84,13 @@ mid
 ```
 
 ##用法
-可以参考：
-	- `apps/pc/mvc/controller/index.js`
-	- `apps/pc/mvc/view/index.html`
-	- `apps/pc/static/js/page/index.js`
-	- `apps/pc/static/less/page/index.less`
+	可以参考：
+		- `apps/pc/mvc/controller/index.js`
+		- `apps/pc/mvc/view/index.html`
+		- `apps/pc/static/js/page/index.js`
+		- `apps/pc/static/less/page/index.less`
 
-1. 编写controller，如在`apps/pc/mvc/controller`目录新建`test.js`，写入：
+* 编写controller，如在`apps/pc/mvc/controller`目录新建`test.js`，写入：
 ```
 const controlObj = {
 	index: function(arg) {
@@ -116,7 +116,7 @@ const controlObj = {
 
 exports.controlObj = controlObj;
 ```
-2. 编写view，如在`apps/pc/mvc/view`目录新建`test.html`，写入：
+* 编写view，如在`apps/pc/mvc/view`目录新建`test.html`，写入：
 ```
 <%#head.html%>
 <p>this is a test page</p>
@@ -131,13 +131,13 @@ exports.controlObj = controlObj;
 <% this.useModule( [ 'page/test' ] ) %>
 <%#foot.html%>
 ```
-3. 编写js，如在`apps/pc/static/js/page`目录新建`test.js`，写入：
+* 编写js，如在`apps/pc/static/js/page`目录新建`test.js`，写入：
 ```
 fml.define("page/test", [], function(require, exports) {
 	console.log('test');
 });
 ```
-4. 编写less，如在`apps/pc/static/less/page`目录新建`test.less`，写入：
+* 编写less，如在`apps/pc/static/less/page`目录新建`test.less`，写入：
 ```
 @import "../atom.less";
 @import "../widget/banner.less";
