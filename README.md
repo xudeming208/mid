@@ -1,5 +1,5 @@
 # mid
-用nodejs开发的一套基于URI的MVC框架，适用于前后端分离项目。
+	用nodejs开发的一套基于URI的MVC框架，适用于前后端分离项目。
 
 ##技术选型
 	- 采用nodejs + MVC + 模块加载器 + less
@@ -7,24 +7,24 @@
 
 
 ##Usage
-1. sudo npm install -g pm2
-2. ~~cd nest~~
-3. ~~npm install~~
-4. ~~npm run start~~
-	* ~~npm run stop~~
-	* ~~npm run restart~~
-	* ~~npm run logs~~
-5. ~~In the browser input **127.0.0.1:8083** or **yourIp:8083**, and then can see the pages~~
-    * ~~`The default is open the PC pages, if you want to open the H5 pages, configure config`~~
-6. node setup
+	1. sudo npm install -g pm2
+	2. ~~cd nest~~
+	3. ~~npm install~~
+	4. ~~npm run start~~
+		* ~~npm run stop~~
+		* ~~npm run restart~~
+		* ~~npm run logs~~
+	5. ~~In the browser input **127.0.0.1:8083** or **yourIp:8083**, and then can see the pages~~
+	    * ~~`The default is open the PC pages, if you want to open the H5 pages, configure config`~~
+	6. node setup
 
 ##Nginx
-* 绑定host `host` => sudo vi /etc/hosts，如下：
+1. 绑定host `host` => sudo vi /etc/hosts，如下：
 
 ```
 127.0.0.1 h5.fedevot.test.com pc.fedevot.test.com
 ```
-* 安装 `nginx` 然后配置如下：
+2. 安装 `nginx` 然后配置如下：
 
 ```
 server {

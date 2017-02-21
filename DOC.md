@@ -1,14 +1,14 @@
 #DOC
 
 ##目录
-	- apps为项目代码，分为H5和PC
-	- nest为框架node代码
-	- logs为日志目录
-	- tmp为临时缓存文件
-	- app.js为动态文件服务器入口
-	- router.js为框架的路由处理
-	- jserver.js为静态文件服务器
-	- config.json为框架的配置文件
+	- apps：项目代码，分：H5和PC
+	- nest：框架node代码
+	- logs：日志目录
+	- tmp：临时缓存文件
+	- app.js：动态文件服务器入口
+	- router.js：框架的路由处理
+	- jserver.js：静态文件服务器
+	- config.json：框架的配置文件
 
 ```
 mid
@@ -83,7 +83,8 @@ mid
 |——TODO.md						#待完成的功能				
 ```
 
-##用法，可以参考：
+##用法
+可以参考：
 	- `apps/pc/mvc/controller/index.js`
 	- `apps/pc/mvc/view/index.html`
 	- `apps/pc/static/js/page/index.js`
