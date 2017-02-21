@@ -10,6 +10,7 @@
 	- jserver.js为静态文件服务器
 	- config.json为框架的配置文件
 
+```
 mid
 |——apps							#项目代码目录
 |	|——h5 						#h5项目
@@ -80,8 +81,7 @@ mid
 |——README.md 					#框架介绍文档	
 |——setup.js 					#`node setup.js`即可自动clone代码到本地，并启动服务打开浏览器查看PC页面，后续做成npm包
 |——TODO.md						#待完成的功能				
-
-
+```
 
 ##用法，可以参考：
 	- `apps/pc/mvc/controller/index.js`
@@ -89,7 +89,7 @@ mid
 	- `apps/pc/static/js/page/index.js`
 	- `apps/pc/static/less/page/index.less`
 
-###编写controller，如在`apps/pc/mvc/controller`目录新建`test.js`，写入：
+1. 编写controller，如在`apps/pc/mvc/controller`目录新建`test.js`，写入：
 ```
 const controlObj = {
 	index: function(arg) {
@@ -115,7 +115,7 @@ const controlObj = {
 
 exports.controlObj = controlObj;
 ```
-###编写view，如在`apps/pc/mvc/view`目录新建`test.html`，写入：
+2. 编写view，如在`apps/pc/mvc/view`目录新建`test.html`，写入：
 ```
 <%#head.html%>
 <p>this is a test page</p>
@@ -130,13 +130,13 @@ exports.controlObj = controlObj;
 <% this.useModule( [ 'page/test' ] ) %>
 <%#foot.html%>
 ```
-###编写js，如在`apps/pc/static/js/page`目录新建`test.js`，写入：
+3. 编写js，如在`apps/pc/static/js/page`目录新建`test.js`，写入：
 ```
 fml.define("page/test", [], function(require, exports) {
 	console.log('test');
 });
 ```
-###编写less，如在`apps/pc/static/less/page`目录新建`test.less`，写入：
+4. 编写less，如在`apps/pc/static/less/page`目录新建`test.less`，写入：
 ```
 @import "../atom.less";
 @import "../widget/banner.less";

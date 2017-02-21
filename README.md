@@ -1,7 +1,7 @@
 # mid
-nodejs mvc framework
-<br>
 用nodejs开发的一套基于URI的MVC框架，适用于前后端分离项目。
+
+##技术选型
 	- 采用nodejs + MVC + 模块加载器 + less
 	- 详细查看DOC.md
 
