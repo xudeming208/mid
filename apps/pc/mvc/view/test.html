@@ -1,3 +1,8 @@
 <%#head.html%>
 test page
+<script type="text/javascript">
+	// ==防止XSS
+	// fml.vars.xss = '<%== this.xss %>'
+	fml.vars.xss = '<%= this.xss %>'
+</script>
 <%#foot.html%>

@@ -9,8 +9,7 @@ const controlObj = {
 		}
 		this.getData(php, data => {
 			data.pageTitle = 'test2';
-			data._CSSLinks = ['page/index'];
-			this.render('index.html', data);
+			this.render('test.html', data);
 		})
 	}
 }

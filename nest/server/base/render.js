@@ -16,10 +16,11 @@ let complie = (filePath, tpl, content, data) => {
 	let tplStr = '';
 	// let str = content.replace(/this/g, '_data');
 	let arr = content.split('<%');
-	tplStr += "/* " + filePath + " */\n"
-	tplStr += "let getHtml = require('" + (isWindows ? __filename.replace(/\\/g, '/') : __filename) + "').getHtml;\n"
-	tplStr += "let _getHtml = _data => {\n"
-	tplStr += "let html='';\n"
+	tplStr += "/* " + filePath + " */\n";
+	tplStr += "let getHtml = require('" + (isWindows ? __filename.replace(/\\/g, '/') : __filename) + "').getHtml;\n";
+	tplStr += "let requireWidget = getHtml\n";
+	tplStr += "let _getHtml = _data => {\n";
+	tplStr += "let html='';\n";
 	for (let i = 0, len = arr.length; i < len; i++) {
 		// let item = arr[i].trim();
 		let item = arr[i].replace(/^\s*/g, '');
@@ -28,15 +29,14 @@ let complie = (filePath, tpl, content, data) => {
 		}
 		if (item.indexOf('%>') > 0) {
 			let rightArr = item.split('%>'),
-				rightArr0 = rightArr[0].replace(/this\./g, '_data.'),
+				rightArr0 = rightArr[0].replace(/this/g, '_data'),
 				rightArr1 = rightArr[1];
 			switch (item.substr(0, 1)) {
 				case '=':
 					// '<%== val %>' 防止XSS
 					switch (item.substr(1, 1)) {
 						case '=':
-							let encodeStr = TOOLS.htmlEncode(rightArr0.substr(2));
-							tplStr += "html+=" + quotes + encodeStr + quotes + "\n";
+							tplStr += "html+=TOOLS.htmlEncode(" + rightArr0.substr(2) + ")\n";
 							break;
 						default:
 							tplStr += "html+=" + rightArr0.substr(1) + "\n";
@@ -44,7 +44,7 @@ let complie = (filePath, tpl, content, data) => {
 					}
 					break;
 				case '#':
-					tplStr += "html+=getHtml('" + rightArr0.substr(1) + "',_data);\n"
+					tplStr += "html+=getHtml('" + rightArr0.substr(1) + "',_data);\n";
 					break;
 				default:
 					tplStr += ";" + rightArr0 + "\n";
@@ -54,9 +54,9 @@ let complie = (filePath, tpl, content, data) => {
 			tplStr += "html+=" + quotes + item + quotes + "\n";
 		}
 	}
-	tplStr += "return html;"
-	tplStr += "}\n"
-	tplStr += 'exports._getHtml = _getHtml' + '\n'
+	tplStr += "return html;";
+	tplStr += "}\n";
+	tplStr += 'exports._getHtml = _getHtml' + '\n';
 	let tmpFile = getTmpFile(tpl);
 	fs.writeFileSync(tmpFile, tplStr);
 	return require(tmpFile)._getHtml(data);

@@ -1,7 +1,7 @@
 <%#head.html%>
 <%
 	var testData = {
-		's':'pc'
+		's':'pc 页'
 	};
 	var busi = this.busi || {}
 	var busiData = busi.data || {};
@@ -13,21 +13,42 @@
 %>
 <div><%= testData.s %></div>
 
+<p>this is a test page</p>
 
 <p>md5:<%= TOOLS.md5('asdasd') %></p>
 
 <p>os :<%= JSON.stringify(TOOLS.os) %></p>
 
 <p>当前浏览器是：<%= TOOLS.browser %></p>
+ 
+<p>XSS:<%== '<script type="text/javascript">alert("XSS")</script>' %></p>
 
-
-<p>XSS:<%== <script>alert(9)</script> %></p>
+<p>XSS可以看<a href="http://127.0.0.1:8083/index/test/?xss=%27;alert(%27xss%27);%27" target="_blank">http://127.0.0.1:8083/index/test/?xss=%27;alert(%27xss%27);%27</a></p>
 
 <p><a href="javascript:;" id="get">get方式ajax</a></p>
 
 <div id="ajaxContent"></div>
 
 <p><a href="javascript:;" id="post">post方式ajax</a></p>
+
+<br>
+<%= requireWidget('widget/banner.html',{
+	'model' : this,
+	'data':this.banner,
+	'config':{
+		"autoTime":1800
+	}
+});%>
+<br>
+<%= requireWidget('widget/banner.html',{
+	'model' : this,
+	'id':'banner2',
+	'class':'banner2',
+	'data':this.banner,
+	'config':{
+		"autoTime":3200
+	}
+});%>
 
 <%#test/test2/test2.html%>
 <img src="<%= this.staticHost + this.pcPath %>/img/index.png" alt="">
@@ -45,29 +66,27 @@
 
 <ul>
 	<% (hotlists.length >3) && (hotlists.length = 3) %>
-	<% hotlists.forEach(function(item,index){ %>
+	<% hotlists.forEach((item,index)=>{ %>
 		<% for(var j in item){ %>
 			<li><span><%= j %></span> : <%= item[j] %></li>
 		<% } %>
 	<% }) %>
 </ul>
 
-<p>this is a test</p>
-
 <script type="text/html" id="pageTpl">
 <!-- 这是注释 -->
 	<ul>
 		<li>this is a test</li>
 		<li>win-width:<?= $(window).width()+'px' ?></li>
+		<br>
 		<? (this.hotlists.length >3) && (this.hotlists.length = 3) ?>
-		<? this.hotlists.forEach(function(item,index){ ?>
+		<? this.hotlists.forEach((item,index)=>{ ?>
 			<? for(var j in item){ ?>
 				<li><span><?= j ?></span> : <?= item[j] ?></li>
 			<? } ?>
 		<? }) ?>
 	</ul>
 </script>
-
 <% this.useModule( [ 'page/index' ] ) %>
 <% this.useModule( [ 'page/test/test' ] ) %>
 <%#foot.html%>

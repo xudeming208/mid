@@ -1,5 +1,15 @@
 @import "../atom.less";
-@import "../component/banner.less";
+@import "../widget/banner.less";
 
+body{
+	padding:10px;
+	.f(14px)
+}
 img{.w(30%)}
 .test{.w(300px);.h(50px);.b(#f00);.bgc(#ff0);.fc(#fff);.l(50px)}
+p{.l(3)}
+
+//以下为覆盖widget的默认样式
+.banner2{
+	.h(200px)
+}

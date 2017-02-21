@@ -11,12 +11,13 @@ function tools() {
 		md5: str => {
 			return str ? cryto.createHash('md5').update(str.toString()).digest('hex') : '';
 		},
+		// 对象是否为空
 		isEmpey: obj => {
 			let arr = Object.keys(obj);
 			return arr.length ? false : true;
 		},
 		htmlEncode: str => {
-			return str.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#039;');
+			return str ? str.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#039;') : '';
 		},
 		isObject: obj => {
 			return ({}).toString.call(obj) === '[object Object]';
@@ -26,6 +27,20 @@ function tools() {
 		},
 		isString: obj => {
 			return ({}).toString.call(obj) === '[object String]';
+		},
+		// 数组去重
+		unique: arr => {
+			let hash = {},
+				result = [],
+				len = arr.length; //n为hash表，r为临时数组
+			for (let i = 0; i < len; i++) {
+				//如果hash表中没有当前项
+				if (!hash[arr[i]]) {
+					hash[arr[i]] = true; //存入hash表
+					result.push(arr[i]);
+				}
+			}
+			return result;
 		},
 		browser: (() => {
 			let browser = 'unknow',

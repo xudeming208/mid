@@ -1,0 +1,29 @@
+<%
+	var bannerArr = this.data || [];
+%>
+<div class="banner <%= this.class || '' %>" id="<%= this.id || 'banner' %>">
+	<ul>
+		<% bannerArr.length && bannerArr.forEach((item,index)=>{ %>
+			<li>
+				<a href="<%= item.href || '#'%>">
+					<img src="<%= item.src || '' %>" alt="">
+				</a>
+			</li>
+		<% }) %>
+	</ul>
+	<div class="num"></div>
+	<div class="btn-wrap">
+		<span class="prev"></span>
+		<span class="next"></span>
+	</div>
+</div>
+<script type="text/javascript">
+	if(!fml.vars.banner){
+		fml.vars.banner=[];
+	}
+	fml.vars.banner.push({
+		id:'<%= this.id || "banner" %>',
+		config:<%= JSON.stringify(this.config) %>
+	})
+</script>
+<% this.model.useModule( [ 'widget/banner' ] ) %> 

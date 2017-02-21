@@ -2,29 +2,6 @@
 	- 待完成的功能
 
 
-##weiget
-
-```
-weiget
-├─banner
-│  ├─tpl
-│  ├─css
-│  └─js
-├─banner2
-│  ├─tpl
-│  ├─css
-│  └─js
-```
-
-```
-<%= requireFn('block/banner.html')({
-	'data' : [],
-	'config':{},
-	'css':'',
-	'_JSstack' : this._JSstack ,'_JSmods' :  this._JSmods
-});%>
-```
-
 ##工程化问题
 	- JS的合并压缩
 	- CSS的合并
