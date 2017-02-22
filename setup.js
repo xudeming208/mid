@@ -68,8 +68,8 @@ const config = () => {
 				space: true,
 				maxLength: '0'
 			});
-			open(`http://${ip}:${serverPort}`);
 			console.log(`In the browser input`, `127.0.0.1:${serverPort}`.green.underline, `or`, `${ip}:${serverPort}`.green.underline, `, and then can see the pages.\n`);
+			open(`http://${ip}:${serverPort}`);
 		});
 	})
 }
