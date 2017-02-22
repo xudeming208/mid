@@ -1,4 +1,4 @@
-#DOC
+#框架介绍及使用方法
 
 ##目录
 	- apps：项目代码，分：H5和PC
@@ -22,12 +22,12 @@ mid
 |	|	|——static				#静态文件目录，生成环境CDN加速
 |	|	|	|——img 				
 |	|	|	|——js
-|	|	|	|	|——component	#模块JS
+|	|	|	|	|——component	#插件JS
 |	|	|	|	|——page			#页面的JS
 |	|	|	|	|——widget		#组件的JS
 |	|	|	|	|——zepto.js
 |	|	|	|——less
-|	|	|	|	|——component	#模块less
+|	|	|	|	|——component	#插件less
 |	|	|	|	|——page			#页面less
 |	|	|	|	|——widget		#组件less
 |	|	|	|	|——atom.less
@@ -57,19 +57,19 @@ mid
 |	|	|——config.js  			#全局变量
 |	|	|——config.json  		#框架的配置文件
 |	|	|——README.md 			#配置介绍
-|	|——jserver					#静态文件服务器
-|	|	|——jserver.js
-|	|	|——commonJS.js 			
-|	|	|——mime.js
-|	|	|——openBrowser.js		
+|	|——jserver					#静态文件服务器目录
+|	|	|——jserver.js 			#静态服务器
+|	|	|——commonJS.js 			#commonJS规范
+|	|	|——mime.js 				#Content-Type
+|	|	|——openBrowser.js		#自动打开浏览器
 |	|——node_modules				
 |	|——server					#动态文件服务器	
 |	|	|——base 				#基础模块代码		
-|	|	|	|——ajaxTo.js
-|	|	|	|——cookie.js
-|	|	|	|——redirectTo.js
-|	|	|	|——render.js
-|	|	|	|——watchFile.js
+|	|	|	|——ajaxTo.js 		#ajax逻辑
+|	|	|	|——cookie.js 		
+|	|	|	|——redirectTo.js 	#重定向
+|	|	|	|——render.js 		#渲染
+|	|	|	|——watchFile.js 	监听文件变化
 |	|	|	|——......
 |	|	|——app.js 				#入口
 |	|	|——router.js 			#路由处理
@@ -85,10 +85,10 @@ mid
 
 ##用法
 	可以参考：
-		- `apps/pc/mvc/controller/index.js`
-		- `apps/pc/mvc/view/index.html`
-		- `apps/pc/static/js/page/index.js`
-		- `apps/pc/static/less/page/index.less`
+		- apps/pc/mvc/controller/index.js
+		- apps/pc/mvc/view/index.html
+		- apps/pc/static/js/page/index.js
+		- apps/pc/static/less/page/index.less
 
 * 编写controller，如在`apps/pc/mvc/controller`目录新建`test.js`，写入：
 ```
@@ -158,5 +158,6 @@ p{
 	3. npm install
 	4. npm start
 	5. 打开浏览器，输入：`127.0.0.1:8083/test`
+	6. npm run logs 查看日志
 
 
