@@ -18,10 +18,31 @@ let ip = ETC.ip || '127.0.0.1';
 
 //自动打开浏览器
 // if (ETC.debug) {
-// 	let openBrowerFun = () => {
-// 		const openBrowser = require('./openBrowser');
-// 		openBrowser(`http://${ip}:${port-1}`);
-// 	}
+	// const IS_WIN = process.platform.indexOf('win') === 0;
+	// const child_process = require('child_process');
+
+	// function openBrower(path, callback) {
+	// 	let cmd = '"' + path + '"';
+	// 	if (IS_WIN) {
+	// 		cmd = 'start "" ' + cmd;
+	// 	} else {
+	// 		if (process.env['XDG_SESSION_COOKIE'] ||
+	// 			process.env['XDG_CONFIG_DIRS'] ||
+	// 			process.env['XDG_CURRENT_DESKTOP']) {
+	// 			cmd = 'xdg-open ' + cmd;
+	// 		} else if (process.env['GNOME_DESKTOP_SESSION_ID']) {
+	// 			cmd = 'gnome-open ' + cmd;
+	// 		} else {
+	// 			cmd = 'open ' + cmd;
+	// 		}
+	// 	}
+	// 	child_process.exec(cmd, callback);
+	// };
+	// openBrower(`http://${ip}:${port-1}`, function() {})
+
+
+// 	let open = require("open");
+// 	open(`http://${ip}:${port-1}`);
 // }
 
 // loadFile
@@ -77,7 +98,6 @@ let loadFile = (req, res, filePath, fileType) => {
 //jserver
 if (cluster.isMaster) {
 	clusterEnable();
-	// openBrowerFun();
 } else {
 	http.createServer((req, res) => {
 		let reqUrl = url.parse(req.url);

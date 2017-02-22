@@ -55,21 +55,23 @@ const config = () => {
 		}
 		// exec framework
 		execFun(['cd mid/nest', 'npm run start'], 'framework start', function() {
-			const CFonts = require('./mid/nest/node_modules/cfonts');
-			require('./mid/nest/node_modules/colors');
-			CFonts.say('MID', {
-				font: '3d',
-				align: 'left',
-				colors: ['white', 'black'],
-				background: 'Black',
-				letterSpacing: 1,
-				lineHeight: 1,
-				space: true,
-				maxLength: '0'
-			});
+			if (ETC.debug) {
+				const CFonts = require('./mid/nest/node_modules/cfonts');
+				const open = require('./mid/nest/node_modules/open');
+				require('./mid/nest/node_modules/colors');
+				CFonts.say('MID', {
+					font: '3d',
+					align: 'left',
+					colors: ['white', 'black'],
+					background: 'Black',
+					letterSpacing: 1,
+					lineHeight: 1,
+					space: true,
+					maxLength: '0'
+				});
+				open(`http://${ip}:${serverPort}`);
+			}
 			console.log(`In the browser input`, `127.0.0.1:${serverPort}`.green.underline, `or`, `${ip}:${serverPort}`.green.underline, `, and then can see the pages.\n`);
-			let openBrowser = require(midPath + '/jserver/openBrowser');
-			openBrowser(`http://${ip}:${serverPort}`);
 		});
 	})
 }

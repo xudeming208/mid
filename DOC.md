@@ -61,7 +61,6 @@ mid
 |	|	|——jserver.js 			#静态服务器
 |	|	|——commonJS.js 			#commonJS规范
 |	|	|——mime.js 				#Content-Type
-|	|	|——openBrowser.js		#自动打开浏览器
 |	|——node_modules				
 |	|——server					#动态文件服务器	
 |	|	|——base 				#基础模块代码		
