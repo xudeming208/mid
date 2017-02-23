@@ -119,6 +119,7 @@ let render = function(tpl, data = {}) {
 			'X-Frame-Options': 'SAMEORIGIN',
 			'X-Xss-Protection': '1; mode=block',
 			'X-Content-Type-Options': 'nosniff',
+			// 'Access-Control-Allow-Origin': '*',
 			'Server': ETC.server
 		});
 		!ETC.debug && (html = html.replace(/[\r\n\t]+/g, ''));
