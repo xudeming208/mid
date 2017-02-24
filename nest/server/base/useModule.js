@@ -21,8 +21,8 @@ function useModule(modules) {
     var blockKey = TOOLS.md5(modules.toString()),
         getAllModules = (mod) => {
             !this._JSmods.includes(mod) && this._JSmods.push(mod);
-            // combo
-            if (ETC.debug) {
+            // merge
+            if (!ETC.merge) {
                 !this._JSLinks.includes(mod) && this._JSLinks.push(mod);
                 this._JSmods.length = 0;
             }

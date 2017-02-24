@@ -138,6 +138,7 @@ fml.define("page/test", [], function(require, exports) {
 ```
 * 编写less，如在`apps/pc/static/less/page`目录新建`test.less`，写入：
 ```
+/*页面都必须引入atom.less，其他的引入根据需求*/
 @import "../atom.less";
 @import "../widget/banner.less";
 body{

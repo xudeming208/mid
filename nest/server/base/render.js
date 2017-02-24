@@ -89,7 +89,7 @@ let render = function(tpl, data = {}) {
 	});
 	data.useModule = this.useModule.bind(data);
 	//combo css
-	if (!ETC.debug) {
+	if (ETC.merge) {
 		// data._CSSmods = [].concat(data._CSSLinks);
 		data._CSSmods.push(...data._CSSLinks);
 		data._CSSLinks.length = 0;

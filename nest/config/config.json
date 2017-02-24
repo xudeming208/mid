@@ -8,6 +8,7 @@
 		"ip": "172.20.121.236",
 		"apiTimeOut": 5000,
 		"cpuNums": 1,
+		"merge": false,
 		"debug": true
 	},
 	"path": {

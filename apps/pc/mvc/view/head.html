@@ -5,6 +5,7 @@
 	<title><%= this.pageTitle %></title>
 	<meta name="description" content="<%= this.pageDescription %>" />
 	<meta name="keywords" content="<%= this.pageKeywords %>" />
+	<link rel="stylesheet" type="text/css" href="<%= this.staticHost + this.pcPath %>/css/base.css<%= this.version || '' %>">
 	<%=
 		(function(link ,cssmods){
 			let cssStr ='',

@@ -43,20 +43,29 @@ function tools() {
 			return result;
 		},
 		browser: (() => {
-			let browser = 'unknow',
-				ua = self.req.headers['user-agent'].toLowerCase();
+			let browser = '没作此浏览器的匹配',
+				ua = self.req.headers['user-agent'];
 			if (!ua) {
 				return browser;
 			}
-			let ie = ua.match(/msie\s([\d.]+)/),
-				chrome = ua.match(/chrome\/([\d.]+)/),
-				safari = ua.match(/safari\/([\d.]+)/),
-				firefox = ua.match(/firefox\/([\d.]+)/),
-				opera = ua.match(/presto\/([\d.]+)/);
+			let ie = ua.match(/msie\s([\d.]+)/i),
+				chrome = ua.match(/chrome\/([\d.]+)/i),
+				safari = ua.match(/safari\/([\d.]+)/i),
+				firefox = ua.match(/firefox\/([\d.]+)/i),
+				opera = ua.match(/presto\/([\d.]+)/i),
+				weixin = ua.match(/micromessenger\/([\d.]+)/i),
+				qq = ua.match(/qq/i),
+				uc = ua.match(/ucbrowser\/([\d.]+)/i);
 			if (ie) {
 				browser = `ie ${ie[1]}`;
 			} else if (chrome) {
 				browser = `chrome ${chrome[1]}`;
+			} else if (weixin) {
+				browser = `weixin ${weixin[1]}`;
+			} else if (qq) {
+				browser = `qq`;
+			} else if (uc) {
+				browser = `uc ${uc[1]}`;
 			} else if (safari) {
 				browser = `safari ${safari[1]}`;
 			} else if (firefox) {
@@ -73,21 +82,21 @@ function tools() {
 				return os;
 			}
 			let mobileQQ = ua.match(/qq\/(\/[\d\.]+)*/i) || ua.match(/qzone\//i),
-				weixin = ua.match(/MicroMessenger/),
-				webkit = ua.match(/WebKit\/([\d.]+)/),
-				android = ua.match(/(Android)\s+([\d.]+)/),
-				ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
-				iphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
-				webos = ua.match(/(webOS|hpwOS)[\s\/]([\d.]+)/),
-				touchpad = webos && ua.match(/TouchPad/),
-				kindle = ua.match(/Kindle\/([\d.]+)/),
-				silk = ua.match(/Silk\/([\d._]+)/),
-				blackberry = ua.match(/(BlackBerry).*Version\/([\d.]+)/),
-				bb10 = ua.match(/(BB10).*Version\/([\d.]+)/),
-				rimtabletos = ua.match(/(RIM\sTablet\sOS)\s([\d.]+)/),
-				playbook = ua.match(/PlayBook/),
-				chrome = ua.match(/Chrome\/([\d.]+)/) || ua.match(/CriOS\/([\d.]+)/),
-				firefox = ua.match(/Firefox\/([\d.]+)/);
+				weixin = ua.match(/MicroMessenger/i),
+				webkit = ua.match(/WebKit\/([\d.]+)/i),
+				android = ua.match(/(Android)\s+([\d.]+)/i),
+				ipad = ua.match(/(iPad).*OS\s([\d_]+)/i),
+				iphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/i),
+				webos = ua.match(/(webOS|hpwOS)[\s\/]([\d.]+)/i),
+				touchpad = webos && ua.match(/TouchPad/i),
+				kindle = ua.match(/Kindle\/([\d.]+)/i),
+				silk = ua.match(/Silk\/([\d._]+)/i),
+				blackberry = ua.match(/(BlackBerry).*Version\/([\d.]+)/i),
+				bb10 = ua.match(/(BB10).*Version\/([\d.]+)/i),
+				rimtabletos = ua.match(/(RIM\sTablet\sOS)\s([\d.]+)/i),
+				playbook = ua.match(/PlayBook/i),
+				chrome = ua.match(/Chrome\/([\d.]+)/i) || ua.match(/CriOS\/([\d.]+)/i),
+				firefox = ua.match(/Firefox\/([\d.]+)/i);
 
 			if (android) os.isAndroid = true, os.version = android[2]
 			if (iphone) os.isIos = os.isIphone = true, os.version = iphone[2].replace(/_/g, '.')
@@ -100,10 +109,10 @@ function tools() {
 			if (kindle) os.isKindle = true, os.version = kindle[1]
 
 			os.isMobile = !!(!os.tablet && (android || iphone || webos || blackberry || bb10 ||
-				(chrome && ua.match(/Android/)) || (chrome && ua.match(/CriOS\/([\d.]+)/)) || (firefox && ua.match(/Mobile/))));
+				(chrome && ua.match(/Android/i)) || (chrome && ua.match(/CriOS\/([\d.]+)/i)) || (firefox && ua.match(/Mobile/i))));
 			os.isWeixin = !!weixin;
 			os.isMobileQQ = !!mobileQQ;
-			os.isTablet = !!(ipad || playbook || (android && !ua.match(/Mobile/)) || (firefox && ua.match(/Tablet/)));
+			os.isTablet = !!(ipad || playbook || (android && !ua.match(/Mobile/i)) || (firefox && ua.match(/Tablet/i)));
 			return os;
 		})()
 	}

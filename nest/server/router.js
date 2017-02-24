@@ -28,7 +28,7 @@ let route = (req, res) => {
 		reqQuery = reqUrl.query || {};
 
 	// favicon.ico
-	if (reqUrl == '/favicon.ico') {
+	if (pathname == '/favicon.ico') {
 		let icoPath = path.resolve(__dirname, '../', 'favicon.ico');
 		fs.readFile(icoPath, (err, html) => {
 			if (err) {
