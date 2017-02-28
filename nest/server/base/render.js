@@ -5,6 +5,8 @@ const watchFile = require("./watchFile");
 let isWindows = process.platform === 'win32';
 let host = 'pc';
 let quotes = '`';
+//去掉注释，包含单行和多行<!--注释-->、//注释、/*注释*/，同时不去掉//www.baidu.com/img/bd_logo1.png
+let reg = /<!--[\s\S]*?-->|[^\S]\/\/.*|\/\*[\s\S]*?\*\//g;
 
 // getTmpFile
 let getTmpFile = tpl => {
@@ -14,8 +16,7 @@ let getTmpFile = tpl => {
 // complie
 let complie = (filePath, tpl, content, data) => {
 	let tplStr = '';
-	// let str = content.replace(/this/g, '_data');
-	let arr = content.split('<%');
+	let arr = content.replace(reg, '\n').split('<%');
 	tplStr += "/* " + filePath + " */\n";
 	tplStr += "let getHtml = require('" + (isWindows ? __filename.replace(/\\/g, '/') : __filename) + "').getHtml;\n";
 	tplStr += "let requireWidget = getHtml\n";
@@ -131,6 +132,7 @@ let render = function(tpl, data = {}) {
 			'Cache-Control': 'no-cache,no-store'
 		})
 		this.res.end('oops! complie error!');
+		return;
 	}
 }
 

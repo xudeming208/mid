@@ -10,7 +10,7 @@
 	- 表示的是response headers中的server字段
 
 ##apiTimeOut：
-	- 表示的访问接口的超时时间
+	- 表示访问接口的超时时间
 
 ##merge（未完成）：
 	- 表示是否合并CSS和JS；生产环境需将merge设为true
