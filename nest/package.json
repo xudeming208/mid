@@ -33,7 +33,6 @@
     "chokidar": "^1.6.1",
     "colors": "^1.1.2",
     "less": "^2.7.1",
-    "open": "^0.0.5",
     "uglify-js": "^2.8.7"
   },
   "license": "ISC"

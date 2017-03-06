@@ -3,7 +3,27 @@
 //后续做成npm包
 const fs = require('fs'),
 	path = require('path'),
-	exec = require('child_process').exec;
+	child_process = require('child_process'),
+	exec = child_process.exec,
+	IS_WIN = process.platform.indexOf('win') === 0;
+
+const openBrower = (path, callback) => {
+	let cmd = '"' + path + '"';
+	if (IS_WIN) {
+		cmd = 'start "" ' + cmd;
+	} else {
+		if (process.env['XDG_SESSION_COOKIE'] ||
+			process.env['XDG_CONFIG_DIRS'] ||
+			process.env['XDG_CURRENT_DESKTOP']) {
+			cmd = 'xdg-open ' + cmd;
+		} else if (process.env['GNOME_DESKTOP_SESSION_ID']) {
+			cmd = 'gnome-open ' + cmd;
+		} else {
+			cmd = 'open ' + cmd;
+		}
+	}
+	child_process.exec(cmd, callback);
+};
 
 //执行之前确保已经全局安装了pm2
 // execFun
@@ -56,7 +76,6 @@ const config = () => {
 		// exec framework
 		execFun(['cd mid/nest', 'npm run start'], 'framework start', function() {
 			const CFonts = require('./mid/nest/node_modules/cfonts');
-			const open = require('./mid/nest/node_modules/open');
 			require('./mid/nest/node_modules/colors');
 			CFonts.say('MID', {
 				font: '3d',
@@ -69,7 +88,9 @@ const config = () => {
 				maxLength: '0'
 			});
 			console.log(`In the browser input`, `127.0.0.1:${serverPort}`.green.underline, `or`, `${ip}:${serverPort}`.green.underline, `, and then can see the pages.\n`);
-			open(`http://${ip}:${serverPort}`);
+			openBrower(`http://${ip}:${serverPort}`, () => {
+				console.log(`browser has opened!`)
+			});
 		});
 	})
 }

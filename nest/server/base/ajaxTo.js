@@ -23,7 +23,7 @@ function ajaxTo(php, args) {
 	}
 
 	// 特殊的protocol和特殊的port 可以通过control设置
-	// 如果control中有设置字段，以这个为准
+	// 如果control中有设置字段，以control中的设置为准
 	phpObj[args] = {
 		'protocol': php[args]['protocol'] || 'http',
 		'port': php[args]['port'] || 80,
@@ -40,6 +40,7 @@ function ajaxTo(php, args) {
 		res.writeHead(200, {
 			'Content-Type': 'text/plain',
 			'Cache-Control': 'no-cache,no-store',
+			// 'Access-Control-Allow-Origin': '*',
 			'Server': ETC.server
 		})
 
