@@ -1,99 +1,186 @@
 /**
 * 定义atom原子化样式
-* */
-.break-word(){word-wrap: break-word; }
-.break-all(){word-wrap: break-word; word-break: break-all;}
-.nowrap(){white-space: nowrap; }
+**/
 
-.eventNone(){ pointer-events:none; }
-.willchange(){will-change: transform;}
-
-.bgc(@color:@wap_bgpink){background-color:@color;}
-.fc(@color){color:@color;}
-
-.yahei(){font-family: "Microsoft YaHei"; }
-.c(){text-align: center; }
-.vm(){vertical-align: middle;}
-.tl(){text-align: left; }
-.tr(){text-align: right; }
-.t-through(){ text-decoration:line-through; }
-
-.hidden(){overflow: hidden; }
-.scrolling(){-webkit-overflow-scrolling: touch;-moz-overflow-scrolling: touch;-o-overflow-scrolling: touch;-ms-overflow-scrolling: touch;overflow-scrolling: touch;overflow: scroll;
-	&::-webkit-scrollbar{.none}  //隐藏滚动条http://www.hacke2.cn/scroll-in-uc/
+.break-word() {
+    word-wrap: break-word;
 }
-.vhidden(){visibility:hidden; }
-.tnone(){text-decoration: none;}
-.tunder(){text-decoration: underline; }
-.ellipsis(){ .nowrap; .hidden; text-overflow: ellipsis; }
-.ellipsis-row(@var){.hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:@var;-webkit-box-orient:vertical;}
-
-.none(){display: none; }
-.inline(){display: inline; }
-.il-block(){display:inline-block;*zoom:1;*display:inline;}
-.block(){display: block; }
-.i_block(){display: inline-block; }
-
-.fl(){float: left; }
-.fr(){float: right; }
-
-.pa(){position: absolute; }
-.pr(){position: relative; }
-.pf(){position: fixed; }
-
-.cursor(){cursor: pointer; }
-.clear(){clear: both; .hidden; .h(0); }
-.clearfix(){ *zoom:1;
-  &:after{clear:both; content:".";  .block; .vhidden; .h(0);}
+.break-all() {
+    word-wrap: break-word;
+    word-break: break-all;
 }
-
-
-.f(@var){
-  font-size: @var;
+.nowrap() {
+    white-space: nowrap;
 }
-.l(@var){
-  line-height: @var;
+.eventNone() {
+    pointer-events:none;
 }
-.h(@var){
-  height: @var;
+.willchange() {
+    will-change: transform;
 }
-.w(@var){
-  width: @var;
+.bgc(@color) {
+    background-color:@color;
 }
-.mt(@var){
-  margin-top: @var;
+.fc(@color) {
+    color:@color;
 }
-.mb(@var){
-  margin-bottom: @var;
+.yahei() {
+    font-family: "Microsoft YaHei";
 }
-.ml(@var){
-  margin-left: @var;
+.c() {
+    text-align: center;
 }
-.mr(@var){
-  margin-right: @var;
+.vm() {
+    vertical-align: middle;
 }
-.pt(@var){
-  padding-top: @var;
+.tl() {
+    text-align: left;
 }
-.pb(@var){
-  padding-bottom: @var;
+.tr() {
+    text-align: right;
 }
-.pl(@var){
-  padding-left: @var;
+.t-through() {
+    text-decoration:line-through;
 }
-.pr(@var){
-  padding-right: @var;
+.hidden() {
+    overflow: hidden;
 }
-.bp(@x,@y){
-  background-position:@x @y;
+.overflow-scrolling() {
+    -webkit-overflow-scrolling: touch;
+    -moz-overflow-scrolling: touch;
+    -o-overflow-scrolling: touch;
+    -ms-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+        .none
+    }
+    /*隐藏滚动条http://www.hacke2.cn/scroll-in-uc/*/
 }
-
-.fb(){font-weight: bold; }
-.fn(){font-weight: normal;}
-
-.auto() { margin-left: auto; margin-right: auto; }
-
-
-.border-r(@radius: 3px) { -webkit-border-radius: @radius; border-radius: @radius; }
-
-.indent(){ text-indent: -999em; }
+.vhidden() {
+    visibility:hidden;
+}
+.tnone() {
+    text-decoration: none;
+}
+.tunder() {
+    text-decoration: underline;
+}
+.ellipsis() {
+    .nowrap;
+    .hidden;
+    text-overflow: ellipsis;
+}
+.ellipsis-row(@num: 2) {
+    .hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-line-clamp:@num;
+    -webkit-box-orient:vertical;
+}
+.none() {
+    display: none;
+}
+.inline() {
+    display: inline;
+}
+.il-block() {
+    display:inline-block;
+    *zoom:1;
+    *display:inline;
+}
+.block() {
+    display: block;
+}
+.i_block() {
+    display: inline-block;
+}
+.fl() {
+    float: left;
+}
+.fr() {
+    float: right;
+}
+.pa() {
+    position: absolute;
+}
+.pr() {
+    position: relative;
+}
+.pf() {
+    position: fixed;
+}
+.cursor() {
+    cursor: pointer;
+}
+.f(@var) {
+    font-size: @var;
+}
+.l(@var) {
+    line-height: @var;
+}
+.h(@var) {
+    height: @var;
+}
+.w(@var) {
+    width: @var;
+}
+.mt(@var) {
+    margin-top: @var;
+}
+.mb(@var) {
+    margin-bottom: @var;
+}
+.ml(@var) {
+    margin-left: @var;
+}
+.mr(@var) {
+    margin-right: @var;
+}
+.pt(@var) {
+    padding-top: @var;
+}
+.pb(@var) {
+    padding-bottom: @var;
+}
+.pl(@var) {
+    padding-left: @var;
+}
+.pr(@var) {
+    padding-right: @var;
+}
+.bp(@x,@y) {
+    background-position:@x @y;
+}
+.fb() {
+    font-weight: bold;
+}
+.fn() {
+    font-weight: normal;
+}
+.auto() {
+    margin-left: auto;
+    margin-right: auto;
+}
+.border-r(@radius: .2rem) {
+    -webkit-border-radius: @radius;
+    border-radius: @radius;
+}
+.indent() {
+    text-indent: -999em;
+}
+.clear() {
+    clear: both;
+    .hidden;
+    .h(0);
+}
+.clearfix() {
+    *zoom:1;
+    &:after {
+        clear:both;
+        content:".";
+        .block;
+        .vhidden;
+        .h(0);
+    }
+}

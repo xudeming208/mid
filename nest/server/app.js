@@ -12,19 +12,19 @@ let ip = require('./base/getIp')() || '127.0.0.1';
 
 let init = () => {
 	// config
-	// let configPath = path.resolve(__dirname, '../config/config.json');
-	// let content = require(configPath);
-	// // 删除host字段中最后一个属性（IP变化的时候不会累加在host中）
-	// let hostKeys = Object.keys(content.host);
-	// let hostLen = hostKeys.length;
-	// if (hostLen > 3) {
-	// 	delete content.host[hostKeys[hostLen - 1]];
-	// }
-	// content.etc.ip = ip;
-	// content.host[ip] = ETC.defaultPage;
-	// content.site.staticHost = `http://${ip}:${ETC.jserverPort}`;
-	// content.site.ip = ip;
-	// content.site.port = port;
+	let configPath = path.resolve(__dirname, '../config/config.json');
+	let content = require(configPath);
+	// 删除host字段中最后一个属性（IP变化的时候不会累加在host中）
+	let hostKeys = Object.keys(content.host);
+	let hostLen = hostKeys.length;
+	if (hostLen > 3) {
+		delete content.host[hostKeys[hostLen - 1]];
+	}
+	content.etc.ip = ip;
+	content.host[ip] = ETC.defaultPage;
+	content.site.staticHost = `http://${ip}:${ETC.jserverPort}`;
+	content.site.ip = ip;
+	content.site.port = port;
 
 	// 重启服务清除缓存
 	exec(['cd ../.. ', 'rm -rf tmp/*', 'rm -rf logs/*'].join(' && '), function(error, stdout, stderr) {
@@ -34,36 +34,6 @@ let init = () => {
 		console.log('Clear cache finised');
 	})
 
-	// 版本号
-	// if (!ETC.debug) {
-	// 	let PUBDAY = 81.011;
-	// 	let getNowDate = () => {
-	// 		let st = new Date
-	// 		let leadZero = t => {
-	// 			if (t < 10) t = '0' + t
-	// 			return t
-	// 		}
-	// 		return leadZero(st.getMonth()) + leadZero(st.getDate()) + leadZero(st.getHours()) + leadZero(st.getMinutes()) + leadZero(st.getSeconds());
-	// 	}
-	// 	content.site.version = `?${getNowDate()}${PUBDAY}`;
-	// } else {
-	// 	delete content.site.version;
-	// }
-
-	// fs.writeFileSync(configPath, JSON.stringify(content), 'utf-8');
-
-
-	// 删除host字段中最后一个属性（IP变化的时候不会累加在host中）
-	let hostKeys = Object.keys(HOST);
-	let hostLen = hostKeys.length;
-	if (hostLen > 3) {
-		delete HOST[hostKeys[hostLen - 1]];
-	}
-	ETC.ip = ip;
-	HOST[ip] = ETC.defaultPage;
-	SITE.staticHost = `http://${ip}:${ETC.jserverPort}`;
-	SITE.ip = ip;
-	SITE.port = port;
 	// 版本号
 	if (!ETC.debug) {
 		let PUBDAY = 81.011;
@@ -75,10 +45,40 @@ let init = () => {
 			}
 			return leadZero(st.getMonth()) + leadZero(st.getDate()) + leadZero(st.getHours()) + leadZero(st.getMinutes()) + leadZero(st.getSeconds());
 		}
-		SITE.version = `?${getNowDate()}${PUBDAY}`;
+		content.site.version = `?${getNowDate()}${PUBDAY}`;
 	} else {
-		delete SITE.version;
+		delete content.site.version;
 	}
+
+	fs.writeFileSync(configPath, JSON.stringify(content), 'utf-8');
+
+
+	// 删除host字段中最后一个属性（IP变化的时候不会累加在host中）
+	// let hostKeys = Object.keys(HOST);
+	// let hostLen = hostKeys.length;
+	// if (hostLen > 3) {
+	// 	delete HOST[hostKeys[hostLen - 1]];
+	// }
+	// ETC.ip = ip;
+	// HOST[ip] = ETC.defaultPage;
+	// SITE.staticHost = `http://${ip}:${ETC.jserverPort}`;
+	// SITE.ip = ip;
+	// SITE.port = port;
+	// // 版本号
+	// if (!ETC.debug) {
+	// 	let PUBDAY = 81.011;
+	// 	let getNowDate = () => {
+	// 		let st = new Date
+	// 		let leadZero = t => {
+	// 			if (t < 10) t = '0' + t
+	// 			return t
+	// 		}
+	// 		return leadZero(st.getMonth()) + leadZero(st.getDate()) + leadZero(st.getHours()) + leadZero(st.getMinutes()) + leadZero(st.getSeconds());
+	// 	}
+	// 	SITE.version = `?${getNowDate()}${PUBDAY}`;
+	// } else {
+	// 	delete SITE.version;
+	// }
 }
 
 

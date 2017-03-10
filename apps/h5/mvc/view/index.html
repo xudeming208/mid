@@ -36,7 +36,11 @@
 	'model' : this,
 	'data':this.banner,
 	'config':{
-		"autoTime":1800
+		"beforeCallback":function(){console.log('start')},
+		"finishCallback":function(){console.log('finished')},
+		"autoTime":2000,
+		"index":2,
+		"follow":true
 	}
 });%>
 <br>

@@ -1,10 +1,12 @@
 fml.define("component/touchSlide", [], function(require, exports) {
     /*
-        @plugName: wap.touchSlide.js
-        @author: xudeming208@126.com
-        @data: 2013-06-22
-        @example:
+    @plugName: wap.touchSlide.js
+    @author: xudeming208@126.com
+    @data: 2013-06-22
+    @example:
         $(id).touchSlide({
+            //初次显示第几张，从0开始
+            index: 0,
             //列表框的标签
             ul: "ul",
             //列表标签
@@ -27,9 +29,9 @@ fml.define("component/touchSlide", [], function(require, exports) {
             isSlideLi: false,
             //是否滑多少就是多少的时候，外容器的宽度，默认为$(window).width()
             isSlideLiWidth: $(window).width(),
-            //滑动前的回调
+            //滑动前的回调，参数为wrap和index
             beforeCallback: function() {},
-            //滑动完成后的回调
+            //滑动完成后的回调，参数为wrap和index
             finishCallback: function() {}
         });
     */
@@ -64,12 +66,12 @@ fml.define("component/touchSlide", [], function(require, exports) {
         function TouchSlide(el, opts) {
             var self = this;
             self.wrap = el;
-            self.index = 0;
+            self.index = opts.index;
             self.ul = self.wrap.find(opts.ul);
             self.li = self.ul.find(opts.li);
             self.len = self.li.length;
-            // zepto源码的width方法会四舍五入
-            self.liWidth = parseFloat(window.getComputedStyle(self.li[0], null).width);
+            self.wrapWidth = self.wrap.width();
+            self.liWidth = self.li.width();
             self.numBox = self.wrap.find(opts.numBox);
             self.isLoop = opts.isLoop;
             self.isAuto = opts.isAuto;
@@ -97,22 +99,26 @@ fml.define("component/touchSlide", [], function(require, exports) {
             /*配置*/
             config: function() {
                 var self = this;
-                //是否滑多少就是多少，通常用于导航滑动,此时follow一定为true,isLoop设置为false
+                // zepto的width是四舍五入计算的，这里重新设置宽度是为了避免其宽度为小数px的情况
+                self.wrap.width(self.wrapWidth);
+                self.li.width(self.liWidth);
+                // 是否滑多少就是多少，通常用于导航滑动,此时follow一定为true,isLoop设置为false
                 if (self.isSlideLi) {
                     self.follow = true;
                     self.isLoop = false;
                 }
+                //限制index的值的范围
+                if (self.index <= 0) {
+                    self.index = 0;
+                } else if (self.index >= self.len) {
+                    self.index = self.len - 1;
+                }
+                self.numBox.empty();
                 for (var m = 0; m < self.len; m++) {
                     self.numBox.append("<b>" + (m + 1) + "</b>");
                 }
                 self.numBoxB = self.numBox.children();
-                self.numBoxB.eq(0).addClass(self.cur);
-                // 防止LI的宽度是小数情况
-                if (parseInt(self.liWidth) != parseFloat(self.liWidth)) {
-                    var newLiWidth = Math.ceil(parseFloat(self.liWidth));
-                    self.liWidth = newLiWidth;
-                    self.li.width(newLiWidth);
-                }
+                self.numBoxB.eq(self.index).addClass(self.cur);
                 if (self.isLoop) {
                     self.ul.width(self.liWidth * (self.len + 2));
                     self.li.eq(0).clone().appendTo(self.ul);
@@ -124,7 +130,8 @@ fml.define("component/touchSlide", [], function(require, exports) {
                 } else {
                     self.ul.width(self.liWidth * self.len);
                 }
-                self.beforeCallback && typeof self.beforeCallback == "function" && self.beforeCallback();
+                setTransform(self.ul, -self.liWidth * self.index);
+                self.beforeCallback && typeof self.beforeCallback == "function" && self.beforeCallback(self.wrap, self.index);
             },
             /*移动*/
             move: function() {
@@ -162,7 +169,7 @@ fml.define("component/touchSlide", [], function(require, exports) {
                             self.index = self.len - 1;
                         }
                         self.numBoxB.removeClass(self.cur).eq(self.index).addClass(self.cur);
-                        self.finishCallback && typeof self.finishCallback == "function" && self.finishCallback(self.index, self.li[self.index]);
+                        self.finishCallback && typeof self.finishCallback == "function" && self.finishCallback(self.wrap, self.index);
                     });
                 if (self.isLoop && self.index == self.len) {
                     self.numBoxB.removeClass(self.cur).eq(0).addClass(self.cur);
@@ -235,10 +242,9 @@ fml.define("component/touchSlide", [], function(require, exports) {
                         self.autoPlay();
                     }
                 }
-                //手机是高级浏览器，不必做addEventListener的兼容
-                self.wrap[0].addEventListener("touchstart", touchStart, false);
-                self.wrap[0].addEventListener("touchmove", touchMove, false);
-                self.wrap[0].addEventListener("touchend", touchEnd, false);
+                self.wrap.on("touchstart", touchStart);
+                self.wrap.on("touchmove", touchMove);
+                self.wrap.on("touchend", touchEnd);
             }
         };
         //插件
@@ -251,6 +257,8 @@ fml.define("component/touchSlide", [], function(require, exports) {
         };
         /*定义默认值*/
         $.fn.touchSlide.defaults = {
+            //初次显示第几张，从0开始
+            index: 0,
             //列表框的标签
             ul: "ul",
             //列表标签
@@ -273,9 +281,9 @@ fml.define("component/touchSlide", [], function(require, exports) {
             isSlideLi: false,
             //是否滑多少就是多少的时候，外容器的宽度，默认为$(window).width()
             isSlideLiWidth: $(window).width(),
-            //滑动前的回调
+            //滑动前的回调，参数为wrap和index
             beforeCallback: function() {},
-            //滑动完成后的回调
+            //滑动完成后的回调，参数为wrap和index
             finishCallback: function() {}
         };
     })(Zepto)

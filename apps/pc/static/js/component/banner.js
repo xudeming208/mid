@@ -25,8 +25,6 @@ fml.define("component/banner", [], function(require, exports) {
                 lazyLoad: false,
                 //启用图片延迟加载时，真正图片存贮的属性名称
                 imgSrc: "data-src",
-                //是否根据图片的数量自动生成系号
-                displayNum: true,
                 //触发效果的事件，0：hover事件；1：click事件
                 evt: 1,
                 //特效类型 0：渐变；1:左右滑动；2：上下滑动；
@@ -34,7 +32,11 @@ fml.define("component/banner", [], function(require, exports) {
                 //效果时间
                 speed: 500,
                 //效果间隔时间
-                autoTime: 5000
+                autoTime: 5000,
+                //滑动前的回调，参数为wrap和index
+                beforeCallback: function() {},
+                //滑动完成后的回调，参数为wrap和index
+                finishCallback: function() {}
             });
         */
 
@@ -66,10 +68,11 @@ fml.define("component/banner", [], function(require, exports) {
             self.timer = null;
             self.direction = null;
             self.step = null;
-            self.dbclicks = false;
             self.moveObj = {};
             self.moveObj2 = {};
             self.prevIndex = 0;
+            self.beforeCallback = opts.beforeCallback;
+            self.finishCallback = opts.finishCallback;
             //执行
             self.init();
         }
@@ -92,12 +95,9 @@ fml.define("component/banner", [], function(require, exports) {
                 } else if (self.index >= self.len) {
                     self.index = self.len - 1;
                 }
-                /*是否显示图片序列号*/
-                if (self.displayNum) {
-                    self.numBox.empty();
-                    for (var m = 0; m < self.len; m++) {
-                        self.numBox.append("<b>" + (m + 1) + "</b>");
-                    }
+                self.numBox.empty();
+                for (var m = 0; m < self.len; m++) {
+                    self.numBox.append("<b>" + (m + 1) + "</b>");
                 }
                 self.numBoxB = self.numBox.children();
                 self.numBoxB.eq(self.index).addClass(self.cur);
@@ -129,61 +129,58 @@ fml.define("component/banner", [], function(require, exports) {
                     self.li.css(self.direction, self.step).eq(self.index).css(self.direction, 0).addClass("prevIndexLi");
                 }
                 self.moveObj[self.direction] = 0;
+                self.beforeCallback && typeof self.beforeCallback == "function" && self.beforeCallback(self.wrap, self.index);
             },
             /*移动*/
             move: function() {
                 var self = this;
-                //防止双击
-                if (!self.dbclicks) {
-                    self.prevIndex = self.wrap.find(".prevIndexLi").index();
-                    if (arguments[0] == 0) {
-                        self.index < self.len - 1 ? self.index++ : self.index = 0;
-                        if (self.effect != 0) {
-                            self.moveObj2[self.direction] = -self.step;
-                            self.li.eq(self.index).css(self.direction, self.step);
-                        }
-                    } else if (arguments[0] == 1) {
-                        self.index <= 0 ? (self.index = self.len - 1) : self.index--;
-                        if (self.effect != 0) {
-                            self.moveObj2[self.direction] = self.step;
-                            self.li.eq(self.index).css(self.direction, -self.step);
-                        }
-                    } else {
-                        if (self.prevIndex < self.index) {
-                            self.moveObj2[self.direction] = -self.step;
-                            self.effect != 0 && self.li.eq(self.index).css(self.direction, self.step);
-                        } else {
-                            self.moveObj2[self.direction] = self.step;
-                            self.effect != 0 && self.li.eq(self.index).css(self.direction, -self.step);
-                        }
+                self.prevIndex = self.wrap.find(".prevIndexLi").index();
+                if (arguments[0] == 0) {
+                    self.index < self.len - 1 ? self.index++ : self.index = 0;
+                    if (self.effect != 0) {
+                        self.moveObj2[self.direction] = -self.step;
+                        self.li.eq(self.index).css(self.direction, self.step);
                     }
-                    self.li.removeClass("prevIndexLi").eq(self.index).addClass("prevIndexLi");
-                    switch (self.effect) {
-                        //渐变效果
-                        case 0:
-                            self.li.stop(true, true).fadeOut(self.speed).eq(self.index).fadeIn(self.speed,
-                                function() {
-                                    self.dbclicks = false;
-                                    self.loadImg(self.index);
-                                });
-                            self.numBoxB.removeClass(self.cur).eq(self.index).addClass(self.cur);
-                            break;
-                            //滑动效果
-                        case 1:
-                        case 2:
-                            self.li.eq(self.prevIndex).stop(true, true).animate(self.moveObj2, self.speed);
-                            self.li.eq(self.index).stop(true, true).animate(self.moveObj, self.speed,
-                                function() {
-                                    self.dbclicks = false;
-                                    self.loadImg(self.index);
-                                });
-                            self.numBoxB.removeClass(self.cur).eq(self.index).addClass(self.cur);
-                            if (self.index == self.len) {
-                                self.numBoxB.removeClass(self.cur).eq(0).addClass(self.cur);
-                            }
-                            break;
+                } else if (arguments[0] == 1) {
+                    self.index <= 0 ? (self.index = self.len - 1) : self.index--;
+                    if (self.effect != 0) {
+                        self.moveObj2[self.direction] = self.step;
+                        self.li.eq(self.index).css(self.direction, -self.step);
+                    }
+                } else {
+                    if (self.prevIndex < self.index) {
+                        self.moveObj2[self.direction] = -self.step;
+                        self.effect != 0 && self.li.eq(self.index).css(self.direction, self.step);
+                    } else {
+                        self.moveObj2[self.direction] = self.step;
+                        self.effect != 0 && self.li.eq(self.index).css(self.direction, -self.step);
                     }
                 }
+                self.li.removeClass("prevIndexLi").eq(self.index).addClass("prevIndexLi");
+                switch (self.effect) {
+                    //渐变效果
+                    case 0:
+                        self.li.stop(true, true).fadeOut(self.speed).eq(self.index).fadeIn(self.speed,
+                            function() {
+                                self.loadImg(self.index);
+                            });
+                        self.numBoxB.removeClass(self.cur).eq(self.index).addClass(self.cur);
+                        break;
+                        //滑动效果
+                    case 1:
+                    case 2:
+                        self.li.eq(self.prevIndex).stop(true, true).animate(self.moveObj2, self.speed);
+                        self.li.eq(self.index).stop(true, true).animate(self.moveObj, self.speed,
+                            function() {
+                                self.loadImg(self.index);
+                            });
+                        self.numBoxB.removeClass(self.cur).eq(self.index).addClass(self.cur);
+                        if (self.index == self.len) {
+                            self.numBoxB.removeClass(self.cur).eq(0).addClass(self.cur);
+                        }
+                        break;
+                }
+                self.finishCallback && typeof self.finishCallback == "function" && self.finishCallback(self.wrap, self.index);
             },
             /*加载图片函数*/
             loadImg: function(index, callback) {
@@ -266,11 +263,9 @@ fml.define("component/banner", [], function(require, exports) {
                     });
                     self.prev.click(function() {
                         self.move(1);
-                        self.dbclicks = true;
                     });
                     self.next.click(function() {
                         self.move(0);
-                        self.dbclicks = true;
                     });
                 }
             }
@@ -306,8 +301,6 @@ fml.define("component/banner", [], function(require, exports) {
             lazyLoad: false,
             //启用图片延迟加载时，真正图片存贮的属性名称
             imgSrc: "data-src",
-            //是否根据图片的数量自动生成系号
-            displayNum: true,
             //触发效果的事件，0：hover事件；1：click事件
             evt: 1,
             //特效类型 0：渐变；1:左右滑动；2：上下滑动；
@@ -315,7 +308,11 @@ fml.define("component/banner", [], function(require, exports) {
             //效果时间
             speed: 500,
             //效果间隔时间
-            autoTime: 5000
+            autoTime: 5000,
+            //滑动前的回调，参数为wrap和index
+            beforeCallback: function() {},
+            //滑动完成后的回调，参数为wrap和index
+            finishCallback: function() {}
         };
     })(jQuery)
 })

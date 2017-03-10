@@ -18,11 +18,10 @@
 	</div>
 </div>
 <script type="text/javascript">
-	if(!fml.vars.banner){
-		fml.vars.banner=[];
-	}
 	fml.vars.banner.push({
 		id:'<%= this.id || "banner" %>',
+		beforeCallback:<%= this.config.beforeCallback || function(){} %>,
+		finishCallback:<%= this.config.finishCallback || function(){} %>,
 		config:<%= JSON.stringify(this.config) %>
 	})
 </script>
