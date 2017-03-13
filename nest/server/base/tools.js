@@ -1,6 +1,7 @@
 'use strict'
 const path = require('path');
 const cryto = require('crypto');
+const isWindows = process.platform === 'win32';
 
 function tools() {
 	const self = this;
@@ -42,77 +43,73 @@ function tools() {
 			}
 			return result;
 		},
-		browser: (() => {
-			let browser = '没作此浏览器的匹配',
-				ua = self.req.headers['user-agent'];
-			if (!ua) {
-				return browser;
-			}
-			let ie = ua.match(/msie\s([\d.]+)/i),
-				chrome = ua.match(/chrome\/([\d.]+)/i),
-				safari = ua.match(/safari\/([\d.]+)/i),
-				firefox = ua.match(/firefox\/([\d.]+)/i),
-				opera = ua.match(/presto\/([\d.]+)/i),
-				weixin = ua.match(/micromessenger\/([\d.]+)/i),
-				qq = ua.match(/qq/i),
-				uc = ua.match(/ucbrowser\/([\d.]+)/i);
-			if (ie) {
-				browser = `ie ${ie[1]}`;
-			} else if (chrome) {
-				browser = `chrome ${chrome[1]}`;
-			} else if (weixin) {
-				browser = `weixin ${weixin[1]}`;
-			} else if (qq) {
-				browser = `qq`;
-			} else if (uc) {
-				browser = `uc ${uc[1]}`;
-			} else if (safari) {
-				browser = `safari ${safari[1]}`;
-			} else if (firefox) {
-				browser = `firefox ${firefox[1]}`;
-			} else if (opera) {
-				browser = `opera ${opera[1]}`;
-			}
-			return browser;
-		})(),
 		os: (() => {
 			let os = {},
-				ua = self.req.headers['user-agent'];
-			if (!ua) {
-				return os;
-			}
-			let mobileQQ = ua.match(/qq\/(\/[\d\.]+)*/i) || ua.match(/qzone\//i),
+				ua = self.req.headers['user-agent'],
+				mobileQQ = ua.match(/qq\/(\/[\d\.]+)*/i) || ua.match(/qzone\//i),
 				weixin = ua.match(/MicroMessenger/i),
-				webkit = ua.match(/WebKit\/([\d.]+)/i),
-				android = ua.match(/(Android)\s+([\d.]+)/i),
-				ipad = ua.match(/(iPad).*OS\s([\d_]+)/i),
-				iphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/i),
-				webos = ua.match(/(webOS|hpwOS)[\s\/]([\d.]+)/i),
-				touchpad = webos && ua.match(/TouchPad/i),
-				kindle = ua.match(/Kindle\/([\d.]+)/i),
-				silk = ua.match(/Silk\/([\d._]+)/i),
-				blackberry = ua.match(/(BlackBerry).*Version\/([\d.]+)/i),
-				bb10 = ua.match(/(BB10).*Version\/([\d.]+)/i),
-				rimtabletos = ua.match(/(RIM\sTablet\sOS)\s([\d.]+)/i),
-				playbook = ua.match(/PlayBook/i),
-				chrome = ua.match(/Chrome\/([\d.]+)/i) || ua.match(/CriOS\/([\d.]+)/i),
-				firefox = ua.match(/Firefox\/([\d.]+)/i);
+				webkit = ua.match(/Web[kK]it[\/]{0,1}([\d.]+)/),
+				android = ua.match(/(Android);?[\s\/]+([\d.]+)?/),
+				osx = !!ua.match(/\(Macintosh\; Intel /),
+				ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
+				ipod = ua.match(/(iPod)(.*OS\s([\d_]+))?/),
+				iphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
+				webos = ua.match(/(webOS|hpwOS)[\s\/]([\d.]+)/),
+				wp = ua.match(/Windows Phone ([\d.]+)/),
+				touchpad = webos && ua.match(/TouchPad/),
+				kindle = ua.match(/Kindle\/([\d.]+)/),
+				silk = ua.match(/Silk\/([\d._]+)/),
+				blackberry = ua.match(/(BlackBerry).*Version\/([\d.]+)/),
+				bb10 = ua.match(/(BB10).*Version\/([\d.]+)/),
+				rimtabletos = ua.match(/(RIM\sTablet\sOS)\s([\d.]+)/),
+				playbook = ua.match(/PlayBook/),
+				chrome = ua.match(/Chrome\/([\d.]+)/) || ua.match(/CriOS\/([\d.]+)/),
+				firefox = ua.match(/Firefox\/([\d.]+)/),
+				firefoxos = ua.match(/\((?:Mobile|Tablet); rv:([\d.]+)\).*Firefox\/[\d.]+/),
+				ie = ua.match(/MSIE\s([\d.]+)/) || ua.match(/Trident\/[\d](?=[^\?]+).*rv:([0-9.].)/),
+				webview = !chrome && ua.match(/(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/),
+				safari = webview || ua.match(/Version\/([\d.]+)([^S](Safari)|[^M]*(Mobile)[^S]*(Safari))/),
+				opera = ua.match(/presto\/([\d.]+)/i),
+				uc = ua.match(/ucbrowser\/([\d.]+)/i),
+				qqbrowser = ua.match(/qqbrowser\/([\d.]+)/i);
 
-			if (android) os.isAndroid = true, os.version = android[2]
-			if (iphone) os.isIos = os.isIphone = true, os.version = iphone[2].replace(/_/g, '.')
-			if (ipad) os.isIos = os.isIpad = true, os.version = ipad[2].replace(/_/g, '.')
-			if (webos) os.isWebos = true, os.version = webos[2]
-			if (touchpad) os.isTouchpad = true
-			if (blackberry) os.isBlackberry = true, os.version = blackberry[2]
-			if (bb10) os.isBb10 = true, os.version = bb10[2]
-			if (rimtabletos) os.isRimtabletos = true, os.version = rimtabletos[2]
-			if (kindle) os.isKindle = true, os.version = kindle[1]
+			os.browser = {};
+			if (os.browser.webkit = !!webkit) os.browser.version = webkit[1]
 
-			os.isMobile = !!(!os.tablet && (android || iphone || webos || blackberry || bb10 ||
-				(chrome && ua.match(/Android/i)) || (chrome && ua.match(/CriOS\/([\d.]+)/i)) || (firefox && ua.match(/Mobile/i))));
-			os.isWeixin = !!weixin;
-			os.isMobileQQ = !!mobileQQ;
-			os.isTablet = !!(ipad || playbook || (android && !ua.match(/Mobile/i)) || (firefox && ua.match(/Tablet/i)));
+			if (android) os.android = true, os.version = android[2]
+			if (iphone && !ipod) os.ios = os.iphone = true, os.version = iphone[2].replace(/_/g, '.')
+			if (ipad) os.ios = os.ipad = true, os.version = ipad[2].replace(/_/g, '.')
+			if (ipod) os.ios = os.ipod = true, os.version = ipod[3] ? ipod[3].replace(/_/g, '.') : null
+			if (wp) os.wp = true, os.version = wp[1]
+			if (webos) os.webos = true, os.version = webos[2]
+			if (touchpad) os.touchpad = true
+			if (blackberry) os.blackberry = true, os.version = blackberry[2]
+			if (bb10) os.bb10 = true, os.version = bb10[2]
+			if (rimtabletos) os.rimtabletos = true, os.version = rimtabletos[2]
+			if (playbook) os.browser.playbook = true
+			if (kindle) os.kindle = true, os.version = kindle[1]
+			if (silk) os.browser.silk = true, os.browser.version = silk[1]
+			if (!silk && os.android && ua.match(/Kindle Fire/)) os.browser.silk = true
+			if (chrome) os.browser.chrome = true, os.browser.version = chrome[1]
+			if (firefox) os.browser.firefox = true, os.browser.version = firefox[1]
+			if (firefoxos) os.firefoxos = true, os.version = firefoxos[1]
+			if (ie) os.browser.ie = true, os.browser.version = ie[1]
+			if (opera) os.browser.opera = true, os.browser.version = opera[1]
+			if (uc) os.browser.uc = true, os.browser.version = uc[1]
+			if (qqbrowser) os.browser.qqbrowser = true, os.browser.version = qqbrowser[1]
+			if (safari && (osx || os.ios || isWindows)) {
+				os.browser.safari = true
+				if (!os.ios) os.browser.version = safari[1]
+			}
+			if (webview) os.browser.webview = true
+
+			os.browser.isWeixin = !!weixin;
+			os.browser.isMobileQQ = !!mobileQQ;
+			os.isTablet = !!(ipad || playbook || (android && !ua.match(/Mobile/)) ||
+				(firefox && ua.match(/Tablet/)) || (ie && !ua.match(/Phone/) && ua.match(/Touch/)))
+			os.isMobile = !!(!os.tablet && !os.ipod && (android || iphone || webos || blackberry || bb10 ||
+				(chrome && ua.match(/Android/)) || (chrome && ua.match(/CriOS\/([\d.]+)/)) ||
+				(firefox && ua.match(/Mobile/)) || (ie && ua.match(/Touch/))))
 			return os;
 		})()
 	}

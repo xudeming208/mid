@@ -12,7 +12,7 @@
 1. sudo npm install -g pm2
 2. ~~cd nest~~
 3. ~~npm install~~
-4. ~~npm run start~~
+4. ~~npm start~~
 	* ~~npm run stop~~
 	* ~~npm run restart~~
 	* ~~npm run logs~~

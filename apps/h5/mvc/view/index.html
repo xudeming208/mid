@@ -19,7 +19,7 @@
 
 <p>os :<%= JSON.stringify(TOOLS.os) %></p>
 
-<p>当前浏览器是：<%= TOOLS.browser %></p>
+<p>当前浏览器是：<%= JSON.stringify(TOOLS.os.browser) %></p>
  
 <p>XSS:<%== '<script type="text/javascript">alert("XSS")</script>' %></p>
 
