@@ -5,7 +5,7 @@
 		"defaultPage": "pc",
 		"defaultMod": "index",
 		"server": "MID 1.0.0",
-		"ip": "172.20.128.166",
+		"ip": "172.20.129.206",
 		"apiTimeOut": 5000,
 		"cpuNums": 1,
 		"merge": false,
@@ -21,21 +21,21 @@
 		"view": "./mvc/view/"
 	},
 	"site": {
-		"staticHost": "http://172.20.128.166:8084",
+		"staticHost": "http://172.20.129.206:8084",
 		"jsDefer": true,
 		"pcPath": "/pc/static",
 		"h5Path": "/h5/static",
 		"pageTitle": "demo",
 		"pageDescription": "nodejs mvc frame",
 		"pageKeywords": "nodejs mvc frame",
-		"ip": "172.20.128.166",
+		"ip": "172.20.129.206",
 		"port": 8083
 	},
 	"host": {
 		"127.0.0.1": "pc",
 		"h5.fedevot.test.com": "h5",
 		"pc.fedevot.test.com": "pc",
-		"172.20.128.166": "h5"
+		"172.20.129.206": "pc"
 	},
 	"api": {
 		"web": "webapi.busi.inke.com",

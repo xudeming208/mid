@@ -60,6 +60,7 @@ server {
 
 ##debug(js压缩还未完成)：
 	- 此字段为true时：HTML、CSS和JS不压缩，静态资源不缓存（包括内存的缓存及浏览器的缓存）；生产环境需将debug设为false
+	- 生产环境注意处理favicon.ico
 
 ##FAQ
 * 查看DOC.md

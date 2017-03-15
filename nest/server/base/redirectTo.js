@@ -6,7 +6,7 @@ function redirectTo(url, proxyArgs) {
 	if (args) {
 		args = require('querystring').stringify(args);
 		if (args) {
-			url += (url.indexOf('?') > 0 ? '&' : '?') + args
+			url += (~url.indexOf('?') ? '&' : '?') + args
 		}
 	}
 	try {

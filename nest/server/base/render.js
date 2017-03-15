@@ -28,7 +28,7 @@ let complie = (filePath, tpl, content, data) => {
 		if (!item) {
 			continue;
 		}
-		if (item.indexOf('%>') > 0) {
+		if (~item.indexOf('%>')) {
 			let rightArr = item.split('%>'),
 				rightArr0 = rightArr[0].replace(/this/g, '_data'),
 				rightArr1 = rightArr[1];

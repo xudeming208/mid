@@ -31,6 +31,9 @@ mid
 |	|	|	|	|——page			#页面less
 |	|	|	|	|——widget		#组件less
 |	|	|	|	|——atom.less
+|	|	|	|	|——base.less
+|	|	|	|	|——font.less
+|	|	|	|	|——reset.less
 |	|——pc						#pc项目
 |	|	|——mvc
 |	|	|	|——controller
@@ -49,8 +52,10 @@ mid
 |	|	|	|	|——page
 |	|	|	|	|——widget
 |	|	|	|	|——atom.less
+|	|	|	|	|——base.less
+|	|	|	|	|——font.less
+|	|	|	|	|——reset.less
 |	|——fml.js 					#模块加载器
-|——logs							#日志目录
 |——nest							#框架代码目录
 |	|——config					#配置目录
 |	|	|——cluster.js  			#集群
@@ -74,6 +79,7 @@ mid
 |	|	|——router.js 			#路由处理
 |	|	|——package.json 		
 |	|	|——pm2Conf.json 		#pm2的配置
+|——logs							#日志目录
 |——tmp							#临时缓存文件目录
 |——.gitignore					
 |——DOC.md 						#框架使用文档

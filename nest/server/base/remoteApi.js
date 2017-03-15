@@ -19,7 +19,7 @@ module.exports = remoteApi = (req, res, isAjax, php, cbk) => {
 			hostSource = 'web',
 			reqHeaders = {};
 
-		if (path.indexOf('::') > 0) {
+		if (~path.indexOf('::')) {
 			path = path.split('::');
 			hostSource = path[0];
 			path = path[1];
@@ -46,7 +46,7 @@ module.exports = remoteApi = (req, res, isAjax, php, cbk) => {
 		if (method === 'GET') {
 			if (remoteData) {
 				path = path.trim();
-				path += (path.indexOf('?') > 0 ? '&' : '?') + remoteData;
+				path += (~path.indexOf('?') ? '&' : '?') + remoteData;
 			}
 			remoteData = '';
 		} else {

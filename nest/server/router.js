@@ -27,8 +27,14 @@ let route = (req, res) => {
 		modUrl = pathname.substr(1).replace(/\/+/g, '/').split('/'),
 		reqQuery = reqUrl.query || {};
 
+	// 生产环境：favicon.ico不应该这样处理，应该利用Nginx，首先将favicon.ico放到Nginx根目录，然后配置，like this:
+	// # set site favicon 
+	// location /favicon.ico {  
+	//     root html;  
+	// }
+
 	// favicon.ico
-	if (pathname == '/favicon.ico') {
+	if (ETC.debug && pathname == '/favicon.ico') {
 		let icoPath = path.resolve(__dirname, '../', 'favicon.ico');
 		fs.readFile(icoPath, (err, html) => {
 			if (err) {

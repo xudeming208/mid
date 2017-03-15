@@ -1,4 +1,5 @@
 'use strict'
+//静态资源应考虑cdn or Nginx
 require('../config/config')
 const cluster = require('cluster');
 const path = require('path');
@@ -81,8 +82,14 @@ if (cluster.isMaster) {
 		let pathname = reqUrl.pathname,
 			fileType = pathname.match(/(\.[^.]+|)$/)[0].substr(1); //取得后缀名
 
+		// 生产环境：favicon.ico不应该这样处理，应该利用Nginx，首先将favicon.ico放到Nginx根目录，然后配置，like this:
+		// # set site favicon 
+		// location /favicon.ico {  
+		//     root html;  
+		// }
+
 		// favicon.ico
-		if (reqUrl.pathname == '/favicon.ico') {
+		if (ETC.debug && reqUrl.pathname == '/favicon.ico') {
 			let icoPath = path.resolve(__dirname, '../', 'favicon.ico');
 			fs.readFile(icoPath, (err, html) => {
 				if (err) {
