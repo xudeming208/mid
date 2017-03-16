@@ -1,6 +1,6 @@
-#框架介绍及使用方法
+# 框架介绍及使用方法
 
-##目录
+## 目录
 	- apps：项目代码，分：H5和PC
 	- nest：框架node代码
 	- logs：日志目录
@@ -88,7 +88,7 @@ mid
 |——TODO.md						#待完成的功能				
 ```
 
-##用法
+## 用法
 	可以参考：
 		- apps/pc/mvc/controller/index.js
 		- apps/pc/mvc/view/index.html
@@ -158,7 +158,7 @@ p{
 ```
 
 
-##启动框架
+## 启动框架
 	1. sudo npm install -g pm2
 	2. cd mid/nest
 	3. npm install
