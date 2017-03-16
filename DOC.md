@@ -1,24 +1,25 @@
 # 框架介绍及使用方法
 
 ## 目录
-	- apps：项目代码，分：H5和PC
-	- nest：框架node代码
+	- apps：项目代码目录，分：H5和PC
+	- nest：框架nodeJS代码目录
 	- logs：日志目录
-	- tmp：临时缓存文件
-	- app.js：动态文件服务器入口
-	- router.js：框架的路由处理
+	- tmp：临时缓存文件目录
+	- app.js：动态文件服务器
 	- jserver.js：静态文件服务器
+	- router.js：框架的路由处理
+	- render.js：模板引擎
 	- config.json：框架的配置文件
 
 ```
 mid
 |——apps							#项目代码目录
-|	|——h5 						#h5项目
+|	|——h5						#h5项目
 |	|	|——mvc
 |	|	|	|——controller
 |	|	|	|——model
-|	|	|	|——view  			#模板
-|	|	|	|	|——widget  		#组件目录
+|	|	|	|——view				#模板
+|	|	|	|	|——widget		#组件目录
 |	|	|——static				#静态文件目录，生成环境CDN加速
 |	|	|	|——img 				
 |	|	|	|——js
@@ -58,33 +59,33 @@ mid
 |	|——fml.js 					#模块加载器
 |——nest							#框架代码目录
 |	|——config					#配置目录
-|	|	|——cluster.js  			#集群
-|	|	|——config.js  			#全局变量
-|	|	|——config.json  		#框架的配置文件
-|	|	|——README.md 			#配置介绍
+|	|	|——cluster				#集群
+|	|	|——config.js			#全局变量
+|	|	|——config.json			#框架的配置文件
+|	|	|——README.md			#配置介绍
 |	|——jserver					#静态文件服务器目录
-|	|	|——jserver.js 			#静态服务器
-|	|	|——commonJS.js 			#commonJS规范
+|	|	|——jserver.js			#静态服务器
+|	|	|——commonJS.js			#commonJS规范
 |	|	|——mime.js 				#Content-Type
 |	|——node_modules				
 |	|——server					#动态文件服务器	
 |	|	|——base 				#基础模块代码		
-|	|	|	|——ajaxTo.js 		#ajax逻辑
+|	|	|	|——ajaxTo.js		#ajax逻辑
 |	|	|	|——cookie.js 		
-|	|	|	|——redirectTo.js 	#重定向
-|	|	|	|——render.js 		#渲染
-|	|	|	|——watchFile.js 	监听文件变化
+|	|	|	|——redirectTo.js	#重定向
+|	|	|	|——render.js		#渲染
+|	|	|	|——watchFile.js		监听文件变化
 |	|	|	|——......
-|	|	|——app.js 				#入口
-|	|	|——router.js 			#路由处理
+|	|	|——app.js				#入口
+|	|	|——router.js			#路由处理
 |	|	|——package.json 		
-|	|	|——pm2Conf.json 		#pm2的配置
+|	|	|——pm2Conf.json			#pm2的配置
 |——logs							#日志目录
 |——tmp							#临时缓存文件目录
 |——.gitignore					
 |——DOC.md 						#框架使用文档
-|——README.md 					#框架介绍文档	
-|——setup.js 					#`node setup.js`即可自动clone代码到本地，并启动服务打开浏览器查看PC页面，后续做成npm包
+|——README.md					#框架介绍文档	
+|——setup.js						#`node setup.js`即可自动clone代码到本地，并启动服务打开浏览器查看PC页面，后续做成npm包
 |——TODO.md						#待完成的功能				
 ```
 
