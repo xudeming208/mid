@@ -15,6 +15,12 @@
 <%%>
 <p>this is a test page</p>
 
+<a href="javascript:;" id="btnPopup">点击我弹层confirm</a>
+<br>
+<br>
+<a href="javascript:;" id="btnPopup2">点击我弹层alert</a>
+
+
 <p>md5:<%= TOOLS.md5('asdasd') %></p>
 
 <p>os :<%= JSON.stringify(TOOLS.os) %></p>
@@ -46,14 +52,17 @@
 <br>
 <%= requireWidget('widget/banner.html',{
 	'model' : this,
-	'id':'banner2',
-	'class':'banner2',
+	'id':'widgetBanner2',
+	'class':'widget-banner2',
 	'data':this.banner,
 	'config':{
 		"autoTime":3200
 	}
 });%>
+
+
 <br>
+
 <img src="<%= this.staticHost + this.h5Path %>/img/index.png" alt="">
 <img src="//www.baidu.com/img/bd_logo1.png" alt="">
 
@@ -75,6 +84,7 @@
 		<% } %>
 	<% }) %>
 </ul>
+
 
 <script type="text/html" id="pageTpl">
 <!-- 这是注释 -->

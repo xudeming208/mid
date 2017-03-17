@@ -1,7 +1,7 @@
 <%
 	var bannerArr = this.data || [];
 %>
-<div class="banner <%= this.class || '' %>" id="<%= this.id || 'banner' %>">
+<div class="widget-banner <%= this.class || '' %>" id="<%= this.id || 'widgetBanner' %>">
 	<ul>
 		<% bannerArr.length && bannerArr.forEach((item,index)=>{ %>
 			<li>
@@ -14,8 +14,8 @@
 	<div class="num"></div>
 </div>
 <script type="text/javascript">
-	fml.vars.banner.push({
-		id:'<%= this.id || "banner" %>',
+	fml.vars.widgetBanner.push({
+		id:'<%= this.id || "widgetBanner" %>',
 		beforeCallback:<%= this.config.beforeCallback || function(){} %>,
 		finishCallback:<%= this.config.finishCallback || function(){} %>,
 		config:<%= JSON.stringify(this.config) %>

@@ -1,0 +1,18 @@
+<script type="text/html" id="widgetPopupTpl">
+	<div id="widgetPopup" class="widget-popup">
+		<div class="widget-popup-inner">
+			<p class="widget-popup-title"><?= this.widgetPopupOpts.title ?></p>
+			<div>
+				<? if(this.widgetPopupOpts.type === 'confirm'){ ?>
+					<a href="javascript:;" class="widget-popup-btn-cancel" id="widgetPopupBtnCancel">
+						<?= this.widgetPopupOpts.cancel ?>
+					</a>
+				<? } ?>
+				<a href="javascript:;" class="widget-popup-btn-confirm <?= this.widgetPopupOpts.type === 'confirm' ? '' : 'popup100' ?>" id="widgetPopupBtnConfirm">
+					<?= this.widgetPopupOpts.confirm ?>
+				</a>
+			</div>
+		</div>
+	</div>
+</script>
+<% this.useModule( [ 'widget/popup' ] ) %> 

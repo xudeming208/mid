@@ -1,62 +1,56 @@
-'use strict'
-const path = require('path');
-const cryto = require('crypto');
-const isWindows = process.platform === 'win32';
+fml.define('component/tools', ['component/md5'], function(require, exports) {
 
-// TOOLS(常用的工具函数集合)，只能用于nodeJS端，比如server代码或者模板中，例如：TOOLS.md5(str)
-function tools() {
-	const self = this;
-	let moduleObj = {
-		loadModel: modName => {
-			return require(path.resolve(__dirname, '../', PATH.apps, HOST[self.hostname], PATH.model, modName));
+	var md5 = require('component/md5');
+	// 常用的方法集合
+	var tools = {
+		md5: function(str) {
+			return str ? md5(str) : '';
 		},
-		md5: str => {
-			return str ? cryto.createHash('md5').update(str.toString()).digest('hex') : '';
-		},
-		//获取数组中最大的值
-		getMax: arr => {
+		// 获取数组中最大的值
+		getMax: function(arr) {
 			return Math.max.apply(null, arr);
 		},
-		getMin: arr => {
+		getMin: function(arr) {
 			return Math.min.apply(null, arr);
 		},
 		// 对象是否为空
-		isEmpey: obj => {
+		isEmpey: function(obj) {
 			return Object.keys(obj).length ? false : true;
 		},
-		htmlEncode: str => {
+		htmlEncode: function(str) {
 			return str ? str.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#039;') : '';
 		},
-		isObject: obj => {
+		isObject: function(obj) {
 			return ({}).toString.call(obj) === '[object Object]';
 		},
-		isArray: obj => {
+		isArray: function(obj) {
 			return Array.isArray(obj) || ({}).toString.call(obj) === '[object Array]';
 		},
-		isString: obj => {
+		isString: function(obj) {
 			return ({}).toString.call(obj) === '[object String]';
 		},
-		isNumber: obj => {
+		isNumber: function(obj) {
 			return ({}).toString.call(obj) === '[object Number]';
 		},
-		isNaN: obj => {
+		isNaN: function(obj) {
 			return moduleObj.isNumber(obj) && obj !== +obj;;
 		},
-		isBoolean: obj => {
+		isBoolean: function(obj) {
 			return obj === true || obj === false || ({}).toString.call(obj) === '[object Boolean]';
 		},
-		isNull: obj => {
+		isNull: function(obj) {
 			return obj === null;
 		},
-		isUndefined: obj => {
+		isUndefined: function(obj) {
 			return obj === void 0;
 		},
 		// 数组去重
-		unique: arr => {
-			let hash = {},
+		unique: function(arr) {
+			var hash = {},
+				i = 0,
 				result = [],
 				len = arr.length; //n为hash表，r为临时数组
-			for (let i = 0; i < len; i++) {
+			for (; i < len; i++) {
 				//如果hash表中没有当前项
 				if (!hash[arr[i]]) {
 					hash[arr[i]] = true; //存入hash表
@@ -65,9 +59,21 @@ function tools() {
 			}
 			return result;
 		},
-		os: (() => {
-			let os = {},
-				ua = self.req.headers['user-agent'],
+		//获取参数
+		getQueryString: function(name) {
+			var searchStr = window.location.search.substr(1);
+			if (window.URLSearchParams) {
+				var params = new URLSearchParams(searchStr);
+				return params.get(name);
+			}
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+			var r = searchStr.match(reg);
+			if (r != null) return decodeURIComponent(r[2]);
+			return null;
+		},
+		os: (function() {
+			var os = {},
+				ua = navigator.userAgent,
 				mobileQQ = ua.match(/qq\/(\/[\d\.]+)*/i) || ua.match(/qzone\//i),
 				weixin = ua.match(/MicroMessenger/i),
 				webkit = ua.match(/Web[kK]it[\/]{0,1}([\d.]+)/),
@@ -135,7 +141,6 @@ function tools() {
 			return os;
 		})()
 	}
-	return moduleObj;
-}
 
-module.exports = tools;
+	return tools;
+})

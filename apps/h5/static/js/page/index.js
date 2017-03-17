@@ -1,10 +1,45 @@
-fml.define("page/index", ['component/shareTmp'], function(require, exports) {
-	console.log(9999)
+fml.define("page/index", ['component/shareTmp', 'widget/popup', 'component/tools'], function(require, exports) {
 
-	var shareTmp = require('component/shareTmp');
+	var shareTmp = require('component/shareTmp'),
+		popup = require('widget/popup'),
+		tools = require('component/tools');
+
+	console.log('md5:', tools.md5('asdasd'))
+
+	console.log('os:', tools.os)
+
+	console.log('browser:', tools.os.browser)
+
+	console.log('queryString:test=', tools.getQueryString('test'))
+
+	// confirm
+	$('#btnPopup').on('click', function() {
+		popup({
+			'title': '我是一个弹层',
+			'cancel': '取消',
+			'confirm': '确定',
+			'type': 'confirm',
+			'oncancel': function() {
+				$('#widgetPopup').remove();
+			},
+			'onconfirm': function() {
+				alert('你点击了确认按钮');
+			}
+		});
+	});
+
+	// alert
+	$('#btnPopup2').on('click', function() {
+		popup({
+			'onconfirm': function() {
+				$('#widgetPopup').remove();
+			}
+		});
+	})
+
 
 	$('#get').on('click', function() {
-		$('#ajaxContent').html('loading...').css('color','#f00');
+		$('#ajaxContent').html('loading...').css('color', '#f00');
 		$.ajax({
 			type: 'get',
 			dataType: 'json',

@@ -1,11 +1,18 @@
-fml.define("page/index", ['component/shareTmp'], function(require, exports) {
+fml.define("page/index", ['component/shareTmp', 'component/tools'], function(require, exports) {
 
-	console.log(9999)
+	var shareTmp = require('component/shareTmp'),
+		tools = require('component/tools');
 
-	var shareTmp = require('component/shareTmp');
+	console.log('md5:', tools.md5('asdasd'))
+
+	console.log('os:', tools.os)
+
+	console.log('browser:', tools.os.browser)
+
+	console.log('queryString:test=', tools.getQueryString('test'))
 
 	$('#get').on('click', function() {
-		$('#ajaxContent').html('loading...').css('color','#f00');
+		$('#ajaxContent').html('loading...').css('color', '#f00');
 		$.ajax({
 			type: 'get',
 			dataType: 'json',
