@@ -1,9 +1,11 @@
-fml.define('component/shareTmp', [], function(require, exports) {
+fml.define('component/shareTmp', ['component/tools'], function(require, exports) {
+	var tools = require('component/tools');
 	var cache = {};
 
 	function etic(str, data, isCheck) {
-		isCheck = isCheck ? isCheck : true;
-		
+		//默认开启检查
+		isCheck = tools.isUndefined(isCheck) ? true : false;
+
 		if (isCheck) {
 			checkTemplate(str, data);
 		}
