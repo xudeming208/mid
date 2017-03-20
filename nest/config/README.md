@@ -15,6 +15,6 @@
 ## merge（未完成）：
 	- 表示是否合并CSS和JS；生产环境需将merge设为true
 
-## debug(js压缩还未完成)：
+## debug：
 	- 此字段为true时：HTML、CSS和JS不压缩，静态资源不缓存（包括内存的缓存及浏览器的缓存）；生产环境需将debug设为false
 	- 生产环境注意处理favicon.ico

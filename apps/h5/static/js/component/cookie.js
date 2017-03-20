@@ -12,12 +12,22 @@ fml.define('component/cookie', [], function(require, exports) {
             document.cookie = name + "=" + encodeURIComponent(val) + ';expires=' + expires.toGMTString() + ';';
         },
         get: function(name) {
-            return cookies[name];
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)"); //正则匹配
+            if (arr = document.cookie.match(reg)) {
+                return decodeURIComponent(arr[2]);
+            } else {
+                return null;
+            }
         },
-        clear: function(name) {
-            return set(name, '');
+        del: function(name) {
+            var exp = new Date();
+            exp.setTime(exp.getTime() - 1);
+            var cval = this.get(name);
+            if (cval != null) {
+                this.set(name, cval, exp);
+            }
         }
     }
-    
+
     return cookie;
 })

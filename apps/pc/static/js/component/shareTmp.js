@@ -2,6 +2,8 @@ fml.define('component/shareTmp', [], function(require, exports) {
 	var cache = {};
 
 	function etic(str, data, isCheck) {
+		isCheck = isCheck ? isCheck : true;
+		
 		if (isCheck) {
 			checkTemplate(str, data);
 		}
@@ -58,6 +60,9 @@ fml.define('component/shareTmp', [], function(require, exports) {
 		}
 	}
 
+
+
+	// checkTemplate
 	function checkTemplate(str, data) {
 		'use strict';
 
