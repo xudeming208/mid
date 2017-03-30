@@ -46,6 +46,9 @@ fml.define('component/tools', ['component/md5'], function(require, exports) {
 		},
 		// 数组去重
 		unique: function(arr) {
+			if (window.Set) {
+				return [...new Set(arr)];
+			}
 			var hash = {},
 				i = 0,
 				result = [],

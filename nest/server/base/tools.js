@@ -53,17 +53,7 @@ function tools() {
 		},
 		// 数组去重
 		unique: arr => {
-			let hash = {},
-				result = [],
-				len = arr.length; //n为hash表，r为临时数组
-			for (let i = 0; i < len; i++) {
-				//如果hash表中没有当前项
-				if (!hash[arr[i]]) {
-					hash[arr[i]] = true; //存入hash表
-					result.push(arr[i]);
-				}
-			}
-			return result;
+			return [...new Set(arr)];
 		},
 		os: (() => {
 			let os = {},
