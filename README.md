@@ -56,11 +56,16 @@ server {
 	- 表示访问接口的超时时间
 
 ### merge（未完成）：
-	- 表示是否合并CSS和JS；生产环境需将merge设为true
+	- 表示是否合并CSS和JS；
 
 ### debug：
-	- 此字段为true时：HTML、CSS和JS不压缩，静态资源不缓存（包括内存的缓存及浏览器的缓存）；生产环境需将debug设为false
-	- 生产环境注意处理favicon.ico（CDN或者Nginx）
+	- 此字段为true时：HTML、CSS和JS不压缩，静态资源不缓存（包括内存的缓存及浏览器的缓存）；
+
+### 生产环境：
+	- 生产环境注意处理图片和favicon.ico（CDN或者Nginx）；
+	- 生产环境下，应该是先merge和compress静态资源，然后传至CDN；
+	- 生产环境下，运行npm run build；
+	- 开发环境下，运行npm run dev；
 
 ## FAQ
 * 查看DOC.md
