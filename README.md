@@ -17,7 +17,7 @@
 	* ~~npm run restart~~
 	* ~~npm run logs~~
 5. ~~In the browser input **127.0.0.1:8083** or **yourIp:8083**, and then can see the pages~~
-    * ~~`The default is open the PC pages, if you want to open the H5 pages, configure config`~~
+    * ~~`The default is open the H5 pages, if you want to open the PC pages, configure config`~~
 6. node setup
 
 ## Nginx
@@ -44,7 +44,7 @@ server {
 ## 配置文件相关说明
 
 ### defaultPage：
-	- 表示用真实IP地址（不是127.0.0.1或者localhost）访问的页面（PC or H5）
+	- 表示用真实IP地址（不是127.0.0.1或者localhost）访问的页面（PC or H5）,默认为H5
 
 ### defaultMod：
 	- 表示默认查找controller的JS文件
@@ -60,7 +60,7 @@ server {
 
 ### debug：
 	- 此字段为true时：HTML、CSS和JS不压缩，静态资源不缓存（包括内存的缓存及浏览器的缓存）；生产环境需将debug设为false
-	- 生产环境注意处理favicon.ico
+	- 生产环境注意处理favicon.ico（CDN或者Nginx）
 
 ## FAQ
 * 查看DOC.md

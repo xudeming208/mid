@@ -7,7 +7,7 @@
 	- 是否将公共的JS部分单独引入方便缓存（类似于base.css），比如backTop,popup等，而不只是jQuery
 	- JS的合并
 
-## 定义fml.vars的script是否合并，并且放到body后面
+## 是否将body标签中的script JS合并并放到body后面
 
 
 ## 线上环境，静态资源都传至CDN or 采用Nginx做静态文件服务器

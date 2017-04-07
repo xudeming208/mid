@@ -1,5 +1,6 @@
+<!-- 由于弹层的数据基本都是ajax获取的，所以此插件采用shareTmp方式，引用的时候，只需在JS中调用即可，参考index.js -->
 <script type="text/html" id="widgetPopupTpl">
-	<div id="widgetPopup" class="widget-popup">
+	<div id="widgetPopup" class="widget-popup <?= this.widgetPopupOpts.class ?>">
 		<div class="widget-popup-inner">
 			<p class="widget-popup-title"><?= this.widgetPopupOpts.title ?></p>
 			<div>

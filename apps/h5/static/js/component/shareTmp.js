@@ -3,8 +3,10 @@ fml.define('component/shareTmp', ['component/tools'], function(require, exports)
 	var cache = {};
 
 	function etic(str, data, isCheck) {
-		//默认开启检查
-		isCheck = tools.isUndefined(isCheck) ? true : false;
+		//debug模式下默认开启检查,isCheck为false时不检查
+		if (fml.vars.debug && tools.isUndefined(isCheck)) {
+			isCheck = true;
+		}
 
 		if (isCheck) {
 			checkTemplate(str, data);
@@ -68,97 +70,29 @@ fml.define('component/shareTmp', ['component/tools'], function(require, exports)
 	function checkTemplate(str, data) {
 		'use strict';
 
-		var source = document.getElementById(str).innerHTML,
-			sourceLines;
-
-		data = data || {};
-		source = source ? source.trim() : '';
-		sourceLines = source.split(/[\r\n]/);
-
-		var c,
-			i = 0,
-			lineNum = 1,
-			line = [],
-			stmts = '',
-			codePieces = [],
-			placeholder = 0,
-			len = source.length,
-			isBegin = false,
-			isQuestionMark = false,
-			isInExpression = false,
-			isInStatement = false;
-
-		codePieces[0] = line;
-		line.extraPlaceHolder = 0;
-
-		for (; i < len; i++) {
-			c = source[i];
-
-			switch (c) {
-				case '\n':
-					line = codePieces[lineNum++] = [];
-					line.extraPlaceHolder = 0;
-
-					break;
-				case '<':
-					isBegin = true;
-					placeholder++;
-
-					break;
-				case '?':
-					isQuestionMark = true;
-
-					if (isBegin) {
-						placeholder++;
-						line.push(new Array(placeholder + 1).join(' '));
-						isInStatement = true;
-						placeholder = 0;
-
-						break;
-					}
-
-					placeholder++;
-
-					break;
-				case '=':
-					if (isInStatement && isQuestionMark) {
-						isInExpression = true;
-
-						break;
-					}
-				case '>':
-					if (isQuestionMark) {
-						if (isInExpression) {
-							stmts += ';';
-							line.extraPlaceHolder++;
-						}
-
-						line.push(stmts);
-						isQuestionMark = isInStatement = isInExpression = false;
-						stmts = '';
-
-						break;
-					}
-				default:
-					if (isInStatement) {
-						stmts += c;
-					} else {
-						placeholder++;
-					}
-
-					isBegin = isQuestionMark = false;
-
-					break;
+		var source = document.getElementById(str).innerHTML;
+		var jsStr = '';
+		var jsInner = '';
+		var innerArr = [];
+		var arr = source.split('<?');
+		for (var i = 0, len = arr.length; i < len; i++) {
+			if (!~arr[i].indexOf('?>')) {
+				continue;
+			}
+			innerArr = arr[i].split('?>');
+			jsStr = innerArr[0];
+			if (jsStr.substr(0, 1) === '=') {
+				jsInner += jsStr.substr(1) + ';\n';
+			} else {
+				jsInner += jsStr + '\n';
 			}
 		}
 
 		var fn = '(function() {\r\n';
 
-		codePieces.forEach(function(v, i) {
-			fn += v.join('') + '\r\n';
-		});
+		fn += jsInner;
 
-		fn += "}.call(JSON.parse('" + JSON.stringify(data) + "')))";
+		fn += "}.call(JSON.parse('" + JSON.stringify(data).replace(/\'/g, '‘') + "')))";
 
 		/*
 		 onerror arguments：https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers.onerror
@@ -168,37 +102,11 @@ fml.define('component/shareTmp', ['component/tools'], function(require, exports)
 		iframe.style.display = "none";
 		iframe.setAttribute('id', 'iframe');
 		document.body.appendChild(iframe);
-
+		iframe.contentWindow.$ = window.$;
 		iframe.contentWindow.onerror = function(msg, _, line, col, error) {
-			var code,
-				prePos = 10,
-				errorMessageStyle = 'color:#fff;font-weight:bold;background-color:#f00;';
-
-			// 上面 fn 中在定义函数名后有换行，所以这里减 2
-			line = line && line > 2 ? (line - 2) : 0;
-
-			if (line > codePieces.length) {
-				return false;
-			}
-
-			var extraCol = codePieces[line].extraPlaceHolder;
-			code = sourceLines[line];
-
-			col = col ? (col - extraCol) : 0;
-			var start = col > prePos ? (col - prePos) : 0;
 
 			console.group('Error');
-			console.log('Error occurs at Line:', line + 1, ' Col:', col);
-
-			if (line != 0) {
-				console.log(sourceLines[line - 1]);
-			}
-
-			console.log(code.substring(0, start) + '%c' + code.substring(start, col + prePos) + '...', errorMessageStyle);
-
-			if (line != sourceLines.length - 1) {
-				console.log(sourceLines[line + 1]);
-			}
+			console.log('Error occurs at Line:', line, ' Col:', col);
 
 			requestAnimationFrame(function() {
 				console.groupEnd();
@@ -211,9 +119,9 @@ fml.define('component/shareTmp', ['component/tools'], function(require, exports)
 		var s = doc.createElement('script');
 		s.innerHTML = fn;
 		doc.body.appendChild(s);
-
-		return codePieces;
 	}
+
+
 	// var sjt = require('core/etic');
 	return function(obj, data, isCheck) {
 		data = data || Object;

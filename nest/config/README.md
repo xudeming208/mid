@@ -1,7 +1,7 @@
 # 配置文件相关说明
 
 ## defaultPage：
-	- 表示用真实IP地址（不是127.0.0.1或者localhost）访问的页面（PC or H5）
+	- 表示用真实IP地址（不是127.0.0.1或者localhost）访问的页面（PC or H5）,默认为H5
 
 ## defaultMod：
 	- 表示默认查找controller的JS文件

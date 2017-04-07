@@ -32,8 +32,11 @@ fml.define('component/tools', ['component/md5'], function(require, exports) {
 		isNumber: function(obj) {
 			return ({}).toString.call(obj) === '[object Number]';
 		},
+		isFunction: function(obj) {
+			return ({}).toString.call(obj) === '[object Function]';
+		},
 		isNaN: function(obj) {
-			return moduleObj.isNumber(obj) && obj !== +obj;;
+			return moduleObj.isFunction(obj) && obj !== +obj;
 		},
 		isBoolean: function(obj) {
 			return obj === true || obj === false || ({}).toString.call(obj) === '[object Boolean]';
@@ -128,7 +131,7 @@ fml.define('component/tools', ['component/md5'], function(require, exports) {
 			if (opera) os.browser.opera = true, os.browser.version = opera[1]
 			if (uc) os.browser.uc = true, os.browser.version = uc[1]
 			if (qqbrowser) os.browser.qqbrowser = true, os.browser.version = qqbrowser[1]
-			if (safari && (osx || os.ios || isWindows)) {
+			if (safari && (osx || os.ios)) {
 				os.browser.safari = true
 				if (!os.ios) os.browser.version = safari[1]
 			}

@@ -9,6 +9,8 @@ fml.define("widget/popup", ['component/shareTmp'], function(require, exports) {
 		opts.onconfirm = opts.onconfirm || function() {};
 		// type为'alert' or 'confirm'，默认为'alert'
 		opts.type = opts.type || 'alert';
+		// 如果需要覆盖默认样式，可以传入class，此class会添加到弹层顶层div中
+		opts.class = opts.class || '';
 		this.init(opts);
 	}
 	Popup.prototype = {

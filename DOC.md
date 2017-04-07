@@ -85,7 +85,7 @@ mid
 |——.gitignore					
 |——DOC.md 						#框架使用文档
 |——README.md						#框架介绍文档	
-|——setup.js						#`node setup.js`即可自动clone代码到本地，并启动服务打开浏览器查看PC页面，后续做成npm包
+|——setup.js						#`node setup.js`即可自动clone代码到本地，并启动服务打开浏览器查看H5页面，后续做成npm包
 |——TODO.md						#待完成的功能				
 ```
 

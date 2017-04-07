@@ -5,10 +5,11 @@
 	<title><%= this.pageTitle %></title>
 	<meta name="description" content="<%= this.pageDescription %>" />
 	<meta name="keywords" content="<%= this.pageKeywords %>" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name="viewport" content="width=device-width,<%= TOOLS.os.android ? ' target-densitydpi=device-dpi,' : '' %> initial-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 	<meta content="telephone=no" name="format-detection"/>
+	<!-- 域名预解析 -->
 	<link rel="dns-prefetch" href="//img.inke.cn/">
 	<link rel="stylesheet" type="text/css" href="<%= this.staticHost + this.h5Path %>/css/base.css<%= this.version || '' %>">
 	<%=
@@ -54,7 +55,8 @@
 			'defer' : <%= this.jsDefer %>,
 			'modulebase' : '<%= this.staticHost + this.h5Path %>/js/'
 		});
-		fml.vars.widgetBanner=[];
+		fml.vars.widgetBanner = [];
+		fml.vars.debug = <%= ETC.debug %>;
 	</script>
 </head>
 <body>

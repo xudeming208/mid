@@ -19,6 +19,8 @@ fml.define("page/index", ['component/shareTmp', 'widget/popup', 'component/tools
 			'cancel': '取消',
 			'confirm': '确定',
 			'type': 'confirm',
+			// 可以通过传入class覆盖默认弹层样式，此class会添加到弹层顶层div中
+			'class': 'my-popup-Class',
 			'oncancel': function() {
 				$('#widgetPopup').remove();
 			},

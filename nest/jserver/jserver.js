@@ -82,7 +82,7 @@ if (cluster.isMaster) {
 		let pathname = reqUrl.pathname,
 			fileType = pathname.match(/(\.[^.]+|)$/)[0].substr(1); //取得后缀名
 
-		// 生产环境：favicon.ico不应该这样处理，应该利用Nginx，首先将favicon.ico放到Nginx根目录，然后配置，like this:
+		// 生产环境：favicon.ico不应该这样处理，应该利用CDN或者Nginx，首先将favicon.ico放到Nginx根目录，然后配置，like this:
 		// # set site favicon 
 		// location /favicon.ico {  
 		//     root html;  

@@ -5,6 +5,8 @@
 	<title><%= this.pageTitle %></title>
 	<meta name="description" content="<%= this.pageDescription %>" />
 	<meta name="keywords" content="<%= this.pageKeywords %>" />
+	<!-- 域名预解析 -->
+	<link rel="dns-prefetch" href="//img.inke.cn/">
 	<link rel="stylesheet" type="text/css" href="<%= this.staticHost + this.pcPath %>/css/base.css<%= this.version || '' %>">
 	<%=
 		(function(link ,cssmods){
@@ -34,7 +36,8 @@
 			'defer' : <%= this.jsDefer %>,
 			'modulebase' : '<%= this.staticHost + this.pcPath %>/js/'
 		});
-		fml.vars.widgetBanner=[];
+		fml.vars.widgetBanner = [];
+		fml.vars.debug = <%= ETC.debug %>;
 	</script>
 </head>
 <body>
