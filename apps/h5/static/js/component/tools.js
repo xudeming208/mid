@@ -36,7 +36,7 @@ fml.define('component/tools', ['component/md5'], function(require, exports) {
 			return ({}).toString.call(obj) === '[object Function]';
 		},
 		isNaN: function(obj) {
-			return moduleObj.isFunction(obj) && obj !== +obj;
+			return moduleObj.isNumber(obj) && obj !== +obj;
 		},
 		isBoolean: function(obj) {
 			return obj === true || obj === false || ({}).toString.call(obj) === '[object Boolean]';

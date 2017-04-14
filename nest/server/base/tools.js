@@ -39,6 +39,9 @@ function tools() {
 		isNumber: obj => {
 			return ({}).toString.call(obj) === '[object Number]';
 		},
+		isFunction: function(obj) {
+			return ({}).toString.call(obj) === '[object Function]';
+		},
 		isNaN: obj => {
 			return moduleObj.isNumber(obj) && obj !== +obj;;
 		},
