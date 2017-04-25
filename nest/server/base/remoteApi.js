@@ -98,8 +98,8 @@ module.exports = remoteApi = (req, res, isAjax, php, cbk) => {
 					result = false;
 				}
 				if (ETC.debug) {
+					let result_orgin = result;
 					try {
-						let result_orgin = result;
 						result = result ? (JSON.parse(result) || result) : false;
 					} catch (err) {
 						console.log('error', 'api', path, 'API ERROR:', result_orgin);

@@ -68,7 +68,7 @@ let getHtml = (tpl, data) => {
 	let filePath = path.resolve(__dirname, '../', PATH.apps, host, PATH.view, '.', tpl);
 	let tmpFile = getTmpFile(tpl);
 	//watchFile
-	watchFile(filePath, function() {
+	watchFile(filePath, () => {
 		delete require.cache[tmpFile];
 		return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
 	});
@@ -83,7 +83,7 @@ let getHtml = (tpl, data) => {
 // 输出HTML
 let render = function(tpl, data = {}) {
 	host = HOST[this.hostname];
-	['_JSLinks', '_CSSLinks', '_JSstack', '_CSSstack', '_JSmods', '_CSSmods'].map(function(item) {
+	['_JSLinks', '_CSSLinks', '_JSstack', '_CSSstack', '_JSmods', '_CSSmods'].map(item => {
 		if (!data.hasOwnProperty(item)) {
 			data[item] = [];
 		}

@@ -88,7 +88,7 @@ let route = (req, res) => {
 		modPath = path.resolve(controllerPath, modName + '.js');
 
 	// notFoundFun
-	let notFoundFun = (modPath) => {
+	let notFoundFun = modPath => {
 		res.writeHead(404, {
 			'Content-Type': 'text/plain'
 		});
@@ -102,7 +102,7 @@ let route = (req, res) => {
 
 	let modJs = require(modPath);
 	// watchFile
-	watchFile(modPath, function() {
+	watchFile(modPath, () => {
 		delete require.cache[modPath];
 	});
 

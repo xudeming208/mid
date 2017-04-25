@@ -86,4 +86,24 @@ fml.define("page/index", ['component/shareTmp', 'widget/popup', 'component/tools
 		});
 	})
 
+	$('#jsonp').on('click', function() {
+		// jQuery或者zepto会把post改为get，并会把jsonp callback中的数据匹配出来传给success
+		$.ajax({
+			type: 'post',
+			dataType: 'jsonp',
+			url: 'index/aj/busi',
+			data: {
+				'liveid': '1481105372291334',
+				'uid': '5778280'
+			},
+			timeout: 5000,
+			success: function(data) {
+				alert(JSON.stringify(data));
+			},
+			error: function(error) {
+				alert('error')
+			}
+		});
+	})
+
 });

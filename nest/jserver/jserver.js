@@ -120,7 +120,7 @@ if (cluster.isMaster) {
 		}
 		filePath += pathname;
 		// 读取文件的最后修改时间
-		fs.stat(filePath, function(err, stat) {
+		fs.stat(filePath, (err, stat) => {
 			if (err) {
 				throw err;
 			}
@@ -177,7 +177,7 @@ if (cluster.isMaster) {
 	});
 }
 
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', err => {
 	console.dir(err);
 	process.exit(1);
 })

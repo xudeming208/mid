@@ -22,7 +22,7 @@ function ajaxTo(php, args) {
 		return;
 	}
 
-	// 特殊的protocol和特殊的port 可以通过control设置
+	// 特殊的protocol和特殊的port 可以通过controller设置
 	// 如果control中有设置字段，以control中的设置为准
 	phpObj[args] = {
 		'protocol': php[args]['protocol'] || 'http',
@@ -46,7 +46,7 @@ function ajaxTo(php, args) {
 
 		//for jsonp
 		if (req.__get.callback) {
-			res.end(req.__get.callback + '(' + data + ')');
+			res.end(req.__get.callback + '(' + JSON.stringify(data) + ')');
 			return;
 		}
 		res.end(JSON.stringify(data));

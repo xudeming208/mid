@@ -27,7 +27,7 @@ let init = () => {
 	content.site.port = port;
 
 	// 重启服务清除缓存
-	exec(['cd ../.. ', 'rm -rf tmp/*', 'rm -rf logs/*'].join(' && '), function(error, stdout, stderr) {
+	exec(['cd ../.. ', 'rm -rf tmp/*', 'rm -rf logs/*'].join(' && '), (error, stdout, stderr) => {
 		if (error) {
 			console.dir(error);
 		}
@@ -99,7 +99,7 @@ if (cluster.isMaster) {
 	});
 }
 
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', err => {
 	console.dir(err);
 	process.exit(1);
 })
