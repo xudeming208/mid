@@ -10,17 +10,89 @@ ul li{
 	list-style-type: none;
 	.hidden;
 	span{
-		color:#f00;
-		font-weight: 700;
-		margin-right: 1rem;
-		float: left;
-		width:2rem;
-		text-align: right;
+		.fc(#f00);
+		.fb;
+		.mr(1rem);
+		.fl;
+		.w(2rem);
+		.tr;
 	}
 }
 img{.w(30%)}
 .test{.w(3rem);.h(1rem);.bgc(#ff0);.fc(#fff);.l(1rem)}
 p{.l(3);word-break:break-all;}
+
+/*不确定子元素个数的弹性滚动*/
+.ul-scroll{
+	.w(100%);
+	.h(2rem);
+	.display(-webkit-box);
+	.overflow-scrolling;
+	.hidden-y;
+	li{
+		.w(60%);
+		.mr(.05rem);
+		&:last-of-type{
+			.mr(0);
+		};
+	}
+	img{
+		.w(100%);
+	}
+}
+
+/*水平垂直居中*/
+.align-v{
+	.display(flex);
+	align-items: center;
+	.w(100%);
+	.h(3rem);
+	.c;
+	.rgba(0,0,0,.5);
+	p{
+		.w(100%);
+		.f(.3rem);
+		.l(1.2);
+		.fc(#fff);
+	}
+}
+
+.align-v2{
+	.pr;
+	.w(100%);
+	.h(3rem);
+	.rgba(0,0,0,.5);
+	p{
+		.w(100%);
+		.c;
+		.pa;
+		.p-left(0);
+		.p-top(50%);
+		.translate3d(0,-50%,0);
+		.f(.3rem);
+		.fc(#fff);
+	}
+}
+
+.align-v3{
+	.w(100%);
+	.h(3rem);
+	.rgba(0,0,0,.5);
+
+	p{
+		.f(.3rem);
+		.fc(#fff);
+		.c;
+		.w(100%);
+		.h(100%);
+		&:after {
+			content: '';
+			.i_block;
+			.h(100%);
+			.vm;
+		};
+	}
+}
 
 //以下为覆盖widget的默认样式
 .widget-banner2{
