@@ -6,16 +6,66 @@ html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address
 	margin:0;
 	padding:0;
 	border:0;
-	outline:0;
+	outline:none;
 	font-size:100%;
 	vertical-align:baseline;
 	background:transparent;
+	border-collapse: collapse;
 	-webkit-user-select:none;
 	-webkit-text-size-adjust:none;
-	-webkit-tap-highlight-color:rgba(255,255,255,0);
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
 	-webkit-user-drag: none;
 	box-sizing: border-box;
+	-webkit-appearance: none;
+	-webkit-touch-callout: none;
+	object-fit: contain;
+	object-position: 50% 50%;
+	pointer-events: none;
 }
+/*
+http://stackoverflow.com/questions/17678302/how-to-hide-full-screen-button-of-the-video-tag-in-html5
+video标签隐藏控制条
+::-webkit-media-controls {
+    display: none;
+}
+video标签隐藏控制条
+::-webkit-media-controls-enclosure {
+    display: none;
+}
+video标签隐藏全屏按钮
+::-webkit-media-controls-fullscreen-button {
+	display: none;
+}
+video标签隐藏播放和暂停按钮（控制条左侧的，不是video中心的btn）
+::-webkit-media-controls-play-button {
+	display: none;
+}
+::-webkit-media-controls-timeline {
+	display: none;
+}
+::-webkit-media-controls-current-time-display {
+	display: none;
+}
+::-webkit-media-controls-time-remaining-display {
+	display: none;
+}
+::-webkit-media-controls-mute-button {
+	display: none;
+}
+::-webkit-media-controls-toggle-closed-captions-button {
+	display: none;
+}
+::-webkit-media-controls-volume-slider {
+	display: none;
+}
+*/
+
+/*video标签隐藏默认的播放按钮(video默认居中的那个播放按钮)*/
+::-webkit-media-controls-start-playback-button {
+	pointer-events: none;
+    display: none;
+}
+
 body {
 	line-height:1;
 	font-family:"HY-XiZYJ", "HY_XiZYJ", Arial;
