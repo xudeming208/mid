@@ -1,7 +1,3 @@
-[![Github All Releases](https://img.shields.io/github/downloads/atom/atom/total.svg)](https://github.com/xudeming208/mid)
-[![node](https://img.shields.io/node/v/gh-badges.svg)](https://github.com/xudeming208/mid)
-[![npm](https://img.shields.io/npm/v/npm.svg)](https://github.com/xudeming208/mid)
-
 # mid
 	- 用nodejs开发的一套基于URI的MVC框架，适用于前后端分离项目。
 	- 采用nodejs + es6 + MVC + 模块加载器 + 组件 + less
