@@ -1,9 +1,13 @@
+<p align="center">
+	
+</p>
+
 # mid
 	- 用nodejs开发的一套基于URI的MVC框架，适用于前后端分离项目。
 	- 采用nodejs + es6 + MVC + 模块加载器 + 组件 + less
 
 ## 框架介绍及使用方法
-	- 详细查看[DOC.md](https://github.com/xudeming208/mid/blob/master/DOC.md)
+详细查看[DOC.md](https://github.com/xudeming208/mid/blob/master/DOC.md)
 
 
 ## Usage

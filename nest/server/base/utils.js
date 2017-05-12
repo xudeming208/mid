@@ -1,10 +1,13 @@
 'use strict'
+/**
+ * @file 工具集
+ */
 const path = require('path');
 const cryto = require('crypto');
 const isWindows = process.platform === 'win32';
 
-// TOOLS(常用的工具函数集合)，只能用于nodeJS端，比如server代码或者模板中，例如：TOOLS.md5(str)
-function tools() {
+// UTILS(常用的工具函数集合)，只能用于nodeJS端，比如server代码或者模板中，例如：UTILS.md5(str)
+function utils() {
 	const self = this;
 	let moduleObj = {
 		loadModel: modName => {
@@ -15,10 +18,12 @@ function tools() {
 		},
 		//获取数组中最大的值
 		getMax: arr => {
-			return Math.max.apply(null, arr);
+			// return Math.max.apply(null, arr);
+			return Math.max(...arr);
 		},
 		getMin: arr => {
-			return Math.min.apply(null, arr);
+			// return Math.min.apply(null, arr);
+			return Math.min(...arr);
 		},
 		// 对象是否为空
 		isEmpey: obj => {
@@ -49,10 +54,12 @@ function tools() {
 			return obj === true || obj === false || ({}).toString.call(obj) === '[object Boolean]';
 		},
 		isNull: obj => {
-			return obj === null;
+			// return obj === null;
+			return Object.is(obj, null);
 		},
 		isUndefined: obj => {
-			return obj === void 0;
+			// return obj === void 0;
+			return Object.is(undefined, void 0);
 		},
 		// 数组去重
 		unique: arr => {
@@ -131,4 +138,4 @@ function tools() {
 	return moduleObj;
 }
 
-module.exports = tools;
+module.exports = utils;

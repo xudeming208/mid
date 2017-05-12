@@ -1,10 +1,10 @@
-fml.define('component/shareTmp', ['component/tools'], function(require, exports) {
-	var tools = require('component/tools');
+fml.define('component/shareTmp', ['component/utils'], function(require, exports) {
+	var utils = require('component/utils');
 	var cache = {};
 
 	function etic(str, data, isCheck) {
 		//debug模式下默认开启检查,isCheck为false时不检查
-		if (fml.vars.debug && tools.isUndefined(isCheck)) {
+		if (fml.vars.debug && utils.isUndefined(isCheck)) {
 			isCheck = true;
 		}
 

@@ -6,7 +6,7 @@ module.exports = remoteApi = (req, res, isAjax, php, cbk) => {
 	let phpLen = Object.keys(php).length;
 	for (let phpKey in php) {
 		let remoteObj = php[phpKey];
-		if (TOOLS.isString(remoteObj)) {
+		if (UTILS.isString(remoteObj)) {
 			remoteObj = {
 				'path': remoteObj
 			}
@@ -122,7 +122,7 @@ module.exports = remoteApi = (req, res, isAjax, php, cbk) => {
 				}
 
 				// setCookie
-				['set-cookie'].forEach((proxyKey) => {
+				['set-cookie'].forEach(proxyKey => {
 					if (proxyKey in response.headers) {
 						let pdVal = response.headers[proxyKey];
 						if (!pdVal) {
@@ -133,8 +133,9 @@ module.exports = remoteApi = (req, res, isAjax, php, cbk) => {
 							pdVal.forEach((val) => {
 								cookieSet.set(val);
 							})
-						} else
+						} else {
 							res.setHeader(proxyKey, pdVal);
+						}
 					}
 				})
 

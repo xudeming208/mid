@@ -1,28 +1,28 @@
-fml.define("page/index", ['component/shareTmp', 'widget/popup', 'component/tools'], function(require, exports) {
+fml.define("page/index", ['component/shareTmp', 'widget/dialog', 'component/utils'], function(require, exports) {
 
 	var shareTmp = require('component/shareTmp'),
-		popup = require('widget/popup'),
-		tools = require('component/tools');
+		dialog = require('widget/dialog'),
+		utils = require('component/utils');
 
-	console.log('md5:', tools.md5('asdasd'))
+	console.log('md5:', utils.md5('asdasd'))
 
-	console.log('os:', tools.os)
+	console.log('os:', utils.os)
 
-	console.log('browser:', tools.os.browser)
+	console.log('browser:', utils.os.browser)
 
-	console.log('queryString:test=', tools.getQueryString('test'))
+	console.log('queryString:test=', utils.getQueryString('test'))
 
 	// confirm
-	$('#btnPopup').on('click', function() {
-		popup({
+	$('#btnDialog').on('click', function() {
+		dialog({
 			'title': '我是一个弹层',
 			'cancel': '取消',
 			'confirm': '确定',
 			'type': 'confirm',
 			// 可以通过传入class覆盖默认弹层样式，此class会添加到弹层顶层div中
-			'class': 'my-popup-Class',
+			'class': 'my-dialog-Class',
 			'oncancel': function() {
-				$('#widgetPopup').remove();
+				$('#widgetDialog').remove();
 			},
 			'onconfirm': function() {
 				alert('你点击了确认按钮');
@@ -31,10 +31,10 @@ fml.define("page/index", ['component/shareTmp', 'widget/popup', 'component/tools
 	});
 
 	// alert
-	$('#btnPopup2').on('click', function() {
-		popup({
+	$('#btnDialog2').on('click', function() {
+		dialog({
 			'onconfirm': function() {
-				$('#widgetPopup').remove();
+				$('#widgetDialog').remove();
 			}
 		});
 	})

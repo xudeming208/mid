@@ -42,7 +42,7 @@ const controlObj = {
 		//只要是获取URL中的参数都要防止XSS
 		let xss = this.req.__get.xss;
 		this.getData(php, data => {
-			//http://data.ip:data.port/index/xss/?xss=%27;alert(%27xss%27);%27
+			//http://${data.ip}:${data.port}/index/xss/?xss=%27;alert(%27xss%27);%27
 			data.pageTitle = 'xss';
 			data.xss = xss;
 			this.render('xss.html', data);

@@ -1,7 +1,7 @@
-fml.define("widget/popup", ['component/shareTmp'], function(require, exports) {
+fml.define("widget/dialog", ['component/shareTmp'], function(require, exports) {
 	var shareTmp = require('component/shareTmp');
 
-	function Popup(opts) {
+	function Dialog(opts) {
 		opts.title = opts.title || '我是一个弹层';
 		opts.cancel = opts.cancel || '取消';
 		opts.confirm = opts.confirm || '确认';
@@ -13,33 +13,33 @@ fml.define("widget/popup", ['component/shareTmp'], function(require, exports) {
 		opts.class = opts.class || '';
 		this.init(opts);
 	}
-	Popup.prototype = {
-		constructor: Popup,
+	Dialog.prototype = {
+		constructor: Dialog,
 		init: function(opts) {
 			var body = $('body');
 
-			if (!body.find('#widgetPopup').length) {
-				var tpl = shareTmp('widgetPopupTpl', {
-					'widgetPopupOpts': opts
+			if (!body.find('#widgetDialog').length) {
+				var tpl = shareTmp('widgetDialogTpl', {
+					'widgetDialogOpts': opts
 				});
 				body.append(tpl);
 			}
 
 			// confirm弹层
 			if (opts.type == 'confirm') {
-				$('#widgetPopupBtnCancel').off('click').on('click', function() {
+				$('#widgetDialogBtnCancel').off('click').on('click', function() {
 					opts.oncancel();
 				})
 			}
 
 			// alert弹层
-			$('#widgetPopupBtnConfirm').off('click').on('click', function() {
+			$('#widgetDialogBtnConfirm').off('click').on('click', function() {
 				opts.onconfirm();
 			})
 		}
 	}
 
 	return function(opts) {
-		return new Popup(opts);
+		return new Dialog(opts);
 	};
 })

@@ -1,8 +1,8 @@
-fml.define('component/tools', ['component/md5'], function(require, exports) {
+fml.define('component/utils', ['component/md5'], function(require, exports) {
 
 	var md5 = require('component/md5');
 	// 常用的方法集合
-	var tools = {
+	var utils = {
 		md5: function(str) {
 			return str ? md5(str) : '';
 		},
@@ -148,5 +148,5 @@ fml.define('component/tools', ['component/md5'], function(require, exports) {
 		})()
 	}
 
-	return tools;
+	return utils;
 })

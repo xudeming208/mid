@@ -9,7 +9,7 @@ const useModule = require('./base/useModule');
 const redirectTo = require('./base/redirectTo');
 const render = require('./base/render').render;
 const ajaxTo = require('./base/ajaxTo');
-const tools = require('./base/tools');
+const utils = require('./base/utils');
 
 let route = (req, res) => {
 	try {
@@ -116,14 +116,14 @@ let route = (req, res) => {
 			redirectTo,
 			render,
 			ajaxTo,
-			tools
+			utils
 		};
 
 	// merge
 	Object.assign(modJsObj, extendObj);
 
-	// TOOLS(常用的工具函数集合)，代码和模板中都可以使用，例如：TOOLS.md5(str)
-	global.TOOLS = modJsObj.tools();
+	// UTILS(常用的工具函数集合)，代码和模板中都可以使用，例如：UTILS.md5(str)
+	global.UTILS = modJsObj.utils();
 
 	let fn = modJsObj[modFun];
 

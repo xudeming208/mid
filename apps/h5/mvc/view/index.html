@@ -15,17 +15,17 @@
 <%%>
 <p>this is a test page</p>
 
-<a href="javascript:;" id="btnPopup">点击我弹层confirm</a>
+<a href="javascript:;" id="btnDialog">点击我弹层confirm</a>
 <br>
 <br>
-<a href="javascript:;" id="btnPopup2">点击我弹层alert</a>
+<a href="javascript:;" id="btnDialog2">点击我弹层alert</a>
 
 
-<p>md5:<%= TOOLS.md5('asdasd') %></p>
+<p>md5:<%= UTILS.md5('asdasd') %></p>
 
-<p>os :<%= JSON.stringify(TOOLS.os) %></p>
+<p>os :<%= JSON.stringify(UTILS.os) %></p>
 
-<p>当前浏览器是：<%= JSON.stringify(TOOLS.os.browser) %></p>
+<p>当前浏览器是：<%= JSON.stringify(UTILS.os.browser) %></p>
  
 <p>XSS:<%== '<script type="text/javascript">alert("XSS")</script>' %></p>
 

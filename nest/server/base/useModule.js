@@ -14,11 +14,11 @@ function useModule(modules) {
     })
 
     // this._JSstack.push(...fullModulesInvoke)
-    // this._JSstack = TOOLS.unique(this._JSstack)
+    // this._JSstack = UTILS.unique(this._JSstack)
 
     if (!SITE.jsDefer) return
 
-    var blockKey = TOOLS.md5(modules.toString()),
+    var blockKey = UTILS.md5(modules.toString()),
         getAllModules = (mod) => {
             !this._JSmods.includes(mod) && this._JSmods.push(mod);
             // merge

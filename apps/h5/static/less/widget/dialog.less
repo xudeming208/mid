@@ -1,4 +1,4 @@
-.widget-popup {
+.widget-dialog {
 	.pf;
 	left:0;
 	top:0;
@@ -6,7 +6,7 @@
 	.h(100%);
 	.bgc(rgba(0,0,0,0.5));
 	z-index:10000;
-	.widget-popup-inner {
+	.widget-dialog-inner {
 		.pa;
 		left:50%;
 		top:50%;
@@ -17,14 +17,14 @@
 		transform: translate3d(-50%,-50%,0);
 		-webkit-transform: translate3d(-50%,-50%,0);
 	}
-	.widget-popup-title {
+	.widget-dialog-title {
 		.f(.25rem);
 		.fc(#000);
 		border-bottom:1px solid #ddd;
 		padding:.35rem 0;
 		.l(1.4);
 	}
-	.widget-popup-btn-cancel,.widget-popup-btn-confirm {
+	.widget-dialog-btn-cancel,.widget-dialog-btn-confirm {
 		.f(.25rem);
 		.fc(#f69);
 		.fl;
@@ -34,11 +34,11 @@
 		.l(3.2);
 		.ellipsis;
 	}
-	.widget-popup-btn-cancel {
+	.widget-dialog-btn-cancel {
 		border-right:1px solid #ddd;
 		box-sizing:border-box;
 	}
-	.popup100 {
+	.dialog100 {
 		.w(100%)
 	}
 }

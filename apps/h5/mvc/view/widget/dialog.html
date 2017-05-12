@@ -1,0 +1,19 @@
+<!-- 由于弹层的数据基本都是ajax获取的，所以此插件采用shareTmp方式，引用的时候，只需在JS中调用即可，参考index.js -->
+<script type="text/html" id="widgetDialogTpl">
+	<div id="widgetDialog" class="widget-dialog <?= this.widgetDialogOpts.class ?>">
+		<div class="widget-dialog-inner">
+			<p class="widget-dialog-title"><?= this.widgetDialogOpts.title ?></p>
+			<div>
+				<? if(this.widgetDialogOpts.type === 'confirm'){ ?>
+					<a href="javascript:;" class="widget-dialog-btn-cancel" id="widgetDialogBtnCancel">
+						<?= this.widgetDialogOpts.cancel ?>
+					</a>
+				<? } ?>
+				<a href="javascript:;" class="widget-dialog-btn-confirm <?= this.widgetDialogOpts.type === 'confirm' ? '' : 'dialog100' ?>" id="widgetDialogBtnConfirm">
+					<?= this.widgetDialogOpts.confirm ?>
+				</a>
+			</div>
+		</div>
+	</div>
+</script>
+<% this.useModule( [ 'widget/dialog' ] ) %> 

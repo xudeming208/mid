@@ -126,7 +126,7 @@ exports.controlObj = controlObj;
 ```
 <%#head.html%>
 <p>this is a test page</p>
-<p>当前浏览器是：<%= JSON.stringify(TOOLS.os.browser) %></p>
+<p>当前浏览器是：<%= JSON.stringify(UTILS.os.browser) %></p>
 <%= requireWidget('widget/banner.html',{
 	'model' : this,
 	'data':this.banner,

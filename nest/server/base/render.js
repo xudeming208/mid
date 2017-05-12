@@ -37,7 +37,7 @@ let complie = (filePath, tpl, content, data) => {
 					// '<%== val %>' 防止XSS
 					switch (item.substr(1, 1)) {
 						case '=':
-							tplStr += "html+=TOOLS.htmlEncode(" + rightArr0.substr(2) + ")\n";
+							tplStr += "html+=UTILS.htmlEncode(" + rightArr0.substr(2) + ")\n";
 							break;
 						default:
 							tplStr += "html+=" + rightArr0.substr(1) + "\n";
@@ -136,5 +136,7 @@ let render = function(tpl, data = {}) {
 	}
 }
 
-exports.getHtml = getHtml;
-exports.render = render;
+module.exports = {
+	getHtml,
+	render
+};
