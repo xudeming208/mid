@@ -19,6 +19,7 @@
 		beforeCallback:<%= this.config.beforeCallback || function(){} %>,
 		finishCallback:<%= this.config.finishCallback || function(){} %>,
 		config:<%= JSON.stringify(this.config) %>
+		// config:<%= JSON.stringify(Object.assign({},this.config)) %>
 	})
 </script>
 <% this.model.useModule( [ 'widget/banner' ] ) %> 

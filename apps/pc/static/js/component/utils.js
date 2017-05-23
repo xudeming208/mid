@@ -1,5 +1,7 @@
 fml.define('component/utils', ['component/md5'], function(require, exports) {
 
+	// Underscore.js
+
 	var md5 = require('component/md5');
 	// 常用的方法集合
 	var utils = {

@@ -2,6 +2,9 @@
 /**
  * @file 工具集
  */
+
+// npm install lodash
+
 const path = require('path');
 const cryto = require('crypto');
 const isWindows = process.platform === 'win32';
@@ -48,7 +51,8 @@ function utils() {
 			return ({}).toString.call(obj) === '[object Function]';
 		},
 		isNaN: obj => {
-			return moduleObj.isNumber(obj) && obj !== +obj;;
+			// return moduleObj.isNumber(obj) && obj !== +obj;
+			return Object.is(obj, NaN);
 		},
 		isBoolean: obj => {
 			return obj === true || obj === false || ({}).toString.call(obj) === '[object Boolean]';
@@ -59,11 +63,31 @@ function utils() {
 		},
 		isUndefined: obj => {
 			// return obj === void 0;
-			return Object.is(undefined, void 0);
+			return Object.is(obj, void 0);
 		},
 		// 数组去重
 		unique: arr => {
+			// return Array.from(new Set(arr));
 			return [...new Set(arr)];
+		},
+		// 深度克隆对象
+		clone: obj => {
+			// return { ...obj };
+			return Object.assign({}, obj);
+			// 如果还需要克隆对象继承的值，可以：
+			// let originPrototype = Object.getPrototypeOf(obj);
+			// return Object.assign(Object.create(originPrototype), obj);
+		},
+		// 多个对象合并
+		// let a = {
+		// 	x: 1
+		// };
+		// let b = {
+		// 	y: 2
+		// };
+		// mergeObj(a, b) //{x:1,y:2}
+		mergeObj: (...objs) => {
+			return Object.assign({}, ...objs);
 		},
 		os: (() => {
 			let os = {},

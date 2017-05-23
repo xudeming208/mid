@@ -1,6 +1,6 @@
 const remoteApi = require('./remoteApi');
 
-function getData(php, cbk) {
+function getData(php) {
 	const loadModel = UTILS.loadModel('./loadModel');
 	let self = this,
 		req = self.req,
@@ -8,11 +8,19 @@ function getData(php, cbk) {
 	// console.dir(php)
 	loadModel(php);
 	// console.dir(php)
-	if (UTILS.isEmpey(php)) {
-		return cbk(SITE);
-	}
-	remoteApi(req, res, false, php, cbk);
+	return new Promise((resolve, reject) => {
+		if (UTILS.isEmpey(php)) {
+			resolve(SITE);
+		} else {
+			remoteApi(req, res, php).then(data => {
+				resolve(Object.assign({}, SITE, data));
+			}).catch(err => {
+				console.log(err);
+			});
+		}
+	}).catch(err => {
+		console.log(err);
+	});
 }
-
 
 module.exports = getData;

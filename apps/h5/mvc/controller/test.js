@@ -1,7 +1,7 @@
 const controlObj = {
 	index: function(arg) {
 		let php = {};
-		this.getData(php, data => {
+		this.getData(php).then(data => {
 			data.pageTitle = 'test';
 			data._CSSLinks = ['page/test'];
 			data.banner = [{

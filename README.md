@@ -70,5 +70,5 @@ server {
 	- 开发环境下，运行npm run dev；
 
 ## FAQ
-* 查看DOC.md
+* 查看[DOC.md](https://github.com/xudeming208/mid/blob/master/DOC.md)
 * Contact me: `xudeming208@126.com`

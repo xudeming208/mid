@@ -102,7 +102,7 @@ const controlObj = {
 	index: function(arg) {
 		//如有接口数据，请参考apps/h5/mvc/controller/index.js
 		let php = {};
-		this.getData(php, data => {
+		this.getData(php).then(data => {
 			data.pageTitle = 'test';
 			data._CSSLinks = ['page/test'];
 			data.banner = [{
@@ -137,12 +137,6 @@ exports.controlObj = controlObj;
 <% this.useModule( [ 'page/test' ] ) %>
 <%#foot.html%>
 ```
-* 编写js，如在`apps/h5/static/js/page`目录新建`test.js`，写入：
-```
-fml.define("page/test", [], function(require, exports) {
-	console.log('test');
-});
-```
 * 编写less，如在`apps/h5/static/less/page`目录新建`test.less`，写入：
 ```
 /*页面都必须引入atom.less，其他的引入根据需求*/
@@ -161,6 +155,12 @@ p{
 	.h(200px)
 }
 
+```
+* 编写js，如在`apps/h5/static/js/page`目录新建`test.js`，写入：
+```
+fml.define("page/test", [], function(require, exports) {
+	console.log('test');
+});
 ```
 
 

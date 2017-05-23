@@ -1,11 +1,10 @@
 const http = require('http'),
 	querystring = require('querystring'),
 	cookie = require('./cookie.js');
-let apiData = {};
-module.exports = remoteApi = (req, res, isAjax, php, cbk) => {
-	let phpLen = Object.keys(php).length;
-	for (let phpKey in php) {
-		let remoteObj = php[phpKey];
+
+//remoteSingle
+const remoteSingle = (req, res, remoteObj) => {
+	return new Promise((resolve, reject) => {
 		if (UTILS.isString(remoteObj)) {
 			remoteObj = {
 				'path': remoteObj
@@ -28,10 +27,7 @@ module.exports = remoteApi = (req, res, isAjax, php, cbk) => {
 		//config.json api中找不到host的时候
 		if (!host) {
 			console.log(`"${hostSource}": is not configed in config.json -> api`);
-			phpLen--;
-			apiData[phpKey] = false;
-			hasFinished(phpLen, phpKey, isAjax, cbk);
-			continue;
+			resolve(false);
 		}
 		reqHeaders.reqHost = req.headers.host;
 		reqHeaders.requrl = req.url;
@@ -52,6 +48,7 @@ module.exports = remoteApi = (req, res, isAjax, php, cbk) => {
 		} else {
 			reqHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
 		}
+		// reqHeaders['Content-Type'] = 'text/html; charset=utf-8';
 
 		reqHeaders['Content-Length'] = Buffer.byteLength(remoteData, 'utf8');
 
@@ -71,15 +68,13 @@ module.exports = remoteApi = (req, res, isAjax, php, cbk) => {
 		console.log('API request options:\n', options, '\n');
 
 		let httpRequest = http.request(options, response => {
-			phpLen--;
 			request_timer && clearTimeout(request_timer);
 			request_timer = null;
 
 			let res_state = response.statusCode;
 			if (200 != res_state && 400 != res_state && 4000 > res_state) {
 				console.log('error', 'api', path, 'STATUS: ', res_state);
-				apiData[phpKey] = false;
-				hasFinished(phpLen, phpKey, isAjax, cbk);
+				resolve(false);
 				return;
 			}
 			let result = '',
@@ -90,8 +85,7 @@ module.exports = remoteApi = (req, res, isAjax, php, cbk) => {
 				result = Buffer.concat(buff);
 				if (400 == res_state) {
 					console.log('error', 'api', path, '400: ', result);
-					apiData[phpKey] = false;
-					hasFinished(phpLen, phpKey, isAjax, cbk);
+					resolve(false);
 					return;
 				}
 				if ('""' == result) {
@@ -139,43 +133,42 @@ module.exports = remoteApi = (req, res, isAjax, php, cbk) => {
 					}
 				})
 
-				apiData[phpKey] = result;
-				hasFinished(phpLen, phpKey, isAjax, cbk);
+				resolve(result);
 				return;
 			});
 		}).on('error', e => {
 			console.log('error', 'api', path, e.message);
-			phpLen--;
-			apiData[phpKey] = false;
-			hasFinished(phpLen, phpKey, isAjax, cbk);
+			resolve(false);
 		});
 		request_timer = setTimeout(() => {
-			request_timer = null
+			request_timer = null;
 			httpRequest.abort();
 			console.log('error', 'api', path, 'Request Timeout');
-			phpLen--;
-			apiData[phpKey] = false;
-			hasFinished(phpLen, phpKey, isAjax, cbk);
+			resolve(false);
 			return;
 		}, ETC.apiTimeOut);
 
 		// 写入数据到请求主体 post
 		httpRequest.write(remoteData);
 		httpRequest.end();
-
-	}
+	}).catch(err => {
+		console.log(err);
+	});
 }
 
-let hasFinished = (phpLen, phpKey, isAjax, cbk) => {
-	//确保数据都返回完再callback
-	if (phpLen == 0) {
-		if (isAjax) {
-			cbk(apiData[phpKey]);
-		} else {
-			let siteOrgin = JSON.stringify(SITE);
-			cbk(Object.assign(SITE, apiData));
-			//Object.assign改变SITE后，还原SIZE
-			SITE = JSON.parse(siteOrgin);
-		}
+module.exports = remoteApi = (req, res, php) => {
+	let promiseArr = [];
+	let keyArr = [];
+	for (let phpKey in php) {
+		let remoteObj = php[phpKey];
+		keyArr.push(phpKey);
+		promiseArr.push(remoteSingle(req, res, remoteObj));
 	}
+	return Promise.all(promiseArr).then(data => {
+		let result = {};
+		keyArr.forEach((item, index) => {
+			result[item] = data[index];
+		})
+		return result;
+	});
 }

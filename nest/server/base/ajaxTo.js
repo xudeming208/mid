@@ -36,7 +36,8 @@ function ajaxTo(php, args) {
 		phpObj[args]['data'] = php[args]['data'] || req.__post;
 	}
 
-	let cbk = data => {
+	remoteApi(req, res, phpObj).then(data => {
+		data = data[args];
 		res.writeHead(200, {
 			'Content-Type': 'text/plain',
 			'Cache-Control': 'no-cache,no-store',
@@ -50,8 +51,7 @@ function ajaxTo(php, args) {
 			return;
 		}
 		res.end(JSON.stringify(data));
-	}
-	remoteApi(req, res, true, phpObj, cbk);
+	})
 }
 
 

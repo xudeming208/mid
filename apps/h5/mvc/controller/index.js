@@ -19,7 +19,7 @@ const controlObj = {
 				'list': 'inke::/web/live_hotlist_pc'
 			};
 		// }
-		this.getData(php, data => {
+		this.getData(php).then(data => {
 			data.pageTitle = 'index';
 			data._CSSLinks = ['page/index'];
 			data.banner = [{
@@ -41,7 +41,7 @@ const controlObj = {
 		};
 		//只要是获取URL中的参数都要防止XSS
 		let xss = this.req.__get.xss;
-		this.getData(php, data => {
+		this.getData(php).then(data => {
 			//http://${data.ip}:${data.port}/index/xss/?xss=%27;alert(%27xss%27);%27
 			data.pageTitle = 'xss';
 			data.xss = xss;
@@ -52,13 +52,22 @@ const controlObj = {
 		let php = {
 
 		};
-		this.getData(php, data => {
+		this.getData(php).then(data => {
 			this.redirectTo('http://www.baidu.com', true);
 		})
 	},
 	aj: function(args) {
 		let php = {
-			'busi': '/mobile/mobile_share_api',
+			'busi': {
+				'protocol': 'http',
+				'path': '/mobile/mobile_share_api',
+				'method': 'post',
+				'port': 80,
+				'data': {
+					'liveid': '1481105372291334',
+					'uid': '5778280'
+				}
+			},
 			'list': 'inke::/web/live_hotlist_pc'
 		};
 		this.ajaxTo(php, args);
