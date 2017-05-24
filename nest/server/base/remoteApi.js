@@ -1,9 +1,9 @@
 const http = require('http'),
 	querystring = require('querystring'),
 	cookie = require('./cookie.js');
-
+const apiData = {};
 //remoteSingle
-const remoteSingle = (req, res, remoteObj) => {
+const remoteSingle = (req, res, phpKey, remoteObj) => {
 	return new Promise((resolve, reject) => {
 		if (UTILS.isString(remoteObj)) {
 			remoteObj = {
@@ -151,6 +151,8 @@ const remoteSingle = (req, res, remoteObj) => {
 		// 写入数据到请求主体 post
 		httpRequest.write(remoteData);
 		httpRequest.end();
+	}).then(data => {
+		apiData[phpKey] = data;
 	}).catch(err => {
 		console.log(err);
 	});
@@ -158,17 +160,11 @@ const remoteSingle = (req, res, remoteObj) => {
 
 module.exports = remoteApi = (req, res, php) => {
 	let promiseArr = [];
-	let keyArr = [];
 	for (let phpKey in php) {
 		let remoteObj = php[phpKey];
-		keyArr.push(phpKey);
-		promiseArr.push(remoteSingle(req, res, remoteObj));
+		promiseArr.push(remoteSingle(req, res, phpKey, remoteObj));
 	}
-	return Promise.all(promiseArr).then(data => {
-		let result = {};
-		keyArr.forEach((item, index) => {
-			result[item] = data[index];
-		})
-		return result;
+	return Promise.all(promiseArr).then(() => {
+		return apiData;
 	});
 }

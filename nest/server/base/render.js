@@ -100,20 +100,21 @@ let render = function(tpl, data = {}) {
 	if (!fs.existsSync(tmpPath)) {
 		fs.mkdirSync(tmpPath);
 	}
-	//show data
-	if (this.req.__get['__pd__']) {
-		let now = new Date();
-		if (this.req.__get['__pd__'] == '/rb/' + (now.getMonth() + now.getDate() + 1)) {
-			this.res.writeHead(200, {
-				'Content-Type': 'text/plain',
-				'Cache-Control': 'no-cache,no-store'
-			});
-			this.res.end(JSON.stringify(data));
-			return;
-		}
-	}
+	
 	try {
 		let html = getHtml(tpl, data);
+		//show data
+		if (this.req.__get['__pd__']) {
+			let now = new Date();
+			if (this.req.__get['__pd__'] == '/rb/' + (now.getMonth() + now.getDate() + 1)) {
+				this.res.writeHead(200, {
+					'Content-Type': 'text/plain',
+					'Cache-Control': 'no-cache,no-store'
+				});
+				this.res.end(JSON.stringify(data));
+				return;
+			}
+		}
 		this.res.writeHead(200, {
 			'Content-Type': 'text/html;charset=utf-8',
 			'Cache-Control': 'no-cache,no-store',
