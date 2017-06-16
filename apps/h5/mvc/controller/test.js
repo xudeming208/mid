@@ -1,5 +1,5 @@
 const controlObj = {
-	index: function(arg) {
+	index(arg) {
 		let php = {};
 		this.getData(php).then(data => {
 			data.pageTitle = 'test';

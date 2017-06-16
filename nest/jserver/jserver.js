@@ -1,5 +1,5 @@
 'use strict'
-//静态资源应考虑cdn or Nginx
+//生产环境下静态资源应考虑cdn or Nginx
 require('../config/config')
 const cluster = require('cluster');
 const path = require('path');
@@ -60,13 +60,15 @@ let loadFile = (req, res, filePath, fileType) => {
 					});
 					res.end(`"${filePath}": compile error`);
 				})
-			} else {
-				if (!ETC.debug && fileType == 'js') {
+			} else if(fileType == 'js') {
+				if (!ETC.debug) {
 					//js compress
 					data = uglifyJS.minify(data, {
 						fromString: true
 					}).code;
 				}
+				writeFile(data);
+			}else{
 				writeFile(data);
 			}
 		});
@@ -177,7 +179,8 @@ if (cluster.isMaster) {
 	});
 }
 
-process.on('uncaughtException', err => {
+process.on('uncaughtException', (err, promise) => {
 	console.dir(err);
+	console.log(promise);
 	process.exit(1);
 })

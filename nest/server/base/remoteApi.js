@@ -116,22 +116,22 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 				}
 
 				// setCookie
-				['set-cookie'].forEach(proxyKey => {
-					if (proxyKey in response.headers) {
-						let pdVal = response.headers[proxyKey];
-						if (!pdVal) {
-							return
-						}
-						if ('set-cookie' == proxyKey) {
-							let cookieSet = cookie.getHandler(req, res);
-							pdVal.forEach((val) => {
-								cookieSet.set(val);
-							})
-						} else {
-							res.setHeader(proxyKey, pdVal);
-						}
-					}
-				})
+				// ['set-cookie'].forEach(proxyKey => {
+				// 	if (proxyKey in response.headers) {
+				// 		let pdVal = response.headers[proxyKey];
+				// 		if (!pdVal) {
+				// 			return
+				// 		}
+				// 		if ('set-cookie' == proxyKey) {
+				// 			let cookieSet = cookie.getHandler(req, res);
+				// 			pdVal.forEach((val) => {
+				// 				cookieSet.set(val);
+				// 			})
+				// 		} else {
+				// 			res.setHeader(proxyKey, pdVal);
+				// 		}
+				// 	}
+				// })
 
 				resolve(result);
 				return;

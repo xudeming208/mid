@@ -99,7 +99,8 @@ if (cluster.isMaster) {
 	});
 }
 
-process.on('uncaughtException', err => {
+process.on('uncaughtException', (err, promise) => {
 	console.dir(err);
+	console.log(promise);
 	process.exit(1);
 })

@@ -11,7 +11,7 @@
 	- render.js：模板引擎
 	- config.json：框架的配置文件
 
-```
+```javascript
 mid
 |——apps							#项目代码目录
 |	|——h5						#h5项目
@@ -97,7 +97,8 @@ mid
 		- apps/h5/static/less/page/index.less
 
 * 编写controller，如在`apps/h5/mvc/controller`目录新建`test.js`，写入：
-```
+
+```javascript
 const controlObj = {
 	index: function(arg) {
 		//如有接口数据，请参考apps/h5/mvc/controller/index.js
@@ -122,8 +123,10 @@ const controlObj = {
 
 exports.controlObj = controlObj;
 ```
+
 * 编写view，如在`apps/h5/mvc/view`目录新建`test.html`，写入：
-```
+
+```javascript
 <%#head.html%>
 <p>this is a test page</p>
 <p>当前浏览器是：<%= JSON.stringify(UTILS.os.browser) %></p>
@@ -137,8 +140,10 @@ exports.controlObj = controlObj;
 <% this.useModule( [ 'page/test' ] ) %>
 <%#foot.html%>
 ```
+
 * 编写less，如在`apps/h5/static/less/page`目录新建`test.less`，写入：
-```
+
+```javascript
 /*页面都必须引入atom.less，其他的引入根据需求*/
 @import "../atom.less";
 @import "../widget/banner.less";
@@ -156,8 +161,10 @@ p{
 }
 
 ```
+
 * 编写js，如在`apps/h5/static/js/page`目录新建`test.js`，写入：
-```
+
+```javascript
 fml.define("page/test", [], function(require, exports) {
 	console.log('test');
 });

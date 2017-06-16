@@ -2,6 +2,11 @@
 	- 待完成的功能
 
 
+利用webpack工程化
+
+线上环境参考：https://thinkjs.org/zh-cn/doc/2.2/deploy.html
+
+
 ## 工程化问题
 	- CSS的合并（不合并base.css）
 	- 是否将公共的JS部分单独引入方便缓存（类似于base.css），比如backTop,dialog等，而不只是jQuery
@@ -22,7 +27,7 @@
 ## 版本号（或者MD5）的的解决方案，根据文件内容生成hash（保留8位或者6位长度的hash）；不再暴力的上一次线，静态资源所有的版本号都改变？？？
 UTILS.md5()，文件内容不变，hash也不会变的
 
-```
+```javascript
 <%
 	let baseCssUrl=this.staticHost + this.pcPath %>/css/base.css;
 %>

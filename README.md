@@ -25,12 +25,12 @@
 ## Nginx
 * 绑定host `host` => sudo vi /etc/hosts，如下：
 
-```
+```javascript
 127.0.0.1 h5.fedevot.test.com pc.fedevot.test.com
 ```
 * 安装 `nginx` 然后配置如下：
 
-```
+```javascript
 server {
     listen 80;
     server_name *.fedevot.test.com;

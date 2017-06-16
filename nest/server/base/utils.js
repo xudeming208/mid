@@ -91,7 +91,7 @@ function utils() {
 		},
 		os: (() => {
 			let os = {},
-				ua = self.req.headers['user-agent'],
+				ua = self.req.headers['user-agent'] || '',
 				mobileQQ = ua.match(/qq\/(\/[\d\.]+)*/i) || ua.match(/qzone\//i),
 				weixin = ua.match(/MicroMessenger/i),
 				webkit = ua.match(/Web[kK]it[\/]{0,1}([\d.]+)/),
