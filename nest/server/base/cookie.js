@@ -47,7 +47,7 @@ exports.getHandler = function ( req, res ) {
             try {
                 res.setHeader( 'set-cookie', req.__addCookie )
             } catch ( e ) {
-                console.log( 'Cookie unwrite', name, e )
+                console.error( 'Cookie unwrite', name, e )
             }
         }
     }

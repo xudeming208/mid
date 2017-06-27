@@ -1,5 +1,5 @@
 // getIp
-let getIp = () => {
+const getIp = () => {
 	let ifaces = require('os').networkInterfaces();
 	let ret = [];
 	for (let dev in ifaces) {

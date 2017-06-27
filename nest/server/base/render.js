@@ -2,19 +2,19 @@
 const fs = require('fs');
 const path = require('path');
 const watchFile = require("./watchFile");
-let isWindows = process.platform === 'win32';
+const isWindows = process.platform === 'win32';
 let host = 'pc';
 let quotes = '`';
 //去掉注释，包含单行和多行<!--注释-->、//注释、/*注释*/，同时不去掉//www.baidu.com/img/bd_logo1.png
 let reg = /<!--[\s\S]*?-->|[^\S]\/\/.*|\/\*[\s\S]*?\*\//g;
 
 // getTmpFile
-let getTmpFile = tpl => {
+const getTmpFile = tpl => {
 	return path.resolve(__dirname, '../../../tmp/', host + '_' + tpl.replace(/\//g, '_').replace('.html', '.js'));
 }
 
 // complie
-let complie = (filePath, tpl, content, data) => {
+const complie = (filePath, tpl, content, data) => {
 	let tplStr = '';
 	let arr = content.replace(reg, '\n').split('<%');
 	tplStr += "/* " + filePath + " */\n";
@@ -64,7 +64,7 @@ let complie = (filePath, tpl, content, data) => {
 }
 
 // 获取HTML
-let getHtml = (tpl, data) => {
+const getHtml = (tpl, data) => {
 	let filePath = path.resolve(__dirname, '../', PATH.apps, host, PATH.view, '.', tpl);
 	let tmpFile = getTmpFile(tpl);
 	//watchFile
@@ -81,7 +81,7 @@ let getHtml = (tpl, data) => {
 }
 
 // 输出HTML
-let render = function(tpl, data = {}) {
+const render = function(tpl, data = {}) {
 	host = HOST[this.hostname];
 	['_JSLinks', '_CSSLinks', '_JSstack', '_CSSstack', '_JSmods', '_CSSmods'].map(item => {
 		if (!data.hasOwnProperty(item)) {
@@ -100,21 +100,20 @@ let render = function(tpl, data = {}) {
 	if (!fs.existsSync(tmpPath)) {
 		fs.mkdirSync(tmpPath);
 	}
-	
+
 	try {
 		let html = getHtml(tpl, data);
-		//show data
-		if (this.req.__get['__pd__']) {
-			let now = new Date();
-			if (this.req.__get['__pd__'] == '/rb/' + (now.getMonth() + now.getDate() + 1)) {
-				this.res.writeHead(200, {
-					'Content-Type': 'text/plain',
-					'Cache-Control': 'no-cache,no-store'
-				});
-				this.res.end(JSON.stringify(data));
-				return;
-			}
+
+		//show render data
+		if (this.req.__get.server === 'json') {
+			this.res.writeHead(200, {
+				'Content-Type': 'text/plain',
+				'Cache-Control': 'no-cache,no-store'
+			});
+			this.res.end(JSON.stringify(data));
+			return;
 		}
+
 		this.res.writeHead(200, {
 			'Content-Type': 'text/html;charset=utf-8',
 			'Cache-Control': 'no-cache,no-store',
@@ -127,7 +126,7 @@ let render = function(tpl, data = {}) {
 		!ETC.debug && (html = html.replace(/[\r\n\t]+/g, ''));
 		this.res.end(html);
 	} catch (e) {
-		console.dir(e);
+		console.error(e);
 		this.res.writeHead(503, {
 			'Content-Type': 'text/plain',
 			'Cache-Control': 'no-cache,no-store'

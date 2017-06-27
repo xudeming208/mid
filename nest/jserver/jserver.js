@@ -1,5 +1,6 @@
 'use strict'
 //生产环境下静态资源应考虑cdn or Nginx
+require('colors');
 require('../config/config')
 const cluster = require('cluster');
 const path = require('path');
@@ -8,17 +9,51 @@ const fs = require('fs');
 const url = require('url');
 const less = require('less');
 const uglifyJS = require('uglify-js');
-const clusterEnable = require('../config/cluster');
 const mime = require('./mime');
 const mimeTypes = mime.types;
 const mimeBuffer = mime.bufferTypeArr;
-let staticCache = {};
-let maxAge = 60 * 60 * 24 * 180;
-let port = +ETC.jserverPort || 8084;
-let ip = ETC.ip || '127.0.0.1';
+const staticCache = {};
+const maxAge = 60 * 60 * 24 * 180;
+const cpuNums = +ETC.cpuNums || require('os').cpus().length;
+const port = +ETC.jserverPort || 8084;
+const ip = ETC.ip || '127.0.0.1';
+
+
+// readFile fun
+const readFile = (filePath, unicode, fileType) => {
+	return new Promise((resolve, reject) => {
+		fs.readFile(filePath, unicode, (err, data) => {
+			if (err) {
+				reject(err);
+				return;
+			}
+			// less compaile
+			if (fileType === 'less') {
+				less.render(data, {
+					paths: [filePath.substr(0, filePath.lastIndexOf('/'))],
+					compress: !ETC.debug
+				}).then(output => {
+					output && resolve(output.css)
+				}, err => {
+					reject(`"${filePath}": compile error`);
+				})
+			} else if (fileType === 'js') {
+				if (!ETC.debug) {
+					//js compress
+					data = uglifyJS.minify(data, {
+						fromString: true
+					}).code;
+				}
+				resolve(data);
+			} else {
+				resolve(data);
+			}
+		})
+	})
+}
 
 // loadFile
-let loadFile = (req, res, filePath, fileType) => {
+const loadFile = async (req, res, filePath, fileType) => {
 	let unicode = mimeBuffer.includes(fileType) ? '' : 'utf-8';
 	//cache
 	if (staticCache.hasOwnProperty(filePath)) {
@@ -26,161 +61,131 @@ let loadFile = (req, res, filePath, fileType) => {
 		res.end(staticCache[filePath]);
 		return;
 	}
-	// define writeFile fun
-	let writeFile = (data) => {
-		!ETC.debug && (staticCache[filePath] = data);
-		res.write(data);
-		res.end();
-	}
 	if (!fs.existsSync(filePath) || filePath.match(/\bmvc\b/)) {
 		res.writeHead(404, {
-			'Content-Type': 'text/plain'
+			'Content-Type': 'text/plain',
+			'Cache-Control': 'no-cache,no-store'
 		});
-		res.end('404 Not Found');
-		console.log(filePath + ' is lost');
+		console.error(filePath + ' is lost');
+		res.end(`404 Not Found`);
 	} else {
-		fs.readFile(filePath, unicode, (err, data) => {
-			if (err) {
-				res.writeHead(500, {
-					'Content-Type': 'text/plain'
-				});
-				res.end(JSON.stringify(err));
-			}
-			// less compaile
-			if (fileType == 'less') {
-				less.render(data, {
-					paths: [filePath.substr(0, filePath.lastIndexOf('/'))],
-					compress: !ETC.debug
-				}).then(output => {
-					writeFile(output && output.css);
-				}, error => {
-					console.log(error);
-					res.writeHead(500, {
-						'Content-Type': 'text/plain'
-					});
-					res.end(`"${filePath}": compile error`);
-				})
-			} else if(fileType == 'js') {
-				if (!ETC.debug) {
-					//js compress
-					data = uglifyJS.minify(data, {
-						fromString: true
-					}).code;
-				}
-				writeFile(data);
-			}else{
-				writeFile(data);
-			}
+		let data = await readFile(filePath, unicode, fileType).catch(err => {
+			res.writeHead(500, {
+				'Content-Type': 'text/plain'
+			});
+			console.error(err);
+			res.end(err.toString());
 		});
+
+		!ETC.debug && (staticCache[filePath] = data);
+		res.end(data);
 	}
 }
 
-//jserver
-if (cluster.isMaster) {
-	clusterEnable();
-} else {
-	http.createServer((req, res) => {
-		let reqUrl = url.parse(req.url);
-		let pathname = reqUrl.pathname,
-			fileType = pathname.match(/(\.[^.]+|)$/)[0].substr(1); //取得后缀名
+// statFile
+const statFile = (req, res) => {
+	let reqUrl = url.parse(req.url);
+	let pathname = reqUrl.pathname,
+		fileType = pathname.match(/(\.[^.]+|)$/)[0].substr(1); //取得后缀名
 
-		// 生产环境：favicon.ico不应该这样处理，应该利用CDN或者Nginx，首先将favicon.ico放到Nginx根目录，然后配置，like this:
-		// # set site favicon 
-		// location /favicon.ico {  
-		//     root html;  
-		// }
+	if (pathname === '/') {
+		res.writeHead(404, {
+			'Content-Type': 'text/plain',
+			'Cache-Control': 'no-cache,no-store'
+		})
+		console.error(`What do you want to do?`);
+		res.end(`What do you want to do?`);
+		return;
+	}
 
-		// favicon.ico
-		if (ETC.debug && reqUrl.pathname == '/favicon.ico') {
-			let icoPath = path.resolve(__dirname, '../', 'favicon.ico');
-			fs.readFile(icoPath, (err, html) => {
-				if (err) {
-					res.writeHead(500, {
-						'Content-Type': 'text/plain'
-					});
-					// console.log(err);
-					res.end(JSON.stringify(err));
-				}
-				res.writeHead(200, {
-					'Server': ETC.server,
-					'Content-Type': 'image/x-icon;charset=utf-8'
-				});
-				res.end(html);
-			});
-			return;
+	// console.dir(CONFIG)
+	let filePath = path.resolve(__dirname, PATH.apps),
+		contentType = mimeTypes[fileType] || 'text/plain';
+	// console.log(reqUrl)
+
+	//将CSS的请求转化为Less的请求
+	if (fileType === 'css') {
+		pathname = pathname.replace('/css/', '/less/').replace('.css', '.less');
+		fileType = 'less';
+	}
+	filePath += pathname;
+	// 读取文件的最后修改时间
+	fs.stat(filePath, (err, stat) => {
+		if (err) {
+			console.error(err);
 		}
+		let lastModified = stat.mtime.toUTCString(),
+			ifModifiedSince = 'If-Modified-Since'.toLowerCase(),
+			expires = new Date();
 
-		// console.dir(CONFIG)
-		let filePath = path.resolve(__dirname, PATH.apps),
-			contentType = mimeTypes[fileType] || 'text/plain';
-		// console.log(reqUrl)
+		expires.setTime(expires.getTime() + maxAge * 1000);
 
-		//将CSS的请求转化为Less的请求
-		if (fileType == 'css') {
-			pathname = pathname.replace('/css/', '/less/').replace('.css', '.less');
-			fileType = 'less';
-		}
-		filePath += pathname;
-		// 读取文件的最后修改时间
-		fs.stat(filePath, (err, stat) => {
-			if (err) {
-				throw err;
-			}
-			let lastModified = stat.mtime.toUTCString(),
-				ifModifiedSince = 'If-Modified-Since'.toLowerCase(),
-				expires = new Date();
-			expires.setTime(expires.getTime() + maxAge * 1000);
-			// 304
-			// chrome增加了from memory cache和from disk cache，所以开发模式下光禁止304是不行的
-			// if (!ETC.debug && req.headers[ifModifiedSince] && lastModified == req.headers[ifModifiedSince]) {
-			if (req.headers[ifModifiedSince] && lastModified == req.headers[ifModifiedSince]) {
-				res.writeHead(304, 'Not Modified');
-				res.end();
-			} else {
-				let resHeader = {
-					'Server': ETC.server,
-					'Content-Type': contentType + ';charset=utf-8',
-					'Last-Modified': lastModified,
-					'Expires': expires.toUTCString(),
-					// 'Access-Control-Allow-Origin': '*',
-					'Cache-Control': 'max-age=' + maxAge
-				};
-				// chrome增加了from memory cache和from disk cache，所以开发模式下光禁止304是不行的
-				if (ETC.debug) {
-					delete resHeader['Last-Modified'];
-					delete resHeader['Expires'];
-					resHeader['Cache-Control'] = 'no-cache,no-store';
-				}
-				res.writeHead(200, resHeader);
-				if (fileType) {
-					loadFile(req, res, filePath, fileType);
-				} else {
-					// let pathArr = pathname.split('~'),
-					// 	pathStr = pathArr[0],
-					// 	blocks = pathArr[1].split('+'),
-					// 	type = 'css';
-					// if (pathStr.match(/\bjs\b/g)) {
-					// 	type = 'js';
-					// }
-					// blocks.map(mod => {
-					// 	// console.log(pathStr + mod + '.' + type)
-					// 	loadFile(req, res, filePath, type);
-					// })
-				}
-			}
-		});
-	}).listen(port, () => {
-		if (ETC.debug) {
-			require('colors');
-			console.log(`the Jserver has started on`, `${ip}:${port}`.green.underline, `at`, `${new Date().toLocaleString()}`.green.underline);
+		// 304
+		if (req.headers[ifModifiedSince] && lastModified === req.headers[ifModifiedSince]) {
+			res.writeHead(304, `Not Modified`);
+			res.end();
 		} else {
-			console.log(`the Jserver has started on ${ip}:${port} at ${new Date().toLocaleString()}`);
+			let resHeader = {
+				'Server': ETC.server,
+				'Content-Type': contentType + ';charset=utf-8',
+				'Last-Modified': lastModified,
+				'Expires': expires.toUTCString(),
+				// 'Access-Control-Allow-Origin': '*',
+				'Cache-Control': 'max-age=' + maxAge
+			};
+
+			// 开发模式下，禁用cache
+			if (ETC.debug) {
+				delete resHeader['Last-Modified'];
+				delete resHeader['Expires'];
+				resHeader['Cache-Control'] = 'no-cache,no-store';
+			}
+
+			res.writeHead(200, resHeader);
+			if (fileType) {
+				loadFile(req, res, filePath, fileType);
+			} else {
+				// let pathArr = pathname.split('~'),
+				// 	pathStr = pathArr[0],
+				// 	blocks = pathArr[1].split('+'),
+				// 	type = 'css';
+				// if (pathStr.match(/\bjs\b/g)) {
+				// 	type = 'js';
+				// }
+				// blocks.map(mod => {
+				// 	// console.log(pathStr + mod + '.' + type)
+				// 	loadFile(req, res, filePath, type);
+				// })
+			}
 		}
 	});
 }
 
+//jserver
+if (cluster.isMaster) {
+	for (let i = cpuNums; i--;) {
+		cluster.fork();
+	}
+	cluster.on('death', worker => {
+		console.log('worker ' + worker.pid + ' died');
+		cluster.fork();
+	})
+	cluster.on('exit', worker => {
+		let st = new Date;
+		st = st.getFullYear() + '-' + (st.getMonth() + 1) + '-' + st.getDate() + ' ' + st.toLocaleTimeString();
+		console.log('worker ' + worker.process.pid + ' died at:', st);
+		cluster.fork();
+	})
+} else {
+	http.createServer((req, res) => {
+		statFile(req, res);
+	}).listen(port, () => {
+		console.log(`the Jserver has started on`, `${ip}:${port}`.green.underline, `at`, `${new Date().toLocaleString()}`.green.underline);
+	});
+}
+
 process.on('uncaughtException', (err, promise) => {
-	console.dir(err);
+	console.error(err);
 	console.log(promise);
 	process.exit(1);
 })

@@ -17,9 +17,10 @@
 4. ~~npm start~~
 	* ~~npm run stop~~
 	* ~~npm run restart~~
-	* ~~npm run logs~~
-5. ~~In the browser input **127.0.0.1:8083** or **yourIp:8083**, and then can see the pages~~
-    * ~~`The default is open the H5 pages, if you want to open the PC pages, configure config`~~
+	* ~~npm run log~~
+	* ~~npm run debug~~
+5. ~~在浏览器中输入**127.0.0.1:8083** 或者 **yourIp:8083**, 然后就能看见页面了~~
+    * ~~`默认打开的是H5页, 如果想看PC页，请修改配置`~~
 6. node setup
 
 ## Nginx

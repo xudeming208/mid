@@ -11,11 +11,11 @@ const render = require('./base/render').render;
 const ajaxTo = require('./base/ajaxTo');
 const utils = require('./base/utils');
 
-let route = (req, res) => {
+const route = (req, res) => {
 	try {
 		var reqUrl = url.parse('http://' + req.headers.host + req.url, true);
 	} catch (err) {
-		console.log(`Route Parse Error: ${req.url}`);
+		console.error(`Route Parse Error: ${req.url}`);
 		res.writeHead(500, {
 			'Content-Type': 'text/plain'
 		});
@@ -26,32 +26,6 @@ let route = (req, res) => {
 		pathname = reqUrl.pathname,
 		modUrl = pathname.substr(1).replace(/\/+/g, '/').split('/'),
 		reqQuery = reqUrl.query || {};
-
-	// 生产环境：favicon.ico不应该这样处理，应该利用CDN或者Nginx，首先将favicon.ico放到Nginx根目录，然后配置，like this:
-	// # set site favicon 
-	// location /favicon.ico {  
-	//     root html;  
-	// }
-
-	// favicon.ico
-	if (ETC.debug && pathname == '/favicon.ico') {
-		let icoPath = path.resolve(__dirname, '../', 'favicon.ico');
-		fs.readFile(icoPath, (err, html) => {
-			if (err) {
-				res.writeHead(500, {
-					'Content-Type': 'text/plain'
-				});
-				// console.log(err);
-				res.end(JSON.stringify(err));
-			}
-			res.writeHead(200, {
-				'Server': ETC.server,
-				'Content-Type': 'image/x-icon;charset=utf-8'
-			});
-			res.end(html);
-		});
-		return;
-	}
 
 	// 获取参数
 	req.__get = {};
@@ -93,7 +67,7 @@ let route = (req, res) => {
 			'Content-Type': 'text/plain'
 		});
 		res.end('404 Not Found');
-		console.log(`cannot found modPath: ${modPath}`);
+		console.error(`cannot found modPath: ${modPath}`);
 	}
 	if (!fs.existsSync(modPath)) {
 		notFoundFun(modPath);
@@ -135,8 +109,8 @@ let route = (req, res) => {
 				res.writeHead(500, {
 					'Content-Type': 'text/plain'
 				});
-				res.end('err: ', err);
-				console.log('err: ', err);
+				res.end('err: ', err.toString());
+				console.error(err);
 			}
 		} else {
 			notFoundFun(fn);
@@ -144,7 +118,7 @@ let route = (req, res) => {
 	}
 
 	// post
-	if ('POST' == req.method) {
+	if ('POST' === req.method) {
 		let data = '';
 		req.addListener('data', chunk => {
 				data += chunk;

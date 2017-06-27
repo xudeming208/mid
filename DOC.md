@@ -89,6 +89,9 @@ mid
 |——TODO.md						#待完成的功能				
 ```
 
+## 查看页面渲染数据
+	- 在URI后面添加参数server=json即可
+
 ## 用法
 	可以参考：
 		- apps/h5/mvc/controller/index.js
@@ -148,18 +151,12 @@ exports.controlObj = controlObj;
 @import "../atom.less";
 @import "../widget/banner.less";
 body{
-	padding:10px;
-	.f(14px)
+	padding:.5rem;
+	.f(.5rem);
 }
 p{
 	.l(3)
 }
-
-//以下为覆盖widget的默认样式
-.widget-banner{
-	.h(200px)
-}
-
 ```
 
 * 编写js，如在`apps/h5/static/js/page`目录新建`test.js`，写入：
@@ -177,6 +174,7 @@ fml.define("page/test", [], function(require, exports) {
 	3. npm install
 	4. npm start
 	5. 打开浏览器，输入：`127.0.0.1:8083/test`
-	6. npm run logs 查看日志
+	6. npm run log 查看日志
+	7. npm run debug debug模式
 
 

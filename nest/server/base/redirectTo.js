@@ -17,7 +17,7 @@ function redirectTo(url, proxyArgs) {
 		});
 		this.res.end('');
 	} catch (err) {
-		console.log('write res error', err, new Date, '')
+		console.error('write res error', err, new Date, '')
 	}
 
 	return false

@@ -62,7 +62,7 @@ fml.define("page/index", ['component/shareTmp', 'widget/dialog', 'component/util
 				// alert(JSON.stringify(data));
 			},
 			error: function(error) {
-				alert('error')
+				alert(error)
 			}
 		});
 	})
@@ -81,7 +81,7 @@ fml.define("page/index", ['component/shareTmp', 'widget/dialog', 'component/util
 				alert(JSON.stringify(data));
 			},
 			error: function(error) {
-				alert('error')
+				alert(error)
 			}
 		});
 	})
@@ -101,7 +101,7 @@ fml.define("page/index", ['component/shareTmp', 'widget/dialog', 'component/util
 				alert(JSON.stringify(data));
 			},
 			error: function(error) {
-				alert('error')
+				alert(error)
 			}
 		});
 	})

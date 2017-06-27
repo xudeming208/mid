@@ -17,7 +17,7 @@ function ajaxTo(php, args) {
 			'Cache-Control': 'no-cache,no-store',
 			'Server': ETC.server
 		})
-		console.log(`can't find ${args} in ${JSON.stringify(php)}`);
+		console.error(`can't find ${args} in ${JSON.stringify(php)}`);
 		res.end(`can't find ${args} in ${JSON.stringify(php)}`);
 		return;
 	}
@@ -30,7 +30,7 @@ function ajaxTo(php, args) {
 		'path': php[args]['path'] || php[args],
 		'method': php[args]['method'] || req.method || 'get'
 	};
-	if (req.method == 'GET') {
+	if (req.method === 'GET') {
 		phpObj[args]['data'] = php[args]['data'] || req.__get;
 	} else {
 		phpObj[args]['data'] = php[args]['data'] || req.__post;

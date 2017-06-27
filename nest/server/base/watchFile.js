@@ -21,7 +21,7 @@
 
 // https://github.com/paulmillr/chokidar
 const chokidar = require('chokidar');
-let watchFile = (filePath, onChg) => {
+const watchFile = (filePath, onChg) => {
     let watcher = chokidar.watch(filePath, {
         persistent: true,
         interval: 100

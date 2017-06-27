@@ -1,16 +1,18 @@
 'use strict'
 require('../config/config')
+require('colors');
+const CFonts = require('cfonts');
 const cluster = require('cluster');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
-const clusterEnable = require('../config/cluster');
 const router = require('./router');
-let port = +ETC.serverPort || 8083;
-let ip = require('./base/getIp')() || '127.0.0.1';
+const cpuNums = +ETC.cpuNums || require('os').cpus().length;
+const port = +ETC.serverPort || 8083;
+const ip = require('./base/getIp')() || '127.0.0.1';
 
-let init = () => {
+const init = () => {
 	// config
 	let configPath = path.resolve(__dirname, '../config/config.json');
 	let content = require(configPath);
@@ -29,42 +31,12 @@ let init = () => {
 	// 重启服务清除缓存
 	exec(['cd ../.. ', 'rm -rf tmp/*', 'rm -rf logs/*'].join(' && '), (error, stdout, stderr) => {
 		if (error) {
-			console.dir(error);
+			console.error(error);
 		}
-		console.log('Clear cache finised');
+		console.log(`Clear cache finised`);
 	})
 
 	// 版本号
-	if (!ETC.debug) {
-		let PUBDAY = 81.011;
-		let getNowDate = () => {
-			let st = new Date
-			let leadZero = t => {
-				if (t < 10) t = '0' + t
-				return t
-			}
-			return leadZero(st.getMonth()) + leadZero(st.getDate()) + leadZero(st.getHours()) + leadZero(st.getMinutes()) + leadZero(st.getSeconds());
-		}
-		content.site.version = `?${getNowDate()}${PUBDAY}`;
-	} else {
-		delete content.site.version;
-	}
-
-	fs.writeFileSync(configPath, JSON.stringify(content), 'utf-8');
-
-
-	// 删除host字段中最后一个属性（IP变化的时候不会累加在host中）
-	// let hostKeys = Object.keys(HOST);
-	// let hostLen = hostKeys.length;
-	// if (hostLen > 3) {
-	// 	delete HOST[hostKeys[hostLen - 1]];
-	// }
-	// ETC.ip = ip;
-	// HOST[ip] = ETC.defaultPage;
-	// SITE.staticHost = `http://${ip}:${ETC.jserverPort}`;
-	// SITE.ip = ip;
-	// SITE.port = port;
-	// // 版本号
 	// if (!ETC.debug) {
 	// 	let PUBDAY = 81.011;
 	// 	let getNowDate = () => {
@@ -75,32 +47,54 @@ let init = () => {
 	// 		}
 	// 		return leadZero(st.getMonth()) + leadZero(st.getDate()) + leadZero(st.getHours()) + leadZero(st.getMinutes()) + leadZero(st.getSeconds());
 	// 	}
-	// 	SITE.version = `?${getNowDate()}${PUBDAY}`;
+	// 	content.site.version = `?${getNowDate()}${PUBDAY}`;
 	// } else {
-	// 	delete SITE.version;
+	// 	delete content.site.version;
 	// }
+
+	fs.writeFileSync(configPath, JSON.stringify(content), 'utf-8');
 }
 
+init();
 
 // server
 if (cluster.isMaster) {
-	clusterEnable();
+	for (let i = cpuNums; i--;) {
+		cluster.fork();
+	}
+	cluster.on('death', worker => {
+		console.log('worker ' + worker.pid + ' died');
+		cluster.fork();
+	})
+	cluster.on('exit', worker => {
+		let st = new Date;
+		st = st.getFullYear() + '-' + (st.getMonth() + 1) + '-' + st.getDate() + ' ' + st.toLocaleTimeString();
+		console.log('worker ' + worker.process.pid + ' died at:', st);
+		cluster.fork();
+	})
+
+	// CFonts
+	CFonts.say('MID', {
+		font: '3d',
+		align: 'left',
+		colors: ['white', 'black'],
+		background: 'Black',
+		letterSpacing: 1,
+		lineHeight: 1,
+		space: true,
+		maxLength: '0'
+	});
+
 } else {
-	init();
 	http.createServer((req, res) => {
 		router(req, res);
 	}).listen(port, () => {
-		if (ETC.debug) {
-			require('colors');
-			console.log(`the Server has started on`, `${ip}:${port}`.green.underline, `at`, `${new Date().toLocaleString()}`.green.underline);
-		} else {
-			console.log(`the Server has started on ${ip}:${port} at ${new Date().toLocaleString()}`);
-		}
+		console.log(`the Server has started on`, `${ip}:${port}`.green.underline, `at`, `${new Date().toLocaleString()}`.green.underline);
 	});
 }
 
 process.on('uncaughtException', (err, promise) => {
-	console.dir(err);
+	console.error(err);
 	console.log(promise);
 	process.exit(1);
 })
