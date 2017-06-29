@@ -1,5 +1,11 @@
-const controlObj = {
-	index: function(arg) {
+'use strict'
+
+class test {
+	index(arg) {
+		Reflect.has(this, arg) ? this[arg]() : this['main']();
+	}
+
+	main(arg) {
 		let php = {};
 		this.getData(php).then(data => {
 			data.pageTitle = 'test';
@@ -19,5 +25,4 @@ const controlObj = {
 	}
 }
 
-
-exports.controlObj = controlObj;
+module.exports = test;

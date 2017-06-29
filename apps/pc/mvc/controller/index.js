@@ -1,10 +1,13 @@
-const controlObj = {
-	index: function(arg) {
-		arg in this ? this[arg]() : this["main"]();
-	},
-	main: function(arg) {
+'use strict'
+
+class index {
+	index(arg) {
+		Reflect.has(this, arg) ? this[arg]() : this['main']();
+	}
+
+	main(arg) {
 		let php = {};
-		// if (arg == 1) {
+		// if (arg == test) {
 			php = {
 				'busi': {
 					'protocol': 'http',
@@ -34,8 +37,9 @@ const controlObj = {
 			}]
 			this.render('index.html', data);
 		})
-	},
-	xss: function() {
+	}
+
+	xss() {
 		let php = {
 
 		};
@@ -47,16 +51,18 @@ const controlObj = {
 			data.xss = xss;
 			this.render('xss.html', data);
 		})
-	},
-	redirect: function() {
+	}
+
+	redirect() {
 		let php = {
 
 		};
 		this.getData(php).then(data => {
 			this.redirectTo('http://www.baidu.com', true);
 		})
-	},
-	aj: function(args) {
+	}
+
+	aj(args) {
 		let php = {
 			'busi': {
 				'protocol': 'http',
@@ -74,5 +80,4 @@ const controlObj = {
 	}
 }
 
-
-exports.controlObj = controlObj;
+module.exports = index;

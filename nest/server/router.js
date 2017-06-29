@@ -47,10 +47,10 @@ const route = (req, res) => {
 		modUrl.splice(1, 0, 'index');
 	}
 
-	let mods = modUrl.splice(-3),
-		modName = mods[0] || ETC.defaultMod,
-		modFun = mods.length >= 2 ? mods[1] : 'index',
-		modParam = mods.length >= 3 ? mods[2] : null;
+	let modArr = modUrl.splice(-3),
+		modName = modArr[0] || ETC.defaultMod,
+		modFun = modArr.length >= 2 ? modArr[1] : 'index',
+		modParam = modArr.length >= 3 ? modArr[2] : null;
 
 	if (modParam) {
 		modParam = decodeURIComponent(modParam);
@@ -69,42 +69,42 @@ const route = (req, res) => {
 		res.end('404 Not Found');
 		console.error(`cannot found modPath: ${modPath}`);
 	}
+
 	if (!fs.existsSync(modPath)) {
 		notFoundFun(modPath);
 		return;
 	}
 
-	let modJs = require(modPath);
+	let Mod = require(modPath);
+
+	Object.assign(Mod.prototype, {
+		hostname,
+		req,
+		res,
+		getData,
+		useModule,
+		redirectTo,
+		render,
+		ajaxTo,
+		utils
+	});
+
+	let mod = new Mod();
+
+	let fn = mod[modFun];
+
+	// UTILS(常用的工具函数集合)，代码和模板中都可以使用，例如：UTILS.md5(str)
+	global.UTILS = mod.utils();
+
 	// watchFile
 	watchFile(modPath, () => {
 		delete require.cache[modPath];
 	});
 
-	let modJsObj = modJs['controlObj'],
-		extendObj = {
-			hostname,
-			req,
-			res,
-			getData,
-			useModule,
-			redirectTo,
-			render,
-			ajaxTo,
-			utils
-		};
-
-	// merge
-	Object.assign(modJsObj, extendObj);
-
-	// UTILS(常用的工具函数集合)，代码和模板中都可以使用，例如：UTILS.md5(str)
-	global.UTILS = modJsObj.utils();
-
-	let fn = modJsObj[modFun];
-
 	let toExe = () => {
 		if (fn && typeof fn === 'function') {
 			try {
-				fn.call(modJsObj, modParam);
+				fn.call(mod, modParam);
 			} catch (err) {
 				res.writeHead(500, {
 					'Content-Type': 'text/plain'

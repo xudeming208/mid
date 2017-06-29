@@ -1,7 +1,3 @@
-<p align="center">
-	
-</p>
-
 # mid
 	- 用nodejs开发的一套基于URI的MVC框架，适用于前后端分离项目。
 	- 采用nodejs + es6 + MVC + 模块加载器 + 组件 + less
@@ -65,7 +61,6 @@ server {
 	- 此字段为true时：HTML、CSS和JS不压缩，静态资源不缓存（包括内存的缓存及浏览器的缓存）；
 
 ### 生产环境：
-	- 生产环境注意处理图片和favicon.ico（CDN或者Nginx）；
 	- 生产环境下，应该是先merge和compress静态资源，然后传至CDN；
 	- 生产环境下，运行npm run build；
 	- 开发环境下，运行npm run dev；

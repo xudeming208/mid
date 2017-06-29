@@ -102,9 +102,14 @@ mid
 * 编写controller，如在`apps/h5/mvc/controller`目录新建`test.js`，写入：
 
 ```javascript
-const controlObj = {
-	index: function(arg) {
-		//如有接口数据，请参考apps/h5/mvc/controller/index.js
+'use strict'
+
+class test {
+	index(arg) {
+		Reflect.has(this, arg) ? this[arg]() : this['main']();
+	}
+
+	main(arg) {
 		let php = {};
 		this.getData(php).then(data => {
 			data.pageTitle = 'test';
@@ -124,7 +129,7 @@ const controlObj = {
 	}
 }
 
-exports.controlObj = controlObj;
+module.exports = test;
 ```
 
 * 编写view，如在`apps/h5/mvc/view`目录新建`test.html`，写入：
@@ -174,7 +179,7 @@ fml.define("page/test", [], function(require, exports) {
 	3. npm install
 	4. npm start
 	5. 打开浏览器，输入：`127.0.0.1:8083/test`
-	6. npm run log 查看日志
-	7. npm run debug debug模式
+	6. npm run log   // 查看日志
+	7. npm run debug  // debug模式
 
 

@@ -10,7 +10,7 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 				'path': remoteObj
 			}
 		}
-		let protocol = remoteObj['protocol'] && (remoteObj['protocol'] + ':') || 'http:',
+		let protocol = (remoteObj['protocol'] || 'http') + ':',
 			path = remoteObj['path'] || '',
 			method = remoteObj['method'] && remoteObj['method'].toUpperCase() || 'GET',
 			port = remoteObj['port'] || 80,

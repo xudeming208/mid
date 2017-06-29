@@ -19,7 +19,6 @@
 	- 此字段为true时：HTML、CSS和JS不压缩，静态资源不缓存（包括内存的缓存及浏览器的缓存）；
 
 ### 生产环境：
-	- 生产环境注意处理图片和favicon.ico（CDN或者Nginx）；
 	- 生产环境下，应该是先merge和compress静态资源，然后传至CDN；
 	- 生产环境下，运行npm run build；
 	- 开发环境下，运行npm run dev；

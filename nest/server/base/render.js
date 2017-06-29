@@ -132,7 +132,6 @@ const render = function(tpl, data = {}) {
 			'Cache-Control': 'no-cache,no-store'
 		})
 		this.res.end('oops! complie error!');
-		return;
 	}
 }
 

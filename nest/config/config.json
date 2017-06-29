@@ -35,7 +35,7 @@
 		"127.0.0.1": "h5",
 		"h5.fedevot.test.com": "h5",
 		"pc.fedevot.test.com": "pc",
-		"172.20.165.168": "h5"
+		"172.20.165.168": "pc"
 	},
 	"api": {
 		"web": "webapi.busi.inke.com",
