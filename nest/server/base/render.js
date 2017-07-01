@@ -5,18 +5,21 @@ const watchFile = require("./watchFile");
 const isWindows = process.platform === 'win32';
 let host = 'pc';
 let quotes = '`';
+let htmlCache = {};
 //去掉注释，包含单行和多行<!--注释-->、//注释、/*注释*/，同时不去掉//www.baidu.com/img/bd_logo1.png
 let reg = /<!--[\s\S]*?-->|[^\S]\/\/.*|\/\*[\s\S]*?\*\//g;
+let isDelComment = false;
 
 // getTmpFile
 const getTmpFile = tpl => {
-	return path.resolve(__dirname, '../../../tmp/', host + '_' + tpl.replace(/\//g, '_').replace('.html', '.js'));
+	return path.resolve(__dirname, '../../../tmp/', host + '_' + tpl.replace(/\//g, '_').replace(/\.html$/, '.js'));
 }
 
 // complie
 const complie = (filePath, tpl, content, data) => {
 	let tplStr = '';
-	let arr = content.replace(reg, '\n').split('<%');
+	isDelComment && content.replace(reg, '\n');
+	let arr = content.split('<%');
 	tplStr += "/* " + filePath + " */\n";
 	tplStr += "let getHtml = require('" + (isWindows ? __filename.replace(/\\/g, '/') : __filename) + "').getHtml;\n";
 	tplStr += "let requireWidget = getHtml\n";
@@ -60,20 +63,37 @@ const complie = (filePath, tpl, content, data) => {
 	tplStr += 'exports._getHtml = _getHtml' + '\n';
 	let tmpFile = getTmpFile(tpl);
 	fs.writeFileSync(tmpFile, tplStr);
-	return require(tmpFile)._getHtml(data);
+	let htmlCode = require(tmpFile)._getHtml(data);
+
+	// 开发模式下禁用cache
+	if (!ETC.debug) {
+		// write into memory cache
+		htmlCache[tmpFile] = htmlCode;
+	}
+
+	return htmlCode;
 }
 
 // 获取HTML
 const getHtml = (tpl, data) => {
 	let filePath = path.resolve(__dirname, '../', PATH.apps, host, PATH.view, '.', tpl);
 	let tmpFile = getTmpFile(tpl);
-	//watchFile
+	// watchFile
 	watchFile(filePath, () => {
 		delete require.cache[tmpFile];
 		return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
 	});
+
+	// IO from cache；return html immediately not render html again
+	if (htmlCache[tmpFile]) {
+		return htmlCache[tmpFile];
+	}
+
+	// first or delete cache
 	if (fs.existsSync(tmpFile)) {
+		// 开发模式下禁用cache
 		ETC.debug && delete require.cache[tmpFile];
+
 		return require(tmpFile)._getHtml(data);
 	} else {
 		return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);

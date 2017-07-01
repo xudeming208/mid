@@ -81,7 +81,7 @@ mid
 |	|	|——package.json 		
 |	|	|——pm2Conf.json				#pm2的配置
 |——logs							#日志目录
-|——tmp							#临时缓存文件目录
+|——tmp							#模板引擎缓存文件目录
 |——.gitignore					
 |——DOC.md 						#框架使用文档
 |——README.md						#框架介绍文档	

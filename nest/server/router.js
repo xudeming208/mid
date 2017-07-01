@@ -109,7 +109,7 @@ const route = (req, res) => {
 				res.writeHead(500, {
 					'Content-Type': 'text/plain'
 				});
-				res.end('err: ', err.toString());
+				res.end(`oops! some errors has happend!`);
 				console.error(err);
 			}
 		} else {
