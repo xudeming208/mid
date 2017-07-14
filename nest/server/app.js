@@ -52,7 +52,7 @@ const init = () => {
 	// 	delete content.site.version;
 	// }
 
-	fs.writeFileSync(configPath, JSON.stringify(content), 'utf-8');
+	fs.writeFileSync(configPath, JSON.stringify(content, null, '\t'), 'utf-8');
 }
 
 init();

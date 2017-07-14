@@ -1,6 +1,7 @@
 # mid
 	- 用nodejs开发的一套基于URI的 MVC 框架，适用于前后端分离项目。
 	- 采用 MVC 架构，运用nodejs + es6(7) + component + less
+	- 如果使用 PM2 来部署，并且开启了PM2的cluster("exec_mode": "cluster") 模式，那么就cpuNums=1就好。
 
 ## 框架介绍及使用方法
 详细查看[DOC.md](https://github.com/xudeming208/mid/blob/master/DOC.md)
@@ -16,8 +17,8 @@
 	* ~~npm run log~~
 	* ~~npm run debug~~
 5. ~~在浏览器中输入**127.0.0.1:8083** 或者 **yourIp:8083**, 然后就能看见页面了~~
-    * ~~`默认打开的是H5页, 如果想看PC页，请修改配置`~~
-6. node setup
+6. 默认打开的是H5页, 如果想看PC页，请修改配置
+7. node setup
 
 ## Nginx
 * 绑定host `host` => sudo vi /etc/hosts，如下：
@@ -32,6 +33,9 @@ server {
     listen 80;
     server_name *.fedevot.test.com;
     location / {
+    	proxy_set_header Host               $http_host;
+        proxy_set_header X-Real-IP          $remote_addr;
+        proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
         proxy_pass http://127.0.0.1:8083;
     }
 }
@@ -62,8 +66,8 @@ server {
 
 ### 生产环境：
 	- 生产环境下，应该是先merge和compress静态资源，然后传至CDN；
-	- 生产环境下，运行npm run build；
-	- 开发环境下，运行npm run dev；
+	- ~~生产环境下，运行npm run build；~~
+	- ~~开发环境下，运行npm run dev；~~
 
 ## FAQ
 * 查看[DOC.md](https://github.com/xudeming208/mid/blob/master/DOC.md)

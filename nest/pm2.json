@@ -1,13 +1,14 @@
 {
     "apps": [{
-        //http://www.cnblogs.com/chyingp/p/pm2-documentation.html
         //http://pm2.keymetrics.io/docs/usage/pm2-doc-single-page/
         // Application #1
         "name": "server",
         "script": "./server/app.js",
         "instances": 0,
+        "exec_mode": "cluster",
+        "max_memory_restart": "1G",
+        "autorestart": true,
         "merge_logs": true,
-        "exec_mode": "cluster_mode",
         "error_file": "../logs/child-err.log",
         "out_file": "../logs/child-out.log",
         "pid_file": "../logs/child.pid"
@@ -16,8 +17,10 @@
         "name": "jserver",
         "script": "./jserver/jserver.js",
         "instances": 0,
+        "exec_mode": "cluster",
+        "max_memory_restart": "1G",
+        "autorestart": true,
         "merge_logs": true,
-        "exec_mode": "cluster_mode",
         "error_file": "../logs/child-err.log",
         "out_file": "../logs/child-out.log",
         "pid_file": "../logs/child.pid"

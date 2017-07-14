@@ -79,7 +79,7 @@ mid
 |	|	|——app.js				#入口
 |	|	|——router.js				#路由处理
 |	|	|——package.json 		
-|	|	|——pm2Conf.json				#pm2的配置
+|	|	|——pm2.json				#pm2的配置
 |——logs							#日志目录
 |——tmp							#模板引擎缓存文件目录
 |——.gitignore					
@@ -104,7 +104,7 @@ mid
 ```javascript
 'use strict'
 
-class test {
+class Test {
 	index(arg) {
 		Reflect.has(this, arg) ? this[arg]() : this['main']();
 	}
@@ -129,7 +129,7 @@ class test {
 	}
 }
 
-module.exports = test;
+module.exports = Test;
 ```
 
 * 编写view，如在`apps/h5/mvc/view`目录新建`test.html`，写入：
@@ -141,6 +141,7 @@ module.exports = test;
 <%= requireWidget('widget/banner.html',{
 	'model' : this,
 	'data':this.banner,
+	'class':'widget-banner-test',
 	'config':{
 		"autoTime":1800
 	}
@@ -161,6 +162,11 @@ body{
 }
 p{
 	.l(3)
+}
+
+/*以下为覆盖widget的默认样式*/
+.widget-banner-test{
+	.h(2rem)
 }
 ```
 

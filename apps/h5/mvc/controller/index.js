@@ -1,6 +1,6 @@
 'use strict'
 
-class index {
+class Index {
 	index(arg) {
 		Reflect.has(this, arg) ? this[arg]() : this['main']();
 	}
@@ -80,4 +80,4 @@ class index {
 	}
 }
 
-module.exports = index;
+module.exports = Index;
