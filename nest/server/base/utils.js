@@ -65,6 +65,10 @@ function utils() {
 			// return obj === void 0;
 			return Object.is(obj, void 0);
 		},
+		// 拷贝数组
+		copyArr: arr => {
+			return [...arr];
+		},
 		// 数组去重
 		unique: arr => {
 			// return Array.from(new Set(arr));

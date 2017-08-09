@@ -22,7 +22,6 @@ const init = () => {
 	if (hostLen > 3) {
 		delete content.host[hostKeys[hostLen - 1]];
 	}
-	content.etc.ip = ip;
 	content.host[ip] = ETC.defaultPage;
 	content.site.staticHost = `http://${ip}:${ETC.jserverPort}`;
 	content.site.ip = ip;

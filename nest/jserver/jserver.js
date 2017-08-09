@@ -16,7 +16,7 @@ const staticCache = {};
 const maxAge = 60 * 60 * 24 * 180;
 const cpuNums = +ETC.cpuNums || require('os').cpus().length;
 const port = +ETC.jserverPort || 8084;
-const ip = ETC.ip || '127.0.0.1';
+const ip = SITE.ip || '127.0.0.1';
 
 
 // readFile fun
@@ -53,7 +53,7 @@ const readFile = (filePath, unicode, fileType) => {
 }
 
 // loadFile
-const loadFile = async (req, res, filePath, fileType) => {
+const loadFile = async(req, res, filePath, fileType) => {
 	let unicode = mimeBuffer.includes(fileType) ? '' : 'utf-8';
 	//cache
 	if (staticCache.hasOwnProperty(filePath)) {
@@ -83,32 +83,7 @@ const loadFile = async (req, res, filePath, fileType) => {
 }
 
 // statFile
-const statFile = (req, res) => {
-	let reqUrl = url.parse(req.url);
-	let pathname = reqUrl.pathname,
-		fileType = pathname.match(/(\.[^.]+|)$/)[0].substr(1); //取得后缀名
-
-	if (pathname === '/') {
-		res.writeHead(404, {
-			'Content-Type': 'text/plain',
-			'Cache-Control': 'no-cache,no-store'
-		})
-		console.error(`What do you want to do?`);
-		res.end(`What do you want to do?`);
-		return;
-	}
-
-	// console.dir(CONFIG)
-	let filePath = path.resolve(__dirname, PATH.apps),
-		contentType = mimeTypes[fileType] || 'text/plain';
-	// console.log(reqUrl)
-
-	//将CSS的请求转化为Less的请求
-	if (fileType === 'css') {
-		pathname = pathname.replace('/css/', '/less/').replace('.css', '.less');
-		fileType = 'less';
-	}
-	filePath += pathname;
+const statFile = (req, res, filePath, fileType, contentType) => {
 	// 读取文件的最后修改时间
 	fs.stat(filePath, (err, stat) => {
 		if (err) {
@@ -142,23 +117,44 @@ const statFile = (req, res) => {
 			}
 
 			res.writeHead(200, resHeader);
-			if (fileType) {
-				loadFile(req, res, filePath, fileType);
-			} else {
-				// let pathArr = pathname.split('~'),
-				// 	pathStr = pathArr[0],
-				// 	blocks = pathArr[1].split('+'),
-				// 	type = 'css';
-				// if (pathStr.match(/\bjs\b/g)) {
-				// 	type = 'js';
-				// }
-				// blocks.map(mod => {
-				// 	// console.log(pathStr + mod + '.' + type)
-				// 	loadFile(req, res, filePath, type);
-				// })
-			}
+			loadFile(req, res, filePath, fileType);
 		}
 	});
+}
+
+// onRequest
+const onRequest = (req, res) => {
+	let reqUrl = url.parse(req.url);
+	let pathname = reqUrl.pathname,
+		fileType = pathname.match(/(\.[^.]+|)$/)[0].substr(1); //取得后缀名
+
+	if (pathname === '/') {
+		res.writeHead(404, {
+			'Content-Type': 'text/plain',
+			'Cache-Control': 'no-cache,no-store'
+		})
+		console.error(`What do you want to do?`);
+		res.end(`What do you want to do?`);
+		return;
+	}
+
+	// console.dir(CONFIG)
+	let appPath = path.resolve(__dirname, PATH.apps),
+		contentType = mimeTypes[fileType] || 'text/plain';
+	// console.log(reqUrl)
+
+	//将CSS的请求转化为Less的请求
+	if (fileType === 'css') {
+		pathname = pathname.replace('/css/', '/less/').replace('.css', '.less');
+		fileType = 'less';
+	}
+	let filePath = appPath + pathname;
+
+	if (filePath.includes('~')) {
+		
+	} else {
+		statFile(req, res, filePath, fileType, contentType);
+	}
 }
 
 //jserver
@@ -178,7 +174,7 @@ if (cluster.isMaster) {
 	})
 } else {
 	http.createServer((req, res) => {
-		statFile(req, res);
+		onRequest(req, res);
 	}).listen(port, () => {
 		console.log(`the Jserver has started on`, `${ip}:${port}`.green.underline, `at`, `${new Date().toLocaleString()}`.green.underline);
 	});

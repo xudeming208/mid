@@ -13,7 +13,7 @@
 	<link rel="dns-prefetch" href="//img.inke.cn/">
 	<link rel="stylesheet" type="text/css" href="<%= this.staticHost + this.h5Path %>/css/base.css<%= this.version || '' %>">
 	<%=
-		(function(link ,cssmods){
+		(function(link){
 			let cssStr ='',
 				version = this.version || '',
 				base = this.staticHost + this.h5Path + '/css/';
@@ -23,12 +23,7 @@
 				});
 				return cssStr;
 			}
-			if(cssmods.length){
-				cssmods = '~' + cssmods.join('+');
-				cssStr += '<link rel="stylesheet" href="' + base + cssmods + version + '">';
-			}
-			return cssStr; 
-		})(this._CSSLinks ,this._CSSmods)
+		})(this._CSSLinks)
 	%>
 	<% if(this._CSSstack.length){ %>
 		<style><%= this._CSSstack.join("\n"); %></style>

@@ -8,7 +8,7 @@
 
 
 ## 工程化问题
-	- CSS的合并（不合并base.css）
+	- 每个页面有俩个CSS，一个base.css，一个页面自身的
 	- 是否将公共的JS部分单独引入方便缓存（类似于base.css），比如backTop,dialog等，而不只是jQuery
 	- JS的合并
 
@@ -16,6 +16,7 @@
 
 
 ## 线上环境，静态资源都传至CDN or 采用Nginx做静态文件服务器
+## 线上环境，更改config.json文件中的staticHost为CDN地址，开发环境和线上环境的config.json文件不一样
 ## build.js  &&  dev.js
 
 
@@ -41,10 +42,10 @@ UTILS.md5()，文件内容不变，hash也不会变的
 ## eslint
 
 
-## 错误分析和报警
+## 实时监控，错误分析和报警（keymetrics，OneAPM，听云，Easy-Monitor等）
 
 
-## 性能分析
+## 性能分析 （压测工具有ab,webbench,siege，wrk等，http://www.tuicool.com/articles/riyMJnu）
 
 
 ## 部署问题

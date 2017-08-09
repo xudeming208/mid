@@ -103,18 +103,13 @@ const getHtml = (tpl, data) => {
 // 输出HTML
 const render = function(tpl, data = {}) {
 	host = HOST[this.hostname];
-	['_JSLinks', '_CSSLinks', '_JSstack', '_CSSstack', '_JSmods', '_CSSmods'].map(item => {
+	['_JSLinks', '_CSSLinks', '_JSstack', '_CSSstack', '_JSmods'].map(item => {
 		if (!data.hasOwnProperty(item)) {
 			data[item] = [];
 		}
 	});
 	data.useModule = this.useModule.bind(data);
-	//combo css
-	if (ETC.merge) {
-		// data._CSSmods = [].concat(data._CSSLinks);
-		data._CSSmods.push(...data._CSSLinks);
-		data._CSSLinks.length = 0;
-	}
+	
 	// mkdir tmp
 	let tmpPath = path.resolve(__dirname, '../../../tmp');
 	if (!fs.existsSync(tmpPath)) {
