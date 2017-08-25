@@ -4,9 +4,6 @@
   "author": "xudeming",
   "email": "xudeming208@126.com",
   "description": "nodejs MVC framework",
-  "bin": {
-    "app": "./server/app.js"
-  },
   "keywords": [
     "nodejs",
     "mid",
@@ -38,5 +35,5 @@
     "less": "^2.7.1",
     "uglify-js": "^2.8.7"
   },
-  "license": "ISC"
+  "license": "MIT"
 }

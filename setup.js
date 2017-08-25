@@ -22,7 +22,7 @@ const openBrower = (path, callback) => {
 			cmd = 'open ' + cmd;
 		}
 	}
-	child_process.exec(cmd, callback);
+	exec(cmd, callback);
 };
 
 //执行之前确保已经全局安装了pm2

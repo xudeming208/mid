@@ -43,8 +43,10 @@ p{.l(3);word-break:break-all;}
 
 /*水平垂直居中*/
 .align-v{
-	.display(flex);
+	display: flex;
+	display: -webkit-flex;
 	align-items: center;
+	-webkit-align-items: center;
 	.w(100%);
 	.h(3rem);
 	.c;

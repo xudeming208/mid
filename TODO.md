@@ -9,10 +9,10 @@
 
 ## 工程化问题
 	- 每个页面有俩个CSS，一个base.css，一个页面自身的
-	- 是否将公共的JS部分单独引入方便缓存（类似于base.css），比如backTop,dialog等，而不只是jQuery
+	- 将公共的JS部分单独引入方便缓存（类似于base.css），比如backTop,dialog等，而不只是jQuery
 	- JS的合并
 
-## 是否将body标签中的script JS合并并放到body后面
+## 将body标签中的script JS合并并放到body后面
 
 
 ## 线上环境，静态资源都传至CDN or 采用Nginx做静态文件服务器

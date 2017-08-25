@@ -189,3 +189,6 @@ fml.define("page/test", [], function(require, exports) {
 	7. npm run debug  // debug模式
 
 
+## 如果遇见不能启动，试着kill pm2试下 => sudo pkill -9 pm2
+
+
