@@ -24,9 +24,15 @@ async function getData(php) {
 		return await SITE;
 	}
 
-	return await remoteApi(req, res, php).catch(err => {
+	// return await remoteApi(req, res, php).catch(err => {
+	// 	console.error(err);
+	// });
+	
+	try {
+		return await remoteApi(req, res, php);
+	} catch (err) {
 		console.error(err);
-	});
+	}
 
 }
 

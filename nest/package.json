@@ -16,7 +16,7 @@
   },
   "scripts": {
     "start": "pm2 start pm2.json",
-    "stop": "cd .. && rm -rf tmp/* && rm -rf logs/* && pm2 delete all",
+    "stop": "cd .. && rm -rf tmp/* && rm -rf logs/* && pm2 delete all && pkill -9 pm2",
     "restart": "npm run stop && npm run start",
     "log": "cd ../logs && tail -f child-out.log",
     "debug": "cd ../logs && tail -f child-err.log",

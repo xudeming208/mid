@@ -9,16 +9,9 @@
 
 ## Usage
 1. sudo npm install -g pm2
-2. ~~cd nest~~
-3. ~~npm install~~
-4. ~~npm start~~
-	* ~~npm run stop~~
-	* ~~npm run restart~~
-	* ~~npm run log~~
-	* ~~npm run debug~~
-5. ~~在浏览器中输入**127.0.0.1:8083** 或者 **yourIp:8083**, 然后就能看见页面了~~
-6. 默认打开的是H5页, 如果想看PC页，请修改配置
-7. node setup
+2. sudo npm install -g midc (midc是mid框架配置工具)
+3. midc init (midc -h; midc -v)
+	- 默认打开的是H5页, 如果想看PC页，请修改配置
 
 ## Nginx
 * 绑定host `host` => sudo vi /etc/hosts，如下：
