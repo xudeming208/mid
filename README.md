@@ -9,7 +9,7 @@
 
 ## Usage
 1. sudo npm install -g pm2
-2. sudo npm install -g midc (midc是mid框架配置工具)
+2. sudo npm install -g midc (midc是mid框脚手架)
 3. midc init (midc -h; midc -v)
 	- 默认打开的是H5页, 如果想看PC页，请修改配置
 
