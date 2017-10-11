@@ -3,6 +3,7 @@ fml.define('component/utils', ['component/md5'], function(require, exports) {
 	// Underscore.js
 	
 	var md5 = require('component/md5');
+	var _toString = ({}).toString;
 	// 常用的方法集合
 	var utils = {
 		md5: function(str) {
@@ -23,25 +24,25 @@ fml.define('component/utils', ['component/md5'], function(require, exports) {
 			return str ? str.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#039;') : '';
 		},
 		isObject: function(obj) {
-			return ({}).toString.call(obj) === '[object Object]';
+			return _toString.call(obj) === '[object Object]';
 		},
 		isArray: function(obj) {
-			return Array.isArray(obj) || ({}).toString.call(obj) === '[object Array]';
+			return Array.isArray(obj) || _toString.call(obj) === '[object Array]';
 		},
 		isString: function(obj) {
-			return ({}).toString.call(obj) === '[object String]';
+			return _toString.call(obj) === '[object String]';
 		},
 		isNumber: function(obj) {
-			return ({}).toString.call(obj) === '[object Number]';
+			return _toString.call(obj) === '[object Number]';
 		},
 		isFunction: function(obj) {
-			return ({}).toString.call(obj) === '[object Function]';
+			return _toString.call(obj) === '[object Function]';
 		},
 		isNaN: function(obj) {
 			return moduleObj.isNumber(obj) && obj !== +obj;
 		},
 		isBoolean: function(obj) {
-			return obj === true || obj === false || ({}).toString.call(obj) === '[object Boolean]';
+			return obj === true || obj === false || _toString.call(obj) === '[object Boolean]';
 		},
 		isNull: function(obj) {
 			return obj === null;
