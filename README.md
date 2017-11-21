@@ -9,8 +9,8 @@
 
 ## Usage
 1. sudo npm install -g pm2
-2. sudo npm install -g midc (midc是mid框脚手架)
-3. midc init (midc -h; midc -v)
+2. sudo npm install -g mid-cli (mid-cli是mid框脚手架)
+3. mid-cli init (mid-cli -h; mid-cli -v)
 	- 默认打开的是H5页, 如果想看PC页，请修改配置
 
 ## Nginx
