@@ -24,11 +24,6 @@
     "build": "cd .. && node build && npm run restart"
   },
   "dependencies": {
-    "chokidar": "^1.6.1",
-    "less": "^2.7.1",
-    "uglify-js": "^2.8.7"
-  },
-  "devDependencies": {
     "cfonts": "^1.1.1",
     "chokidar": "^1.6.1",
     "colors": "^1.1.2",

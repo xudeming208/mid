@@ -21,8 +21,8 @@
 				link.map(src => {
 					cssStr += '<link rel="stylesheet" href="' + base + src +'.css' + version + '">'
 				});
-				return cssStr;
 			}
+			return cssStr;
 		})(this._CSSLinks)
 	%>
 	<% if(this._CSSstack.length){ %>

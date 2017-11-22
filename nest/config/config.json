@@ -1,7 +1,7 @@
 {
 	"etc": {
-		"serverPort": 6134,
-		"jserverPort": 6135,
+		"serverPort": 8083,
+		"jserverPort": 8084,
 		"defaultPage": "h5",
 		"defaultMod": "index",
 		"server": "MID 1.0.0",
@@ -20,7 +20,7 @@
 		"view": "./mvc/view/"
 	},
 	"site": {
-		"staticHost": "http://192.168.120.65:6135",
+		"staticHost": "http://192.168.120.65:8084",
 		"jsDefer": true,
 		"pcPath": "/pc/static",
 		"h5Path": "/h5/static",
@@ -28,7 +28,7 @@
 		"pageDescription": "nodejs mvc frame",
 		"pageKeywords": "nodejs mvc frame",
 		"ip": "192.168.120.65",
-		"port": 6134
+		"port": 8083
 	},
 	"host": {
 		"127.0.0.1": "h5",
