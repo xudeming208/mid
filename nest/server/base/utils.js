@@ -75,7 +75,7 @@ function utils() {
 			// return Array.from(new Set(arr));
 			return [...new Set(arr)];
 		},
-		// 深度克隆对象
+		// 深度克隆对象，如果obj属性是引用类型（如对象，数组），拷贝的只是其引用
 		clone: obj => {
 			// return { ...obj };
 			return Object.assign({}, obj);
