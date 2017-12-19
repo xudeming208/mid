@@ -193,8 +193,8 @@ fml.define("page/test", [], function(require, exports) {
 	2. cd mid
 	3. npm install
 	4. npm start
-		- npm run log   // 查看日志
-		- npm run debug  // debug模式
+	- npm run log   // 查看日志
+	- npm run debug  // debug模式
 	5. 打开浏览器，输入：`127.0.0.1:8083/test`
 >如果遇见不能启动，试着kill pm2试下 => sudo pkill -9 pm2
 
