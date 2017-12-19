@@ -26,7 +26,9 @@
 		})(this._CSSLinks)
 	%>
 	<% if(this._CSSstack.length){ %>
-		<style><%= this._CSSstack.join("\n"); %></style>
+		<style>
+			<%= this._CSSstack.join("\n"); %>
+		</style>
 	<% } %>
 	<script>
 	(function(doc, win) {

@@ -50,6 +50,8 @@ const complie = (filePath, tpl, content, data) => {
 				case '#':
 					tplStr += "html+=getHtml('" + rightArr0.substr(1) + "',_data);\n";
 					break;
+				case '*':
+					break;
 				default:
 					tplStr += ";" + rightArr0 + "\n";
 			}

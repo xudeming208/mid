@@ -1,5 +1,5 @@
 'use strict'
-require('../config/config')
+require('./config/config')
 require('colors');
 const CFonts = require('cfonts');
 const cluster = require('cluster');
@@ -14,7 +14,7 @@ const ip = require('./base/getIp')() || '127.0.0.1';
 
 const init = () => {
 	// config
-	let configPath = path.resolve(__dirname, '../config/config.json');
+	let configPath = path.resolve(__dirname, './config/config.json');
 	let content = require(configPath);
 	// 删除host字段中最后一个属性（IP变化的时候不会累加在host中）
 	let hostKeys = Object.keys(content.host);
@@ -28,28 +28,12 @@ const init = () => {
 	content.site.port = port;
 
 	// 重启服务清除缓存
-	exec(['cd ../.. ', 'rm -rf tmp/*', 'rm -rf logs/*'].join(' && '), (error, stdout, stderr) => {
+	exec(['cd .. ', 'rm -rf tmp/*', 'rm -rf logs/*'].join(' && '), (error, stdout, stderr) => {
 		if (error) {
 			console.error(error);
 		}
 		console.log(`Clear cache finised`);
-	})
-
-	// 版本号
-	// if (!ETC.debug) {
-	// 	let PUBDAY = 81.011;
-	// 	let getNowDate = () => {
-	// 		let st = new Date
-	// 		let leadZero = t => {
-	// 			if (t < 10) t = '0' + t
-	// 			return t
-	// 		}
-	// 		return leadZero(st.getMonth()) + leadZero(st.getDate()) + leadZero(st.getHours()) + leadZero(st.getMinutes()) + leadZero(st.getSeconds());
-	// 	}
-	// 	content.site.version = `?${getNowDate()}${PUBDAY}`;
-	// } else {
-	// 	delete content.site.version;
-	// }
+	});
 
 	fs.writeFileSync(configPath, JSON.stringify(content, null, '\t'), 'utf-8');
 }

@@ -28,7 +28,9 @@
 		})(this._CSSLinks)
 	%>
 	<% if(this._CSSstack.length){ %>
-		<style><%= this._CSSstack.join("\n"); %></style>
+		<style>
+			<%= this._CSSstack.join("\n"); %>
+		</style>
 	<% } %>
 	<script type="text/javascript" src="<%= this.staticHost %>/fml.js<%= this.version || '' %>"></script>
 	<script>

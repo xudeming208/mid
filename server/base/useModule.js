@@ -6,12 +6,12 @@ function useModule(modules) {
         modules = [modules]
     }
 
-    modules.map((mod) => {
-        let use=`fml.use('${mod.trim()}');`;
-        if (!this._JSstack.includes(use)) {
-            this._JSstack.push(use)
-        }
-    })
+    // modules.map((mod) => {
+    //     let use=`fml.use('${mod.trim()}');`;
+    //     if (!this._JSstack.includes(use)) {
+    //         this._JSstack.push(use)
+    //     }
+    // })
 
     // this._JSstack.push(...fullModulesInvoke)
     // this._JSstack = UTILS.unique(this._JSstack)

@@ -139,7 +139,7 @@ const onRequest = (req, res) => {
 	}
 
 	// console.dir(CONFIG)
-	let appPath = path.resolve(__dirname, PATH.apps),
+	let appPath = path.resolve(__dirname, '../', PATH.apps),
 		contentType = mimeTypes[fileType] || 'text/plain';
 	// console.log(reqUrl)
 

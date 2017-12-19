@@ -16,4 +16,6 @@
 		</div>
 	</div>
 </script>
-<% this.useModule( [ 'widget/dialog' ] ) %> 
+<!-- 因为是采用shareTmp方式，widget/dialog并不是函数执行，而是定义了此组件，必会在后面引入调用，为了避免JS加载俩次，这里不需要引入 -->
+<!-- 此处采用了模板语法的注释功能，页面不会加载widget/dialog  -->
+<%* this.useModule( [ 'widget/dialog' ] ) %>

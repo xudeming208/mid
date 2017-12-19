@@ -1,5 +1,10 @@
 'use strict'
 
+// 是否用开源的cookies包
+// https://www.npmjs.com/package/cookies
+// https://github.com/expressjs/cookie-session
+
+
 exports.getHandler = function ( req, res ) {
     let cookies = {}
 

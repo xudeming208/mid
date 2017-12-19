@@ -25,6 +25,8 @@ class Index {
 		this.getData(php).then(data => {
 			data.pageTitle = 'index';
 			data._CSSLinks = ['page/index'];
+			data._CSSstack = ['body{background:#eee}','div{color:red}'];
+			data._JSstack = ['console.log(\'test\')','console.log(\'test2\')'];
 			data.banner = [{
 				'href': '#',
 				'src': 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2706547558,1569356033&fm=23&gp=0.jpg'

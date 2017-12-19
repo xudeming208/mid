@@ -2,9 +2,15 @@
 	- 待完成的功能
 
 
-利用webpack工程化
+利用webpack/gulp工程化
 
 线上环境参考：https://thinkjs.org/zh-cn/doc/2.2/deploy.html
+
+
+## 生产环境重启时
+	- 最简单的办法可以通过 pm2 restart pm2.json 重启服务，但这种方式会导致服务临时性的中断（重启服务需要时间，重启过程中会导致无法处理用户的请求从而导致服务中断）。如果不想服务中断，那么可以通过发送信号的方式来重启方式，具体命令为：
+	`pm2 sendSignal SIGUSR2 pm2.json`
+	通过发送 SIGUSR2 信号，pm2 会将这个信号派发给框架，框架主进程捕获到这个信号后，会 fork 一个新的子进程提供服务，然后逐渐将之前的子进程重启，从而达到不中断服务重启的目的。
 
 
 ## 工程化问题
@@ -17,7 +23,21 @@
 
 ## 线上环境，静态资源都传至CDN or 采用Nginx做静态文件服务器
 ## 线上环境，更改config.json文件中的staticHost为CDN地址，开发环境和线上环境的config.json文件不一样
-## build.js  &&  dev.js
+
+
+## build.js
+	- 压缩HTML、CSS和JS，合并CSS和JS，模拟生产环境
+	- npm run build
+
+	- 将配置文件的merge设置为true，debug设置为false
+
+	- 将压缩合并好的CSS和JS保存到某个文件夹，方便传至CDN
+
+## dev.js
+	- 不压缩HTML、CSS和JS，不合并CSS和JS，模拟开发环境
+	- npm run dev
+
+	- 将配置文件的merge设置为false，debug设置为true
 
 
 ## 根据UA重定向至手机页面或者PC页面

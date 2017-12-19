@@ -1,0 +1,51 @@
+{
+  "name": "mid",
+  "description": "nodejs MVC framework",
+  "version": "1.0.0",
+  "author": {
+    "name": "xudeming",
+    "email": "xudeming208@126.com"
+  },
+  "scripts": {
+    "start": "pm2 start pm2.json",
+    "stop": "rm -rf tmp/* && rm -rf logs/* && pm2 delete all && pkill -9 pm2",
+    "restart": "npm run stop && npm run start",
+    "log": "tail -f logs/child-out.log",
+    "debug": "tail -f logs/child-err.log"
+  },
+  "dependencies": {
+    "chokidar": "^1.6.1"
+  },
+  "devDependencies": {
+    "cfonts": "^1.1.3",
+    "colors": "^1.1.2",
+    "less": "^2.7.3",
+    "uglify-js": "^2.8.29"
+  },
+  "keywords": [
+    "nodejs",
+    "mid",
+    "mid-cli",
+    "mvc",
+    "framework",
+    "ssr",
+    "es6",
+    "es7",
+    "async",
+    "await",
+    "promise",
+    "less",
+    "cluster"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xudeming208/mid"
+  },
+  "engines": {
+    "node": ">=7.6.0"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xudeming208/mid/issues"
+  }
+}
