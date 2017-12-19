@@ -16,19 +16,19 @@ mid
 |——apps							#项目代码目录
 |	|——h5						#h5项目
 |	|	|——mvc
-|	|	|	|——controller		#controller
+|	|	|	|——controller			#controller
 |	|	|	|——model			#model
 |	|	|	|——view				#模板
 |	|	|	|	|——widget		#组件目录
 |	|	|——static				#静态文件目录，生成环境CDN or Nginx
 |	|	|	|——img 				#image
 |	|	|	|——js
-|	|	|	|	|——component	#插件JS
+|	|	|	|	|——component		#插件JS
 |	|	|	|	|——page			#页面的JS
 |	|	|	|	|——widget		#组件的JS
 |	|	|	|	|——zepto.js
 |	|	|	|——less
-|	|	|	|	|——component	#插件less
+|	|	|	|	|——component		#插件less
 |	|	|	|	|——page			#页面less
 |	|	|	|	|——widget		#组件less
 |	|	|	|	|——atom.less
@@ -60,22 +60,22 @@ mid
 |	|——fml.js 					#模块加载器
 |——server						#框架代码目录
 |	|——base 					#基础模块代码		
-|	|	|——ajaxTo.js			#ajax逻辑
+|	|	|——ajaxTo.js				#ajax逻辑
 |	|	|——cookie.js 		
-|	|	|——redirectTo.js		#重定向
-|	|	|——render.js			#渲染
-|	|	|——watchFile.js			#监听文件变化
+|	|	|——redirectTo.js			#重定向
+|	|	|——render.js				#渲染
+|	|	|——watchFile.js				#监听文件变化
 |	|	|——...
 |	|——config					#配置目录
-|	|	|——config.js			#全局变量
-|	|	|——config.json			#框架的配置文件
-|	|	|——README.md			#配置介绍
+|	|	|——config.js				#全局变量
+|	|	|——config.json				#框架的配置文件
+|	|	|——README.md				#配置介绍
 |	|——jserver					#静态文件服务器目录
-|	|	|——jserver.js			#静态服务器
-|	|	|——commonJS.js			#commonJS规范
+|	|	|——jserver.js				#静态服务器
+|	|	|——commonJS.js				#commonJS规范
 |	|	|——mime.js 				#Content-Type
 |	|——app.js					#入口
-|	|——router.js				#路由处理
+|	|——router.js					#路由处理
 |——node_modules	
 |——logs							#日志目录
 |——tmp							#模板引擎缓存文件目录
@@ -83,20 +83,20 @@ mid
 |——DOC.md 						#框架使用文档
 |——package.json
 |——pm2.json						#pm2配置
-|——README.md					#框架介绍文档	
+|——README.md						#框架介绍文档	
 |——TODO.md						#待完成的功能				
 ```
 
 ## 模板语法
 * 后端渲染语法：
-	- <% JS 语法 %>
-	- <%* 注释，此内容不会被render %>
-	- <%= 将值写入HTML %>
-	- <%== 将值转码后写入HTML，主要为了避免XSS攻击 %>
-	- <%# 导入模板 %>
+	- `<% JS 语法 %>`
+	- `<%* 注释，此内容不会被render %>`
+	- `<%= 将值写入HTML %>`
+	- `<%== 将值转码后写入HTML，主要为了避免XSS攻击 %>`
+	- `<%# 导入模板 %>`
 * ajax前端渲染语法：
-	- <? JS 语法 ?>
-	- <?= 将值写入HTML ?>
+	- `<? JS 语法 ?>`
+	- `<?= 将值写入HTML ?>`
 
 ## 查看页面渲染数据
 	- 在URI后面添加参数server=json即可
@@ -193,9 +193,9 @@ fml.define("page/test", [], function(require, exports) {
 	2. cd mid
 	3. npm install
 	4. npm start
+		- npm run log   // 查看日志
+		- npm run debug  // debug模式
 	5. 打开浏览器，输入：`127.0.0.1:8083/test`
-	6. npm run log   // 查看日志
-	7. npm run debug  // debug模式
 >如果遇见不能启动，试着kill pm2试下 => sudo pkill -9 pm2
 
 
