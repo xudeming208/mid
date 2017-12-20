@@ -43,7 +43,7 @@ server {
 ```
 
 **ps:**
-	当然你也可以以80端口启动node服务，然后用sudo启动，但是不推荐这样。
+	当然你也可以以80端口启动node服务，然后用sudo启动(1024以下端口需要sudo)，但是不推荐这样。
 
 # HTTPS
 现代网站强制建议使用 HTTPS 访问，这样可以提供网站内容的安全性，避免内容被劫持、监听、篡改等问题。如果不愿意支付证书的费用，可以使用 Let's Encrypt 提供的免费 SSL/TLS 证书，可以参见文章 [Let's Encrypt](https://imququ.com/post/letsencrypt-certificate.html)，[免费好用的 HTTPS 证书](https://imququ.com/post/letsencrypt-certificate.html)。

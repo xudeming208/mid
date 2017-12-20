@@ -1,13 +1,81 @@
 <%#head.html%>
-<p>this is a h5 test page</p>
+<%
+	var testData = {
+		's':'h5 页'
+	};
+%>
+<div><%= testData.s %></div>
+<%%>
+<p>this is a test page</p>
+
+<a href="javascript:;" id="btnDialog">点击我弹层confirm</a>
+<br>
+<br>
+<a href="javascript:;" id="btnDialog2">点击我弹层alert</a>
+
+
+<p>md5:<%= UTILS.md5('asdasd') %></p>
+
+<p>os :<%= JSON.stringify(UTILS.os) %></p>
+
 <p>当前浏览器是：<%= JSON.stringify(UTILS.os.browser) %></p>
-<%= requireWidget('widget/banner.html',{
-	'model' : this,
-	'data':this.banner,
-	'class':'widget-banner-test',
-	'config':{
-		"autoTime":1800
-	}
-});%>
-<% this.useModule( [ 'page/test' ] ) %>
+ 
+<p>XSS:<%== '<script type="text/javascript">alert("XSS")</script>' %></p>
+
+<p>XSS可以看<a href="http://<%= this.ip %>:<%= this.port %>/index/xss/?xss=%27;alert(%27xss%27);%27" target="_blank">http://<%= this.ip %>:<%= this.port %>/index/xss/?xss=%27;alert(%27xss%27);%27</a></p>
+
+<p><a href="javascript:;" id="get">get方式ajax</a></p>
+
+<div id="ajaxContent"></div>
+
+<p><a href="javascript:;" id="post">post方式ajax</a></p>
+
+<p><a href="javascript:;" id="jsonp">post方式jsonp</a></p>
+
+<br>
+<br>
+
+
+<br>
+<br>
+
+<div class="align-v">
+	<p>CSS3 水平垂直居中</p>
+</div>
+<br>
+<div class="align-v2">
+	<p>CSS3 水平垂直居中</p>
+</div>
+<br>
+<div class="align-v3">
+	<p>所以浏览器都兼容(包括ie6)</p>
+</div>
+
+<br>
+<br>
+
+
+
+<br>
+
+<img src="<%= this.staticHost + this.h5Path %>/img/index.png" alt="">
+
+
+
+
+<script type="text/html" id="pageTpl">
+<!-- 这是注释 -->
+	<ul>
+		<li>this is a test</li>
+		<li>win-width:<?= $(window).width()+'px' ?></li>
+		<br>
+		<? (this.hotlists.length >3) && (this.hotlists.length = 3) ?>
+		<? this.hotlists.forEach((item,index)=>{ ?>
+			<? for(var j in item){ ?>
+				<li><span><?= j ?></span> : <?= item[j] ?></li>
+			<? } ?>
+		<? }) ?>
+	</ul>
+</script>
+<% this.useModule( [ 'page/index' ] ) %>
 <%#foot.html%>

@@ -84,6 +84,7 @@ mid
 |——package.json
 |——pm2.json						#pm2配置
 |——README.md						#框架介绍文档	
+|——TEST.md						#压力测试文档	
 |——TODO.md						#待完成的功能				
 ```
 

@@ -12,7 +12,7 @@ let isDelComment = false;
 
 // getTmpFile
 const getTmpFile = tpl => {
-	return path.resolve(__dirname, '../../../tmp/', host + '_' + tpl.replace(/\//g, '_').replace(/\.html$/, '.js'));
+	return path.resolve(__dirname, '../../tmp/', host + '_' + tpl.replace(/\//g, '_').replace(/\.html$/, '.js'));
 }
 
 // complie
@@ -68,10 +68,10 @@ const complie = (filePath, tpl, content, data) => {
 	let htmlCode = require(tmpFile)._getHtml(data);
 
 	// 开发模式下禁用cache
-	if (!ETC.debug) {
-		// write into memory cache
-		htmlCache[tmpFile] = htmlCode;
-	}
+	// if (!ETC.debug) {
+	// 	// write into memory cache
+	// 	htmlCache[tmpFile] = htmlCode;
+	// }
 
 	return htmlCode;
 }
@@ -87,9 +87,9 @@ const getHtml = (tpl, data) => {
 	});
 
 	// IO from cache；return html immediately not render html again
-	if (htmlCache[tmpFile]) {
-		return htmlCache[tmpFile];
-	}
+	// if (htmlCache[tmpFile]) {
+	// 	return htmlCache[tmpFile];
+	// }
 
 	// first or delete cache
 	if (fs.existsSync(tmpFile)) {
@@ -113,7 +113,7 @@ const render = function(tpl, data = {}) {
 	data.useModule = this.useModule.bind(data);
 	
 	// mkdir tmp
-	let tmpPath = path.resolve(__dirname, '../../../tmp');
+	let tmpPath = path.resolve(__dirname, '../../tmp');
 	if (!fs.existsSync(tmpPath)) {
 		fs.mkdirSync(tmpPath);
 	}
