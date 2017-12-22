@@ -1,13 +1,22 @@
 # 压力测试
-  - 仅仅测试mid框架本身，测试的网页为test页（请求资源的服务都为mid框架提供），因为首页有其他公司接口和图片的访问
+  - 仅仅测试mid框架本身，测试的网页为test页（此页请求资源的服务都为mid框架提供，而首页有其他公司接口和图片的访问）
   - 压测硬件：MacBook Pro; 8G内存; I5 2.7GHZ的CPU
-  - 测试的工具有ab、wrk
+  - 测试的工具有ab、wrk，其他的测试工具还有http_load、siege等
 
 ## 测试结果
 
+| Tools        | QPS           
+| ------------- |-------------|
+| ab      | 477.55 |
+| ab Nginx     | 239.09 |
+| wrk      | 487.47 |
+| wrk Nginx      | 349.10 |
+
+## 详细结果
+
 ### ab测试工具
 
-```javascript
+```
 /usr/sbin/ab -c 10 -n 10000 http://127.0.0.1:8083/
 
 
@@ -68,7 +77,7 @@ Percentage of the requests served within a certain time (ms)
 
 ##### 通过Nginx代理后的测试结果：
 
-```javascript
+```
 /usr/sbin/ab -c 10 -n 10000 http://h5.fedevot.test.com/
 
 
@@ -131,7 +140,7 @@ Percentage of the requests served within a certain time (ms)
 
 ### wrk测试工具
 
-```javascript
+```
 ./wrk -t12 -c1000 -d60s --latency http://192.168.120.96:8083/
 
 
@@ -153,7 +162,7 @@ Transfer/sec:      2.37MB
 
 ##### 通过Nginx代理后的测试结果：
 
-```javascript
+```
 ./wrk -t12 -c1000 -d60s --latency http://h5.fedevot.test.com/
 
 

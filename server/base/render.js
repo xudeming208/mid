@@ -5,7 +5,7 @@ const watchFile = require("./watchFile");
 const isWindows = process.platform === 'win32';
 let host = 'pc';
 let quotes = '`';
-let htmlCache = {};
+// let htmlCache = {};
 //去掉注释，包含单行和多行<!--注释-->、//注释、/*注释*/，同时不去掉//www.baidu.com/img/bd_logo1.png
 let reg = /<!--[\s\S]*?-->|[^\S]\/\/.*|\/\*[\s\S]*?\*\//g;
 let isDelComment = false;
