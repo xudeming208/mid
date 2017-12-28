@@ -2,9 +2,12 @@
 	- 用nodejs开发的一套基于URI的 MVC 框架，适用于前后端分离项目。
 	- 后端渲染；运用nodejs + es6(7) + component + less
 	- 采用集群cluster模式（基于PM2）
+
 # MVC示意图
+![mvc示意图](https://github.com/xudeming208/mid/blob/master/mvc.gif?raw=true)
 
 # mid流程图
+![mid流程图](https://github.com/xudeming208/mid/blob/master/mid.png?raw=true)
 
 # mid-cli
 	- mid-cli是mid框架脚手架

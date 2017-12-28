@@ -85,7 +85,9 @@ mid
 |——pm2.json						#pm2配置
 |——README.md						#框架介绍文档	
 |——TEST.md						#压力测试文档	
-|——TODO.md						#待完成的功能				
+|——TODO.md						#待完成的功能		
+|——MVC.gif						#MVC示意图		
+|——MID.png						#MID流程图				
 ```
 
 ## 模板语法
