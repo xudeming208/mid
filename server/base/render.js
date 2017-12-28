@@ -148,7 +148,7 @@ const render = function(tpl, data = {}) {
 			'Content-Type': 'text/plain',
 			'Cache-Control': 'no-cache,no-store'
 		})
-		this.res.end('oops! complie error!');
+		this.res.end('Oops! complie error!');
 	}
 }
 

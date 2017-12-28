@@ -12,7 +12,7 @@ async function getData(php) {
 			'Content-Type': 'text/plain',
 			'Cache-Control': 'no-cache,no-store'
 		})
-		res.end('oops! some errors has happend!');
+		res.end('Oops! some errors has happend!');
 		console.error(`php is required and must be Object!`);
 		return await {};
 	}
