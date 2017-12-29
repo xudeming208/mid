@@ -25,8 +25,8 @@
 虽然 Node.js 自身可以直接创建 HTTP(S) 服务，但生产环境不建议直接把 Node 服务可以对外直接访问，而是在前面用 WebServer（如：nginx） 来挡一层，这样有多个好处：
 
 * 可以更好做负载均衡，比如：同一个项目，启动多个端口的服务，用 nginx 做负载
-* 静态资源使用 nginx 直接提供服务性能更高
-* HTTPS 服务用 nginx 提供性能更高
+* 静态资源使用 nginx 直接提供服务性能更高（实际中用CDN更好）
+* HTTPS(HTTP2) 服务用 nginx 提供性能更高
 
 #### 使用Nginx的大致配置：
 * 绑定host `host` => sudo vi /etc/hosts，如下：
