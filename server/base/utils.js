@@ -12,7 +12,11 @@ const isWindows = process.platform === 'win32';
 // UTILS(常用的工具函数集合)，只能用于nodeJS端，比如server代码或者模板中，例如：UTILS.md5(str)
 function utils() {
 	const self = this;
-	const _toString = ({}).toString;
+	const isType = type => {
+		return obj => {
+			return ({}).toString.call(obj) === '[object ' + type + ']';
+		}
+	}
 	let moduleObj = {
 		loadModel: modName => {
 			return require(path.resolve(__dirname, '../', PATH.apps, HOST[self.hostname], PATH.model, modName));
@@ -37,26 +41,26 @@ function utils() {
 			return str ? str.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#039;') : '';
 		},
 		isObject: obj => {
-			return _toString.call(obj) === '[object Object]';
+			return isType('Object')(obj);
 		},
 		isArray: obj => {
-			return Array.isArray(obj) || _toString.call(obj) === '[object Array]';
+			return Array.isArray(obj) || isType('Array')(obj);
 		},
 		isString: obj => {
-			return _toString.call(obj) === '[object String]';
+			return isType('String')(obj);
 		},
 		isNumber: obj => {
-			return _toString.call(obj) === '[object Number]';
+			return isType('Number')(obj);
 		},
 		isFunction: function(obj) {
-			return _toString.call(obj) === '[object Function]';
+			return isType('Function')(obj);
 		},
 		isNaN: obj => {
 			// return moduleObj.isNumber(obj) && obj !== +obj;
 			return Object.is(obj, NaN);
 		},
 		isBoolean: obj => {
-			return obj === true || obj === false || _toString.call(obj) === '[object Boolean]';
+			return obj === true || obj === false || isType('Boolean')(obj);;
 		},
 		isNull: obj => {
 			// return obj === null;

@@ -53,33 +53,26 @@ const readFile = (filePath, unicode, fileType) => {
 }
 
 // loadFile
-const loadFile = async(req, res, filePath, fileType) => {
+const loadFile = async (req, res, filePath, fileType) => {
 	let unicode = mimeBuffer.includes(fileType) ? '' : 'utf-8';
+
 	//cache
 	if (staticCache.hasOwnProperty(filePath)) {
 		// console.log(staticCache[filePath]);
 		res.end(staticCache[filePath]);
 		return;
 	}
-	if (!fs.existsSync(filePath) || filePath.match(/\bmvc\b/)) {
-		res.writeHead(404, {
-			'Content-Type': 'text/plain',
-			'Cache-Control': 'no-cache,no-store'
-		});
-		console.error(filePath + ' is lost');
-		res.end(`404 Not Found`);
-	} else {
-		let data = await readFile(filePath, unicode, fileType).catch(err => {
-			res.writeHead(500, {
-				'Content-Type': 'text/plain'
-			});
-			console.error(err);
-			res.end(err.toString());
-		});
 
-		!ETC.debug && (staticCache[filePath] = data);
-		res.end(data);
-	}
+	let data = await readFile(filePath, unicode, fileType).catch(err => {
+		res.writeHead(500, {
+			'Content-Type': 'text/plain'
+		});
+		console.error(err);
+		res.end(err.toString());
+	});
+
+	!ETC.debug && (staticCache[filePath] = data);
+	res.end(data);
 }
 
 // statFile
@@ -134,8 +127,7 @@ const onRequest = (req, res) => {
 			'Cache-Control': 'no-cache,no-store'
 		})
 		console.error(`What do you want to do?`);
-		res.end(`What do you want to do?`);
-		return;
+		return res.end(`What do you want to do?`);
 	}
 
 	// console.dir(CONFIG)
@@ -150,8 +142,28 @@ const onRequest = (req, res) => {
 	}
 	let filePath = appPath + pathname;
 
+	// 404
+	if (!fs.existsSync(filePath)) {
+		res.writeHead(404, {
+			'Content-Type': 'text/plain',
+			'Cache-Control': 'no-cache,no-store'
+		});
+		console.error(filePath + ' is lost');
+		return res.end(`404 Not Found`);
+	}
+
+	// mvc源文件不允许访问
+	if (filePath.match(/\bmvc\b/)) {
+		res.writeHead(403, {
+			'Content-Type': 'text/plain',
+			'Cache-Control': 'no-cache,no-store'
+		});
+		console.error(filePath + '不允许访问');
+		return res.end(`403 Forbidden`);
+	}
+
 	if (filePath.includes('~')) {
-		
+
 	} else {
 		statFile(req, res, filePath, fileType, contentType);
 	}
