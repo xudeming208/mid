@@ -78,6 +78,5 @@ if (cluster.isMaster) {
 
 process.on('uncaughtException', (err, promise) => {
 	console.error(err);
-	console.log(promise);
 	process.exit(1);
 })

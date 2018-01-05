@@ -2,6 +2,15 @@
 	- 待完成的功能
 
 
+
+## 线上部署：
+	1. 将h5/static/中的JS通过babel转义及压缩 至 h5/src/js
+	2. 将less转换成CSS至h5/src/css
+	3. 更改配置，指向src目录
+	4. 所有的资源上传至cdn，src目录作为回源目录
+	5. 通过Nginx反向代理，静态文件服务器
+
+
 利用webpack/gulp工程化
 
 线上环境参考：https://thinkjs.org/zh-cn/doc/2.2/deploy.html

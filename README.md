@@ -27,6 +27,10 @@
 * 可以更好做负载均衡，比如：同一个项目，启动多个端口的服务，用 nginx 做负载
 * 静态资源使用 nginx 直接提供服务性能更高（实际中用CDN更好）
 * HTTPS(HTTP2) 服务用 nginx 提供性能更高
+* Gzip压缩等
+* 反向代理端口与域名
+* Nginx更好的日志记录分析
+* Nginx缓存
 
 #### 使用Nginx的大致配置：
 * 绑定host `host` => sudo vi /etc/hosts，如下：

@@ -12,7 +12,7 @@ const uglifyJS = require('uglify-js');
 const mime = require('./mime');
 const mimeTypes = mime.types;
 const mimeBuffer = mime.bufferTypeArr;
-const staticCache = {};
+// const staticCache = {};
 const maxAge = 60 * 60 * 24 * 180;
 const cpuNums = +ETC.cpuNums || require('os').cpus().length;
 const port = +ETC.jserverPort || 8084;
@@ -57,11 +57,11 @@ const loadFile = async (req, res, filePath, fileType) => {
 	let unicode = mimeBuffer.includes(fileType) ? '' : 'utf-8';
 
 	//cache
-	if (staticCache.hasOwnProperty(filePath)) {
-		// console.log(staticCache[filePath]);
-		res.end(staticCache[filePath]);
-		return;
-	}
+	// if (staticCache.hasOwnProperty(filePath)) {
+	// 	// console.log(staticCache[filePath]);
+	// 	res.end(staticCache[filePath]);
+	// 	return;
+	// }
 
 	let data = await readFile(filePath, unicode, fileType).catch(err => {
 		res.writeHead(500, {
@@ -71,7 +71,7 @@ const loadFile = async (req, res, filePath, fileType) => {
 		res.end(err.toString());
 	});
 
-	!ETC.debug && (staticCache[filePath] = data);
+	// !ETC.debug && (staticCache[filePath] = data);
 	res.end(data);
 }
 
@@ -194,6 +194,5 @@ if (cluster.isMaster) {
 
 process.on('uncaughtException', (err, promise) => {
 	console.error(err);
-	console.log(promise);
 	process.exit(1);
 })

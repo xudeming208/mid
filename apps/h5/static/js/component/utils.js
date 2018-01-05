@@ -46,7 +46,7 @@ fml.define('component/utils', ['component/md5'], function(require, exports) {
 			return moduleObj.isNumber(obj) && obj !== +obj;
 		},
 		isBoolean: function(obj) {
-			return obj === true || obj === false || isType('Boolean')(obj);;
+			return obj === true || obj === false || isType('Boolean')(obj);
 		},
 		isNull: function(obj) {
 			return obj === null;
@@ -57,7 +57,8 @@ fml.define('component/utils', ['component/md5'], function(require, exports) {
 		// 数组去重
 		unique: function(arr) {
 			if (window.Set) {
-				return [...new Set(arr)];
+				// uglifyJS压缩会报错，先注释
+				// return [...new Set(arr)];
 			}
 			var hash = {},
 				i = 0,
