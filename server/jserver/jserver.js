@@ -13,6 +13,8 @@ const mime = require('./mime');
 const mimeTypes = mime.types;
 const mimeBuffer = mime.bufferTypeArr;
 // const staticCache = {};
+
+// maxAge单位为秒
 const maxAge = 60 * 60 * 24 * 180;
 const cpuNums = +ETC.cpuNums || require('os').cpus().length;
 const port = +ETC.jserverPort || 8084;
@@ -105,7 +107,7 @@ const statFile = (req, res, filePath, fileType, contentType) => {
 			// 开发模式下，禁用cache
 			if (ETC.debug) {
 				delete resHeader['Last-Modified'];
-				delete resHeader['Expires'];
+				resHeader['Expires'] = '0';
 				resHeader['Cache-Control'] = 'no-cache,no-store';
 			}
 
