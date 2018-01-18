@@ -5,12 +5,22 @@
 
 ## 测试结果
 
+#### Mid框架
 | Tools        | QPS           
 | ------------- |-------------|
 | ab      | 477.55 |
-| ab Nginx     | 239.09 |
+| ab Nginx     | 225.82 |
 | wrk      | 487.47 |
 | wrk Nginx      | 349.10 |
+
+#### ThinkJS框架
+| Tools        | QPS           
+| ------------- |-------------|
+| ab      | 282.30 |
+| ab Nginx     | 232.74 |
+| wrk      | 411.47 |
+| wrk Nginx      | 375.87 |
+
 
 ## 详细结果
 
@@ -81,7 +91,7 @@ Percentage of the requests served within a certain time (ms)
 /usr/sbin/ab -c 10 -n 10000 http://h5.fedevot.test.com/
 
 
-This is ApacheBench, Version 2.3 <$Revision: 1796539 $>
+This is ApacheBench, Version 2.3 <$Revision: 1807734 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
 
@@ -103,39 +113,37 @@ Server Software:        nginx/1.10.3
 Server Hostname:        h5.fedevot.test.com
 Server Port:            80
 
-Document Path:          /
-Document Length:        20 bytes
+Document Path:          /test
+Document Length:        4674 bytes
 
 Concurrency Level:      10
-Time taken for tests:   41.826 seconds
+Time taken for tests:   44.283 seconds
 Complete requests:      10000
-Failed requests:        9999
-   (Connect: 0, Receive: 0, Length: 9999, Exceptions: 0)
-Non-2xx responses:      1
-Total transferred:      50445149 bytes
-HTML transferred:       47795240 bytes
-Requests per second:    239.09 [#/sec] (mean)
-Time per request:       41.826 [ms] (mean)
-Time per request:       4.183 [ms] (mean, across all concurrent requests)
-Transfer rate:          1177.81 [Kbytes/sec] received
+Failed requests:        0
+Total transferred:      49390000 bytes
+HTML transferred:       46740000 bytes
+Requests per second:    225.82 [#/sec] (mean)
+Time per request:       44.283 [ms] (mean)
+Time per request:       4.428 [ms] (mean, across all concurrent requests)
+Transfer rate:          1089.18 [Kbytes/sec] received
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
-Connect:        0    9 349.0      0   13198
-Processing:     3   32 231.2     17   13241
-Waiting:        3   32 231.2     17   13241
-Total:          3   42 418.1     18   13242
+Connect:        0   10 438.7      0   19629
+Processing:     2   34 439.1     16   19634
+Waiting:        2   34 439.1     16   19634
+Total:          2   44 620.3     16   19641
 
 Percentage of the requests served within a certain time (ms)
-  50%     18
-  66%     22
-  75%     28
-  80%     33
-  90%     58
-  95%     92
-  98%    137
-  99%    151
- 100%  13242 (longest request)
+  50%     16
+  66%     20
+  75%     25
+  80%     29
+  90%     47
+  95%     72
+  98%    118
+  99%    141
+ 100%  19641 (longest request)
 ```
 
 ### wrk测试工具

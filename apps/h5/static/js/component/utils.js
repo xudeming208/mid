@@ -31,7 +31,7 @@ fml.define('component/utils', ['component/md5'], function(require, exports) {
 			return isType('Object')(obj);
 		},
 		isArray: function(obj) {
-			return Array.isArray(obj) || isType('Array')(obj);
+			return Array.isArray ? Array.isArray(obj) : isType('Array')(obj);
 		},
 		isString: function(obj) {
 			return isType('String')(obj);
@@ -72,6 +72,44 @@ fml.define('component/utils', ['component/md5'], function(require, exports) {
 				}
 			}
 			return result;
+		},
+		// Object.assign、{...obj} 和 [...arr] 拷贝的都是引用类型的引用，不是实际的值
+
+		// 如果需要实现真正的克隆，不是克隆其引用，可以用：JSON.parse(JSON.stringify(obj))，但是
+		// JSON.parse(JSON.stringify(obj))有一些值不能正确clone：
+		// * undefined(会直接删除此属性),
+		// * function(会直接删除此属性),
+		// * regexp(此属性的值会变成空对象),
+		// * NaN(此属性的值会变成null),
+		// * Infinity(此属性的值会变成null)
+		deepClone: obj => {
+			// return { ...obj };
+			let o;
+			if (obj.constructor == Object) {
+				o = new obj.constructor();
+			} else {
+				o = new obj.constructor(obj.valueOf());
+			}
+			for (let key in obj) {
+				if (o[key] != obj[key]) {
+					if (typeof(obj[key]) == 'object') {
+						o[key] = objClone(obj[key]);
+					} else {
+						o[key] = obj[key];
+					}
+				}
+				// null
+				if (Object.is(obj[key], null)) {
+					o[key] = null;
+				}
+				// undefined
+				if (Object.is(obj[key], void 0)) {
+					o[key] = undefined;
+				}
+			}
+			o.toString = obj.toString;
+			o.valueOf = obj.valueOf;
+			return o;
 		},
 		//获取参数
 		getQueryString: function(name) {

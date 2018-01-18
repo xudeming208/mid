@@ -44,7 +44,7 @@ function utils() {
 			return isType('Object')(obj);
 		},
 		isArray: obj => {
-			return Array.isArray(obj) || isType('Array')(obj);
+			return Array.isArray ? Array.isArray(obj) : isType('Array')(obj);
 		},
 		isString: obj => {
 			return isType('String')(obj);
@@ -70,7 +70,7 @@ function utils() {
 			// return obj === void 0;
 			return Object.is(obj, void 0);
 		},
-		// 拷贝数组
+		// 拷贝数组，注意拷贝的都是引用类型的引用，不是实际的值，如果需要深度克隆，可用deepClone
 		copyArr: arr => {
 			return [...arr];
 		},
@@ -79,13 +79,43 @@ function utils() {
 			// return Array.from(new Set(arr));
 			return [...new Set(arr)];
 		},
-		// 深度克隆对象，如果obj属性是引用类型（如对象，数组），拷贝的只是其引用
-		clone: obj => {
+		// Object.assign、{...obj} 和 [...arr] 拷贝的都是引用类型的引用，不是实际的值
+
+		// 如果需要实现真正的克隆，不是克隆其引用，可以用：JSON.parse(JSON.stringify(obj))，但是
+		// JSON.parse(JSON.stringify(obj))有一些值不能正确clone：
+		// * undefined(会直接删除此属性),
+		// * function(会直接删除此属性),
+		// * regexp(此属性的值会变成空对象),
+		// * NaN(此属性的值会变成null),
+		// * Infinity(此属性的值会变成null)
+		deepClone: obj => {
 			// return { ...obj };
-			return Object.assign({}, obj);
-			// 如果还需要克隆对象继承的值，可以：
-			// let originPrototype = Object.getPrototypeOf(obj);
-			// return Object.assign(Object.create(originPrototype), obj);
+			let o;
+			if (obj.constructor == Object) {
+				o = new obj.constructor();
+			} else {
+				o = new obj.constructor(obj.valueOf());
+			}
+			for (let key in obj) {
+				if (o[key] != obj[key]) {
+					if (typeof(obj[key]) == 'object') {
+						o[key] = objClone(obj[key]);
+					} else {
+						o[key] = obj[key];
+					}
+				}
+				// null
+				if (Object.is(obj[key], null)) {
+					o[key] = null;
+				}
+				// undefined
+				if (Object.is(obj[key], void 0)) {
+					o[key] = undefined;
+				}
+			}
+			o.toString = obj.toString;
+			o.valueOf = obj.valueOf;
+			return o;
 		},
 		// 多个对象合并
 		// let a = {

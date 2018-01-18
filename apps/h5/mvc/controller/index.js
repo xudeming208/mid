@@ -7,6 +7,7 @@ class Index {
 
 	main(arg) {
 		let php = {};
+		// 可以针对不同的arguments请求不同的数据
 		// if (arg == 'test') {
 			php = {
 				'busi': {

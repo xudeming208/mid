@@ -121,7 +121,7 @@ const statFile = (req, res, filePath, fileType, contentType) => {
 const onRequest = (req, res) => {
 	let reqUrl = url.parse(req.url);
 	let pathname = reqUrl.pathname,
-		fileType = pathname.match(/(\.[^.]+|)$/)[0].substr(1); //取得后缀名
+		fileType = pathname.match(/(\.[^.]*)$/ig)[0].substr(1); //取得后缀名
 
 	if (pathname === '/') {
 		res.writeHead(404, {
