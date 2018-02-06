@@ -1,7 +1,7 @@
 fml.define('component/utils', ['component/md5'], function(require, exports) {
 
 	// Underscore.js
-	
+
 	var md5 = require('component/md5');
 	var isType = function(type) {
 		return function(obj) {
@@ -82,15 +82,15 @@ fml.define('component/utils', ['component/md5'], function(require, exports) {
 		// * regexp(此属性的值会变成空对象),
 		// * NaN(此属性的值会变成null),
 		// * Infinity(此属性的值会变成null)
-		deepClone: obj => {
+		deepClone: function(obj) {
 			// return { ...obj };
-			let o;
+			var o;
 			if (obj.constructor == Object) {
 				o = new obj.constructor();
 			} else {
 				o = new obj.constructor(obj.valueOf());
 			}
-			for (let key in obj) {
+			for (var key in obj) {
 				if (o[key] != obj[key]) {
 					if (typeof(obj[key]) == 'object') {
 						o[key] = objClone(obj[key]);

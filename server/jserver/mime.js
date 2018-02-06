@@ -16,6 +16,7 @@ exports.types = {
     "wav": "audio/x-wav",
     "wma": "audio/x-ms-wma",
     "wmv": "video/x-ms-wmv",
+    "mpg": "video/mpg",
     "xml": "text/xml"
 };
 exports.bufferTypeArr = ["gif", "ico", "jpeg", "jpg", "pdf", "png", "swf", "tiff", "wav", "wma", "wmv"];

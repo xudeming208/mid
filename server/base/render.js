@@ -7,8 +7,9 @@ let host = 'pc';
 let quotes = '`';
 // let htmlCache = {};
 //去掉注释，包含单行和多行<!--注释-->、//注释、/*注释*/，同时不去掉//www.baidu.com/img/bd_logo1.png
-let reg = /<!--[\s\S]*?-->|[^\S]\/\/.*|\/\*[\s\S]*?\*\//g;
-let isDelComment = false;
+// view HTML模板注释统一用<%* comment %>，这样不会渲染到HTML中
+// let reg = /<!--[\s\S]*?-->|[^\S]\/\/.*|\/\*[\s\S]*?\*\//g;
+// let isDelComment = false;
 
 // getTmpFile
 const getTmpFile = tpl => {
@@ -18,7 +19,7 @@ const getTmpFile = tpl => {
 // complie
 const complie = (filePath, tpl, content, data) => {
 	let tplStr = '';
-	isDelComment && content.replace(reg, '\n');
+	// isDelComment && content.replace(reg, '\n');
 	let arr = content.split('<%');
 	tplStr += "/* " + filePath + " */\n";
 	tplStr += "let getHtml = require('" + (isWindows ? __filename.replace(/\\/g, '/') : __filename) + "').getHtml;\n";
@@ -86,7 +87,7 @@ const getHtml = (tpl, data) => {
 		return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
 	});
 
-	// IO from cache；return html immediately not render html again
+	// IO from cache；return html immediately don't render html again
 	// if (htmlCache[tmpFile]) {
 	// 	return htmlCache[tmpFile];
 	// }

@@ -20,6 +20,7 @@ const cpuNums = +ETC.cpuNums || require('os').cpus().length;
 const port = +ETC.jserverPort || 8084;
 const ip = SITE.ip || '127.0.0.1';
 
+let resHeader = {};
 
 // readFile fun
 const readFile = (filePath, unicode, fileType) => {
@@ -74,6 +75,9 @@ const loadFile = async (req, res, filePath, fileType) => {
 	});
 
 	// !ETC.debug && (staticCache[filePath] = data);
+
+	resHeader['Content-Length'] = Buffer.byteLength(data, 'utf-8');
+	res.writeHead(200, resHeader);
 	res.end(data);
 }
 
@@ -95,7 +99,7 @@ const statFile = (req, res, filePath, fileType, contentType) => {
 			res.writeHead(304, `Not Modified`);
 			res.end();
 		} else {
-			let resHeader = {
+			resHeader = {
 				'Server': ETC.server,
 				'Content-Type': contentType + ';charset=utf-8',
 				'Last-Modified': lastModified,
@@ -111,7 +115,6 @@ const statFile = (req, res, filePath, fileType, contentType) => {
 				resHeader['Cache-Control'] = 'no-cache,no-store';
 			}
 
-			res.writeHead(200, resHeader);
 			loadFile(req, res, filePath, fileType);
 		}
 	});
@@ -121,7 +124,7 @@ const statFile = (req, res, filePath, fileType, contentType) => {
 const onRequest = (req, res) => {
 	let reqUrl = url.parse(req.url);
 	let pathname = reqUrl.pathname,
-		fileType = pathname.match(/(\.[^.]*)$/ig)[0].substr(1); //取得后缀名
+		fileType = pathname.match(/(\.[^.\/]*)$/ig)[0].substr(1); //取得后缀名
 
 	if (pathname === '/') {
 		res.writeHead(404, {
