@@ -8,7 +8,7 @@
 		"apiTimeOut": 5000,
 		"cpuNums": 1,
 		"merge": false,
-		"debug": false
+		"debug": true
 	},
 	"path": {
 		"apps": "../apps/",
