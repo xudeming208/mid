@@ -158,7 +158,7 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 	});
 }
 
-module.exports = remoteApi = (req, res, php) => {
+module.exports = (req, res, php) => {
 	let promiseArr = [];
 	for (let phpKey in php) {
 		let remoteObj = php[phpKey];

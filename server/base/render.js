@@ -5,26 +5,26 @@ const watchFile = require("./watchFile");
 const isWindows = process.platform === 'win32';
 let host = 'pc';
 let quotes = '`';
-// let htmlCache = {};
-//去掉注释，包含单行和多行<!--注释-->、//注释、/*注释*/，同时不去掉//www.baidu.com/img/bd_logo1.png
-// view HTML模板注释统一用<%* comment %>，这样不会渲染到HTML中
-// let reg = /<!--[\s\S]*?-->|[^\S]\/\/.*|\/\*[\s\S]*?\*\//g;
-// let isDelComment = false;
+let routeObj = {};
 
 // getTmpFile
-const getTmpFile = tpl => {
-	return path.resolve(__dirname, '../../tmp/', host + '_' + tpl.replace(/\//g, '_').replace(/\.html$/, '.js'));
+const getTmpPath = (tpl) => {
+	let modName = routeObj.modName,
+		modFun = routeObj.modFun,
+		modParam = routeObj.modParam;
+
+	let reg = /\?.*/g,
+		query = tpl.match(reg) ? tpl.match(reg)[0].substr(1).replace(/(=|&)/g, '_') : '';
+
+	return path.resolve(__dirname, '../../tmp/', host + '_' + modName + '_' + modFun + '_' + modParam + '_' + query + tpl.replace(/\//g, '_').replace(reg, ''));
 }
 
 // complie
-const complie = (filePath, tpl, content, data) => {
+const complie = (tpl, content) => {
 	let tplStr = '';
-	// isDelComment && content.replace(reg, '\n');
 	let arr = content.split('<%');
-	tplStr += "/* " + filePath + " */\n";
-	tplStr += "let getHtml = require('" + (isWindows ? __filename.replace(/\\/g, '/') : __filename) + "').getHtml;\n";
+	tplStr += "let _getHtml = (getHtml,_data) => {\n";
 	tplStr += "let requireWidget = getHtml\n";
-	tplStr += "let _getHtml = _data => {\n";
 	tplStr += "let html='';\n";
 	for (let i = 0, len = arr.length; i < len; i++) {
 		// let item = arr[i].trim();
@@ -63,29 +63,45 @@ const complie = (filePath, tpl, content, data) => {
 	}
 	tplStr += "return html;";
 	tplStr += "}\n";
-	tplStr += 'exports._getHtml = _getHtml' + '\n';
-	let tmpFile = getTmpFile(tpl);
-	fs.writeFileSync(tmpFile, tplStr);
-	let htmlCode = require(tmpFile)._getHtml(data);
+	tplStr += 'return _getHtml' + '\n';
 
-	// 开发模式下禁用cache
-	// if (!ETC.debug) {
-	// 	// write into memory cache
-	// 	htmlCache[tmpFile] = htmlCode;
-	// }
+	return new Function(tplStr)();
+}
 
-	return htmlCode;
+// 将HTML写入缓存
+function writeTmp(tpl, content, getHtml, data) {
+	let tmpPath = getTmpPath(tpl);
+	// 获取html
+	let htmlCode = complie(tpl, content)(getHtml, data);
+	// 写入缓存
+	fs.writeFileSync(tmpPath, htmlCode);
 }
 
 // 获取HTML
 const getHtml = (tpl, data) => {
+	let tmpPath = getTmpPath(tpl);
 	let filePath = path.resolve(__dirname, '../', PATH.apps, host, PATH.view, '.', tpl);
-	let tmpFile = getTmpFile(tpl);
+	// 获取模板内容
+	let content = fs.readFileSync(filePath.replace(/\?.*/g, ''), 'utf-8');
+
 	// watchFile
 	watchFile(filePath, () => {
-		delete require.cache[tmpFile];
-		return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
+		writeTmp(tpl, content, getHtml, data);
 	});
+
+	// 没有缓存的话就编译
+	if (!fs.existsSync(tmpPath)) {
+		writeTmp(tpl, content, getHtml, data);
+	}
+
+	return fs.readFileSync(tmpPath, 'utf-8');
+
+	// let tmpFile = getTmpFile(tpl);
+	// watchFile
+	// watchFile(filePath, () => {
+	// 	delete require.cache[tmpFile];
+	// 	return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
+	// });
 
 	// IO from cache；return html immediately don't render html again
 	// if (htmlCache[tmpFile]) {
@@ -93,18 +109,25 @@ const getHtml = (tpl, data) => {
 	// }
 
 	// first or delete cache
-	if (fs.existsSync(tmpFile)) {
-		// 开发模式下禁用cache
-		ETC.debug && delete require.cache[tmpFile];
+	// if (fs.existsSync(tmpFile)) {
+	// 	// 开发模式下禁用cache
+	// 	ETC.debug && delete require.cache[tmpFile];
 
-		return require(tmpFile)._getHtml(data);
-	} else {
-		return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
-	}
+	// 	return require(tmpFile)._getHtml(data);
+	// } else {
+	// 	return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
+	// }
 }
 
 // 输出HTML
 const render = function(tpl, data = {}) {
+	// 根据请求获取controller、function、argument
+	routeObj = {
+		modName: this.modName,
+		modFun: this.modFun,
+		modParam: this.modParam
+	};
+
 	host = HOST[this.hostname];
 	['_JSLinks', '_CSSLinks', '_JSstack', '_CSSstack', '_JSmods'].map(item => {
 		if (!data.hasOwnProperty(item)) {
@@ -112,7 +135,7 @@ const render = function(tpl, data = {}) {
 		}
 	});
 	data.useModule = this.useModule.bind(data);
-	
+
 	// mkdir tmp
 	let tmpPath = path.resolve(__dirname, '../../tmp');
 	if (!fs.existsSync(tmpPath)) {
@@ -153,7 +176,4 @@ const render = function(tpl, data = {}) {
 	}
 }
 
-module.exports = {
-	getHtml,
-	render
-};
+module.exports = render;

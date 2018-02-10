@@ -12,7 +12,6 @@ const uglifyJS = require('uglify-js');
 const mime = require('./mime');
 const mimeTypes = mime.types;
 const mimeBuffer = mime.bufferTypeArr;
-// const staticCache = {};
 
 // maxAge单位为秒
 const maxAge = 60 * 60 * 24 * 180;
@@ -59,13 +58,6 @@ const readFile = (filePath, unicode, fileType) => {
 const loadFile = async (req, res, filePath, fileType) => {
 	let unicode = mimeBuffer.includes(fileType) ? '' : 'utf-8';
 
-	//cache
-	// if (staticCache.hasOwnProperty(filePath)) {
-	// 	// console.log(staticCache[filePath]);
-	// 	res.end(staticCache[filePath]);
-	// 	return;
-	// }
-
 	let data = await readFile(filePath, unicode, fileType).catch(err => {
 		res.writeHead(500, {
 			'Content-Type': 'text/plain'
@@ -74,15 +66,29 @@ const loadFile = async (req, res, filePath, fileType) => {
 		res.end(err.toString());
 	});
 
-	// !ETC.debug && (staticCache[filePath] = data);
+	if (fileType == 'less') {
+		fileType = 'css';
+	}
+
+	let contentType = mimeTypes[fileType] || 'text/plain';
 
 	resHeader['Content-Length'] = Buffer.byteLength(data, 'utf-8');
+	resHeader['Content-Type'] = contentType + ';charset=utf-8';
 	res.writeHead(200, resHeader);
 	res.end(data);
 }
 
 // statFile
-const statFile = (req, res, filePath, fileType, contentType) => {
+const statFile = (req, res, filePath, fileType) => {
+	resHeader['Server'] = ETC.server;
+
+	// 开发模式下，禁用cache
+	if (ETC.debug) {
+		resHeader['Expires'] = '0';
+		resHeader['Cache-Control'] = 'no-cache,no-store';
+		return loadFile(req, res, filePath, fileType);
+	}
+
 	// 读取文件的最后修改时间
 	fs.stat(filePath, (err, stat) => {
 		if (err) {
@@ -99,21 +105,11 @@ const statFile = (req, res, filePath, fileType, contentType) => {
 			res.writeHead(304, `Not Modified`);
 			res.end();
 		} else {
-			resHeader = {
-				'Server': ETC.server,
-				'Content-Type': contentType + ';charset=utf-8',
-				'Last-Modified': lastModified,
-				'Expires': expires.toUTCString(),
-				// 'Access-Control-Allow-Origin': '*',
-				'Cache-Control': 'max-age=' + maxAge
-			};
-
-			// 开发模式下，禁用cache
-			if (ETC.debug) {
-				delete resHeader['Last-Modified'];
-				resHeader['Expires'] = '0';
-				resHeader['Cache-Control'] = 'no-cache,no-store';
-			}
+			// resHeader
+			resHeader['Last-Modified'] = lastModified;
+			resHeader['Expires'] = expires.toUTCString();
+			resHeader['Cache-Control'] = 'max-age=' + maxAge
+			// resHeader['Access-Control-Allow-Origin'] = '*';
 
 			loadFile(req, res, filePath, fileType);
 		}
@@ -123,8 +119,7 @@ const statFile = (req, res, filePath, fileType, contentType) => {
 // onRequest
 const onRequest = (req, res) => {
 	let reqUrl = url.parse(req.url);
-	let pathname = reqUrl.pathname,
-		fileType = pathname.match(/(\.[^.\/]*)$/ig)[0].substr(1); //取得后缀名
+	let pathname = reqUrl.pathname;
 
 	if (pathname === '/') {
 		res.writeHead(404, {
@@ -135,16 +130,15 @@ const onRequest = (req, res) => {
 		return res.end(`What do you want to do?`);
 	}
 
-	// console.dir(CONFIG)
-	let appPath = path.resolve(__dirname, '../', PATH.apps),
-		contentType = mimeTypes[fileType] || 'text/plain';
-	// console.log(reqUrl)
+	let fileType = pathname.match(/(\.[^.\/]*)$/ig)[0].substr(1), //取得后缀名
+		appPath = path.resolve(__dirname, '../', PATH.apps);
 
 	//将CSS的请求转化为Less的请求
 	if (fileType === 'css') {
 		pathname = pathname.replace('/css/', '/less/').replace('.css', '.less');
 		fileType = 'less';
 	}
+
 	let filePath = appPath + pathname;
 
 	// 404
@@ -170,7 +164,7 @@ const onRequest = (req, res) => {
 	if (filePath.includes('~')) {
 
 	} else {
-		statFile(req, res, filePath, fileType, contentType);
+		statFile(req, res, filePath, fileType);
 	}
 }
 

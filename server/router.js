@@ -7,7 +7,7 @@ const watchFile = require("./base/watchFile");
 const getData = require('./base/getData');
 const useModule = require('./base/useModule');
 const redirectTo = require('./base/redirectTo');
-const render = require('./base/render').render;
+const render = require('./base/render');
 const ajaxTo = require('./base/ajaxTo');
 const utils = require('./base/utils');
 
@@ -86,7 +86,10 @@ const route = (req, res) => {
 		redirectTo,
 		render,
 		ajaxTo,
-		utils
+		utils,
+		modName,
+		modFun,
+		modParam
 	});
 
 	let mod = new Mod();
