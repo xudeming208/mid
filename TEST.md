@@ -4,8 +4,6 @@
   - 测试的工具有ab、wrk，其他的测试工具还有http_load、siege等
 
 ### 测试结果
-
-#### Mid框架
 | Tools        | QPS           
 | ------------- |-------------|
 | ab      | 477.55 |
@@ -13,9 +11,15 @@
 | wrk      | 487.47 |
 | wrk Nginx      | 349.10 |
 
-### 详细结果
 
-### ab测试工具
+# 内存泄漏测试
+- 测试工具为`easy-monitor`
+
+![内存泄漏测试](https://github.com/xudeming208/mid/blob/master/memory.jpg?raw=true)
+
+
+### 压力测试详细结果
+#### ab测试工具
 
 ```
 /usr/sbin/ab -c 10 -n 10000 http://127.0.0.1:8083/

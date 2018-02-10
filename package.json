@@ -14,7 +14,6 @@
     "debug": "tail -f logs/child-err.log"
   },
   "dependencies": {
-    "watch": "^1.0.2"
   },
   "devDependencies": {
     "cfonts": "^1.1.3",

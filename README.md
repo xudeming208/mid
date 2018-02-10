@@ -9,6 +9,9 @@
 # mid流程图
 ![mid流程图](https://github.com/xudeming208/mid/blob/master/mid.png?raw=true)
 
+# 压力测试及内存泄漏测试
+详细查看[DOC.md](https://github.com/xudeming208/mid/blob/master/TEST.md)
+
 # mid-cli
 	- mid-cli是mid框架脚手架
 	- 默认打开的是H5页, 如果想看PC页，请修改配置

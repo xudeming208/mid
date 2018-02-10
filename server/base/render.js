@@ -116,9 +116,9 @@ const render = function(tpl, data = {}) {
 	data.useModule = this.useModule.bind(data);
 
 	// mkdir tmp
-	let tmpPath = path.resolve(__dirname, '../../tmp');
-	if (!fs.existsSync(tmpPath)) {
-		fs.mkdirSync(tmpPath);
+	let tmpDirPath = path.resolve(__dirname, '../../tmp');
+	if (!fs.existsSync(tmpDirPath)) {
+		fs.mkdirSync(tmpDirPath);
 	}
 
 	try {
