@@ -3,7 +3,7 @@ const url = require('url');
 const path = require('path');
 const fs = require('fs');
 const querystring = require('querystring');
-const watchFile = require("./base/watchFile");
+// const watchFile = require("./base/watchFile");
 const getData = require('./base/getData');
 const useModule = require('./base/useModule');
 const redirectTo = require('./base/redirectTo');
@@ -100,9 +100,9 @@ const route = (req, res) => {
 	global.UTILS = mod.utils();
 
 	// watchFile
-	watchFile(modPath, () => {
-		delete require.cache[modPath];
-	});
+	// watchFile(modPath, () => {
+	// 	delete require.cache[modPath];
+	// });
 
 	let toExe = () => {
 		if (fn && typeof fn === 'function') {

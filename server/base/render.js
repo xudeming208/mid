@@ -1,7 +1,7 @@
 'use strict'
 const fs = require('fs');
 const path = require('path');
-const watchFile = require("./watchFile");
+// const watchFile = require("./watchFile");
 const isWindows = process.platform === 'win32';
 let host = 'pc';
 let quotes = '`';
@@ -75,6 +75,8 @@ function writeTmp(tpl, content, getHtml, data) {
 	let htmlCode = complie(tpl, content)(getHtml, data);
 	// 写入缓存
 	fs.writeFileSync(tmpPath, htmlCode);
+
+	return htmlCode;
 }
 
 // 获取HTML
@@ -84,39 +86,16 @@ const getHtml = (tpl, data) => {
 	// 获取模板内容
 	let content = fs.readFileSync(filePath.replace(/\?.*/g, ''), 'utf-8');
 
-	// watchFile
-	watchFile(filePath, () => {
-		writeTmp(tpl, content, getHtml, data);
-	});
-
 	// 没有缓存的话就编译
 	if (!fs.existsSync(tmpPath)) {
-		writeTmp(tpl, content, getHtml, data);
+		return writeTmp(tpl, content, getHtml, data);
+	} else{
+		// watchFile
+		// watchFile(filePath, () => {
+		// 	return writeTmp(tpl, content, getHtml, data);
+		// });
+		return fs.readFileSync(tmpPath, 'utf-8');
 	}
-
-	return fs.readFileSync(tmpPath, 'utf-8');
-
-	// let tmpFile = getTmpFile(tpl);
-	// watchFile
-	// watchFile(filePath, () => {
-	// 	delete require.cache[tmpFile];
-	// 	return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
-	// });
-
-	// IO from cache；return html immediately don't render html again
-	// if (htmlCache[tmpFile]) {
-	// 	return htmlCache[tmpFile];
-	// }
-
-	// first or delete cache
-	// if (fs.existsSync(tmpFile)) {
-	// 	// 开发模式下禁用cache
-	// 	ETC.debug && delete require.cache[tmpFile];
-
-	// 	return require(tmpFile)._getHtml(data);
-	// } else {
-	// 	return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
-	// }
 }
 
 // 输出HTML
