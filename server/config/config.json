@@ -2,7 +2,6 @@
 	"etc": {
 		"serverPort": 8083,
 		"jserverPort": 8084,
-		"defaultPage": "h5",
 		"defaultMod": "index",
 		"server": "MID 1.0.0",
 		"apiTimeOut": 5000,
@@ -20,21 +19,21 @@
 		"view": "./mvc/view/"
 	},
 	"site": {
-		"staticHost": "http://192.168.120.103:8084",
+		"staticHost": "http://192.168.120.102:8084",
 		"jsDefer": true,
 		"pcPath": "/pc/static",
 		"h5Path": "/h5/static",
 		"pageTitle": "demo",
 		"pageDescription": "nodejs mvc frame",
 		"pageKeywords": "nodejs mvc frame",
-		"ip": "192.168.120.103",
+		"ip": "192.168.120.102",
 		"port": 8083
 	},
 	"host": {
 		"127.0.0.1": "h5",
 		"h5.fedevot.test.com": "h5",
 		"pc.fedevot.test.com": "pc",
-		"192.168.120.103": "h5"
+		"192.168.120.102": "h5"
 	},
 	"api": {
 		"web": "webapi.busi.inke.com",

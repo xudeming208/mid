@@ -2,6 +2,7 @@
 	- 待完成的功能
 
 
+## 增加apps文件夹中的代码监听（涉及到router.js监听controller和render监听模板HTML），文件变化重新编译，刷新浏览器即可看到变化
 
 ## 线上部署：
 	1. 将h5/static/中的JS通过babel转义及压缩 至 h5/src/js
@@ -30,8 +31,6 @@
 ## 将body标签中的script JS合并并放到body后面
 
 
-## 线上环境，静态资源都传至CDN or 采用Nginx做静态文件服务器
-## 线上环境，更改config.json文件中的staticHost为CDN地址，开发环境和线上环境的config.json文件不一样
 
 
 ## build.js
@@ -73,8 +72,9 @@ UTILS.md5()
 
 ## 实时监控，错误分析和报警（keymetrics，OneAPM，听云，Easy-Monitor等）
 
+## 性能分析工具node-clinic
 
-## 性能分析 （压测工具有ab,webbench,siege，wrk等，http://www.tuicool.com/articles/riyMJnu）
+## 压测 （压测工具有ab,webbench,siege，wrk等，http://www.tuicool.com/articles/riyMJnu）
 
 
 ## 部署问题

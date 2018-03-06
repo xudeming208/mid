@@ -14,10 +14,9 @@
     "debug": "tail -f logs/child-err.log"
   },
   "dependencies": {
+    "chokidar": "^2.0.2"
   },
   "devDependencies": {
-    "cfonts": "^1.1.3",
-    "colors": "^1.1.2",
     "less": "^2.7.3",
     "uglify-js": "^2.8.29"
   },

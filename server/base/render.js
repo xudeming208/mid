@@ -1,29 +1,23 @@
 'use strict'
 const fs = require('fs');
 const path = require('path');
-// const watchFile = require("./watchFile");
+const watchFile = require("./watchFile");
 const isWindows = process.platform === 'win32';
 let host = 'pc';
 let quotes = '`';
-let routeObj = {};
 
-// getTmpFile
-const getTmpPath = (tpl) => {
-	let modName = routeObj.modName,
-		modFun = routeObj.modFun,
-		modParam = routeObj.modParam;
-
-	let reg = /\?.*/g,
-		query = tpl.match(reg) ? tpl.match(reg)[0].substr(1).replace(/(=|&)/g, '_') : '';
-
-	return path.resolve(__dirname, '../../tmp/', host + '_' + modName + '_' + modFun + '_' + modParam + '_' + query + tpl.replace(/\//g, '_').replace(reg, ''));
+// getTmpPath
+const getTmpPath = tpl => {
+	return path.resolve(__dirname, '../../tmp/', host + '_' + tpl.replace(/\//g, '_').replace(/\.html$/, '.js'));
 }
 
 // complie
-const complie = (tpl, content) => {
+const complie = (filePath, tpl, content, data) => {
 	let tplStr = '';
 	let arr = content.split('<%');
-	tplStr += "let _getHtml = (getHtml,_data) => {\n";
+	tplStr += "/* " + filePath + " */\n";
+	tplStr += "let getHtml = require('" + (isWindows ? __filename.replace(/\\/g, '/') : __filename) + "').getHtml;\n";
+	tplStr += "let _getHtml = _data => {\n";
 	tplStr += "let requireWidget = getHtml\n";
 	tplStr += "let html='';\n";
 	for (let i = 0, len = arr.length; i < len; i++) {
@@ -63,18 +57,11 @@ const complie = (tpl, content) => {
 	}
 	tplStr += "return html;";
 	tplStr += "}\n";
-	tplStr += 'return _getHtml' + '\n';
+	tplStr += 'exports._getHtml = _getHtml' + '\n';
 
-	return new Function(tplStr)();
-}
-
-// 将HTML写入缓存
-function writeTmp(tpl, content, getHtml, data) {
 	let tmpPath = getTmpPath(tpl);
-	// 获取html
-	let htmlCode = complie(tpl, content)(getHtml, data);
-	// 写入缓存
-	fs.writeFileSync(tmpPath, htmlCode);
+	fs.writeFileSync(tmpPath, tplStr);
+	let htmlCode = require(tmpPath)._getHtml(data);
 
 	return htmlCode;
 }
@@ -83,30 +70,25 @@ function writeTmp(tpl, content, getHtml, data) {
 const getHtml = (tpl, data) => {
 	let tmpPath = getTmpPath(tpl);
 	let filePath = path.resolve(__dirname, '../', PATH.apps, host, PATH.view, '.', tpl);
-	// 获取模板内容
-	let content = fs.readFileSync(filePath.replace(/\?.*/g, ''), 'utf-8');
+
+	// watchFile
+	watchFile(filePath, () => {
+		delete require.cache[tmpPath];
+		return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
+	});
 
 	// 没有缓存的话就编译
 	if (!fs.existsSync(tmpPath)) {
-		return writeTmp(tpl, content, getHtml, data);
-	} else{
-		// watchFile
-		// watchFile(filePath, () => {
-		// 	return writeTmp(tpl, content, getHtml, data);
-		// });
-		return fs.readFileSync(tmpPath, 'utf-8');
+		return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
+	} else {
+		// 开发模式下禁用cache
+		ETC.debug && delete require.cache[tmpPath];
+		return require(tmpPath)._getHtml(data);
 	}
 }
 
 // 输出HTML
 const render = function(tpl, data = {}) {
-	// 根据请求获取controller、function、argument
-	routeObj = {
-		modName: this.modName,
-		modFun: this.modFun,
-		modParam: this.modParam
-	};
-
 	host = HOST[this.hostname];
 	['_JSLinks', '_CSSLinks', '_JSstack', '_CSSstack', '_JSmods'].map(item => {
 		if (!data.hasOwnProperty(item)) {
@@ -155,4 +137,7 @@ const render = function(tpl, data = {}) {
 	}
 }
 
-module.exports = render;
+module.exports = {
+	getHtml,
+	render
+};

@@ -1,7 +1,7 @@
 'use strict'
-//生产环境下静态资源应考虑cdn or Nginx
-require('colors');
+//生产环境下，应先将less编译、JS压缩传至cdn or Nginx，如果更改HTML的引入路径即可；这时不需要此静态文件服务器了
 require('../config/config')
+
 const cluster = require('cluster');
 const path = require('path');
 const http = require('http');
@@ -15,9 +15,9 @@ const mimeBuffer = mime.bufferTypeArr;
 
 // maxAge单位为秒
 const maxAge = 60 * 60 * 24 * 180;
-const cpuNums = +ETC.cpuNums || require('os').cpus().length;
-const port = +ETC.jserverPort || 8084;
-const ip = SITE.ip || '127.0.0.1';
+const cpuNums = +ETC.cpuNums;
+const port = +ETC.jserverPort;
+const ip = SITE.ip;
 
 let resHeader = {};
 
@@ -174,20 +174,18 @@ if (cluster.isMaster) {
 		cluster.fork();
 	}
 	cluster.on('death', worker => {
-		console.log('worker ' + worker.pid + ' died');
+		console.log(`worker ${worker.pid} died`);
 		cluster.fork();
 	})
 	cluster.on('exit', worker => {
-		let st = new Date;
-		st = st.getFullYear() + '-' + (st.getMonth() + 1) + '-' + st.getDate() + ' ' + st.toLocaleTimeString();
-		console.log('worker ' + worker.process.pid + ' died at:', st);
+		console.log(`worker worker.process.pid died`);
 		cluster.fork();
 	})
 } else {
 	http.createServer((req, res) => {
 		onRequest(req, res);
 	}).listen(port, () => {
-		console.log(`the Jserver has started on`, `${ip}:${port}`.green.underline, `at`, `${new Date().toLocaleString()}`.green.underline);
+		console.log(`the Jserver has started on ${ip}:${port} at ${new Date().toLocaleString()}`);
 	});
 }
 

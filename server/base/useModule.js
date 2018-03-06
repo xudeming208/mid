@@ -18,23 +18,16 @@ function useModule(modules) {
 
     if (!SITE.jsDefer) return
 
-    var blockKey = UTILS.md5(modules.toString()),
-        getAllModules = (mod) => {
+    modules.forEach((mod, index) => {
+        // merge
+        if (!ETC.merge) {
+            !this._JSLinks.includes(mod) && this._JSLinks.push(mod);
+            this._JSmods.length = 0;
+        } else {
             !this._JSmods.includes(mod) && this._JSmods.push(mod);
-            // merge
-            if (!ETC.merge) {
-                !this._JSLinks.includes(mod) && this._JSLinks.push(mod);
-                this._JSmods.length = 0;
-            }
+            this._JSLinks.length = 0;
         }
+    })
 
-    if (jsDepCache.hasOwnProperty(blockKey)) {
-        var jss = jsDepCache[blockKey]
-        if (false !== jss) jss.map(getAllModules)
-        return
-    }
-
-    jsDepCache[blockKey] = modules.length ? modules : false
-    modules.forEach(getAllModules)
 }
 module.exports = useModule;

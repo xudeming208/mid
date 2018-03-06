@@ -6,12 +6,8 @@
 %>
 <div><%= testData.s %></div>
 <%%>
-<p>this is a test page</p>
+<p>this is a test pages</p>
 
-<a href="javascript:;" id="btnDialog">点击我弹层confirm</a>
-<br>
-<br>
-<a href="javascript:;" id="btnDialog2">点击我弹层alert</a>
 
 
 <p>md5:<%= UTILS.md5('asdasd') %></p>
@@ -24,13 +20,6 @@
 
 <p>XSS可以看<a href="http://<%= this.ip %>:<%= this.port %>/index/xss/?xss=%27;alert(%27xss%27);%27" target="_blank">http://<%= this.ip %>:<%= this.port %>/index/xss/?xss=%27;alert(%27xss%27);%27</a></p>
 
-<p><a href="javascript:;" id="get">get方式ajax</a></p>
-
-<div id="ajaxContent"></div>
-
-<p><a href="javascript:;" id="post">post方式ajax</a></p>
-
-<p><a href="javascript:;" id="jsonp">post方式jsonp</a></p>
 
 <br>
 <br>
@@ -77,5 +66,5 @@
 		<? }) ?>
 	</ul>
 </script>
-<% this.useModule( [ 'page/index' ] ) %>
+<% this.useModule( [ 'page/test' ] ) %>
 <%#foot.html%>

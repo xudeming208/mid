@@ -79,7 +79,7 @@
 
 <br>
 <br>
-<%= requireWidget('widget/banner.html?widgetIndex=1',{
+<%= requireWidget('widget/banner.html',{
 	'model' : this,
 	'data':this.banner,
 	'config':{
@@ -91,8 +91,7 @@
 	}
 });%>
 <br>
-<!-- 当一个页面引用同一个Widget多次的时候，需要给模板增加唯一标识，如这里是根据widgetIndex区分的，你也可以利用别的参数区分，只要两者的模板路径字符串不一样即可 -->
-<%= requireWidget('widget/banner.html?widgetIndex=2',{
+<%= requireWidget('widget/banner.html',{
 	'model' : this,
 	'id':'widgetBanner2',
 	'class':'widget-banner2',

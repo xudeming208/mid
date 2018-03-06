@@ -3,11 +3,11 @@ const url = require('url');
 const path = require('path');
 const fs = require('fs');
 const querystring = require('querystring');
-// const watchFile = require("./base/watchFile");
+const watchFile = require("./base/watchFile");
 const getData = require('./base/getData');
 const useModule = require('./base/useModule');
 const redirectTo = require('./base/redirectTo');
-const render = require('./base/render');
+const render = require('./base/render').render;
 const ajaxTo = require('./base/ajaxTo');
 const utils = require('./base/utils');
 
@@ -86,10 +86,7 @@ const route = (req, res) => {
 		redirectTo,
 		render,
 		ajaxTo,
-		utils,
-		modName,
-		modFun,
-		modParam
+		utils
 	});
 
 	let mod = new Mod();
@@ -100,9 +97,9 @@ const route = (req, res) => {
 	global.UTILS = mod.utils();
 
 	// watchFile
-	// watchFile(modPath, () => {
-	// 	delete require.cache[modPath];
-	// });
+	watchFile(modPath, () => {
+		delete require.cache[modPath];
+	});
 
 	let toExe = () => {
 		if (fn && typeof fn === 'function') {
@@ -123,13 +120,13 @@ const route = (req, res) => {
 	// post
 	if ('POST' === req.method) {
 		let data = '';
-		req.addListener('data', chunk => {
+		req.on('data', chunk => {
 				data += chunk;
 				if (data.length > 1e6) {
-					req.connection.destroy()
+					req.connection.destroy();
 				}
 			})
-			.addListener('end', () => {
+			.on('end', () => {
 				data = querystring.parse(data);
 				req.__post = data;
 				toExe();

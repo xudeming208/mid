@@ -1,7 +1,5 @@
 # Config
 
-* defaultPage：
-	- 表示用真实IP地址（不是127.0.0.1或者localhost）访问的页面（PC or H5）,默认为H5
 * defaultMod：
 	- 表示默认查找controller的JS文件
 * server：
@@ -11,6 +9,6 @@
 * merge（未完成）：
 	- 表示是否合并CSS和JS；
 * debug：
-	- 此字段为true时：HTML、CSS和JS不压缩，静态资源不缓存（包括内存的缓存及浏览器的缓存）；
+	- 此字段为true时：HTML、CSS和JS不压缩，静态资源不缓存;
 * 生产环境：
-	- 生产环境下，应该是先merge和compress静态资源，然后传至CDN；
+	- 生产环境下，应先将less编译、JS压缩传至cdn or Nginx，如果更改HTML的引入路径即可；这时不需要此静态文件服务器了

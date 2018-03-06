@@ -30,24 +30,14 @@
 
 
 // https://github.com/paulmillr/chokidar
-// const chokidar = require('chokidar');
-// const watchFile = (filePath, onChg) => {
-//     let watcher = chokidar.watch(filePath, {
-//         persistent: true,
-//         interval: 100
-//     });
-//     watcher.on('change', onChg);
-// }
+const chokidar = require('chokidar');
+const watchFile = (filePath, onChg) => {
+    let watcher = chokidar.watch(filePath, {
+        persistent: true,
+        interval: 100
+    });
+    watcher.on('change', onChg);
+}
 
-
-
-// var watch = require('watch')
-// const watchFile = (filePath, onChg) => {
-// 	watch.createMonitor(filePath, {interval:10},function(monitor) {
-// 		monitor.on("changed", function(f, curr, prev) {
-// 			onChg()
-// 		})
-// 	})
-// }
 
 module.exports = watchFile;
