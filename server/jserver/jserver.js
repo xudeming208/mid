@@ -66,6 +66,8 @@ const loadFile = async (req, res, filePath, fileType) => {
 		res.end(err.toString());
 	});
 
+	// data = new Buffer(data);
+
 	if (fileType == 'less') {
 		fileType = 'css';
 	}

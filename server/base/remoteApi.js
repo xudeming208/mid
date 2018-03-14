@@ -1,7 +1,20 @@
 const http = require('http'),
 	querystring = require('querystring'),
-	cookie = require('./cookie.js');
+	cookie = require('./cookie.js'),
+	Agent = require('agentkeepalive');
+
+// const agent = new http.Agent({
+// 	maxSockets: 10
+// });
+
+// 对同一个服务器端发起的http请求默认最大连接数为5（超过5个的请求将进入连接池排队），这里修改默认值为ETC.maxSockets；如果设置为false，则代表不受限制
+// Agent对象的sockets和requests属性性分别表示当前连接池中使用中的连接数和处于等待状态的请求数，在业务中监视这两个值有助于发现业务状态的繁忙程程 。
+const agent = ETC.maxSockets ? new Agent({
+	maxSockets: ETC.maxSockets
+}) : false;
+
 const apiData = {};
+
 //remoteSingle
 const remoteSingle = (req, res, phpKey, remoteObj) => {
 	return new Promise((resolve, reject) => {
@@ -24,6 +37,7 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 			path = path[1];
 		}
 		let host = API[hostSource];
+
 		//config.json api中找不到host的时候
 		if (!host) {
 			console.error(`"${hostSource}": is not configed in config.json -> api`);
@@ -62,12 +76,15 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 				port: port,
 				headers: reqHeaders,
 				path: path,
-				// agent: false,
-				method: method,
+				agent: agent,
+				method: method
 			};
 		console.log(`\n'${phpKey}' API request options:\n `, options, `\n`);
 
 		let httpRequest = http.request(options, response => {
+			// 后面的Buffer.concat(buff)参数必须是Array, Buffer, or Uint8Array，所以这里不能设置utf-8
+			// response.setEncoding('utf8');
+
 			request_timer && clearTimeout(request_timer);
 			request_timer = null;
 
@@ -115,23 +132,38 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 					console.log(`WARNING: "${host}${path}" request time is ${runlong}ms > 500ms`);
 				}
 
-				// setCookie
-				// ['set-cookie'].forEach(proxyKey => {
-				// 	if (proxyKey in response.headers) {
-				// 		let pdVal = response.headers[proxyKey];
-				// 		if (!pdVal) {
-				// 			return
-				// 		}
-				// 		if ('set-cookie' == proxyKey) {
-				// 			let cookieSet = cookie.getHandler(req, res);
-				// 			pdVal.forEach((val) => {
-				// 				cookieSet.set(val);
-				// 			})
-				// 		} else {
-				// 			res.setHeader(proxyKey, pdVal);
-				// 		}
-				// 	}
-				// })
+				// test demo
+				// 注意cookie和域名和路径都相关，要想在chrome中看到种植的cookie，必须域名和路径都相同
+				// 如果cookie没设置path，其默认path为调用接口的页面URI；如下面的b，首页访问时，其path为/，127.0.0.1/test调用时，其path为/test
+				// response.headers['set-cookie'] = ['a=1;path=/', 'b=2', 'c=3'];
+
+				// 将后端response.headers传至前端，如果传递，后面的render.js、ajaxTo.js中的writeHead会覆盖后端的header字段
+				// 暂时只考虑传递cookie
+				['set-cookie'].forEach(proxyKey => {
+					if (proxyKey in response.headers) {
+						let pdVal = response.headers[proxyKey];
+						if (!pdVal) {
+							return;
+						}
+
+						// if ('set-cookie' == proxyKey) {
+
+							// 通过cookie.js中的res.setHeader('set-cookie', req.__addCookie)将后端的cookie传至浏览器中
+							// let cookieSet = cookie.getHandler(req, res);
+							// pdVal.forEach((val) => {
+							// 	cookieSet.set(val);
+							// })
+
+							// 不通过cookie.js传递cookie，通过res直接传递，这样不只是node调用接口能传递cookie，ajaxTo也可以传递
+							// 目前框架调用ajax都是通过/xxx/aj/xxx调用，如果不设置cookie的path，其默认path为/xxx/aj，要想首页看到ajax成功种植cookie，需要将cookie的path设置为/
+							res.setHeader('set-cookie', pdVal);
+
+						// 暂时只考虑传递cookie
+						// } else {
+						// 	res.setHeader(proxyKey, pdVal)
+						// }
+					}
+				})
 
 				resolve(result);
 				return;

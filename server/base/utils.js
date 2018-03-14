@@ -18,8 +18,8 @@ function utils() {
 		}
 	}
 	let moduleObj = {
-		loadModel: modName => {
-			return require(path.resolve(__dirname, '../', PATH.apps, HOST[self.hostname], PATH.model, modName));
+		getModelPath: modName => {
+			return path.resolve(__dirname, '../', PATH.apps, HOST[self.hostname], PATH.model, modName);
 		},
 		md5: str => {
 			return str ? cryto.createHash('md5').update(str.toString()).digest('hex') : '';

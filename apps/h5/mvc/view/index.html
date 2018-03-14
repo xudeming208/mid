@@ -13,7 +13,11 @@
 %>
 <div><%= testData.s %></div>
 <%%>
-<p>this is a test page</p>
+<p>`this is a test page ${testData.s}`</p>
+<p>${testData.s}</p>
+<p>\${testData.s}</p>
+<p>`this is a ${testData.s}`</p>
+<p>`this is a <%=testData.s%>`</p>
 
 <a href="javascript:;" id="btnDialog">点击我弹层confirm</a>
 <br>

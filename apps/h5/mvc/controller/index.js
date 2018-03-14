@@ -47,7 +47,14 @@ class Index {
 
 		};
 		//只要是获取URL中的参数都要防止XSS
-		let xss = this.req.__get.xss;
+		
+		// 如果是GET方式，参数的key重复了，其值会是数组，如：foo: ['bar', 'baz']，而POST方式不会是数组，而是后面的值覆盖前面的值，所以利用参数时要判断其值的类型，避免报错
+		// foo=bar&foo=baz
+		// var query = url.parse(req.url, true).query;
+		// {
+		// foo: ['bar', 'baz']
+		// }
+		let xss = Array.isArray(this.req.__get.xss) ? this.req.__get.xss[0] : this.req.__get.xss;
 		this.getData(php).then(data => {
 			//http://${data.ip}:${data.port}/index/xss/?xss=%27;alert(%27xss%27);%27
 			data.pageTitle = 'xss';

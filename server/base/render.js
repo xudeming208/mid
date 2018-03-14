@@ -14,6 +14,12 @@ const getTmpPath = tpl => {
 // complie
 const complie = (filePath, tpl, content, data) => {
 	let tplStr = '';
+	// 替换`字符
+	// 如果保留模板中的`
+	// content = content.replace(/`+/g,'\\`');
+	// 如果按照ES6语法
+	content = content.replace(/`+/g,'');
+
 	let arr = content.split('<%');
 	tplStr += "/* " + filePath + " */\n";
 	tplStr += "let getHtml = require('" + (isWindows ? __filename.replace(/\\/g, '/') : __filename) + "').getHtml;\n";
@@ -61,9 +67,6 @@ const complie = (filePath, tpl, content, data) => {
 
 	let tmpPath = getTmpPath(tpl);
 	fs.writeFileSync(tmpPath, tplStr);
-	let htmlCode = require(tmpPath)._getHtml(data);
-
-	return htmlCode;
 }
 
 // 获取HTML
@@ -74,17 +77,15 @@ const getHtml = (tpl, data) => {
 	// watchFile
 	watchFile(filePath, () => {
 		delete require.cache[tmpPath];
-		return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
+		complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
 	});
 
 	// 没有缓存的话就编译
 	if (!fs.existsSync(tmpPath)) {
-		return complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
-	} else {
-		// 开发模式下禁用cache
-		ETC.debug && delete require.cache[tmpPath];
-		return require(tmpPath)._getHtml(data);
+		complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
 	}
+
+	return require(tmpPath)._getHtml(data);
 }
 
 // 输出HTML
@@ -123,6 +124,7 @@ const render = function(tpl, data = {}) {
 			'X-Xss-Protection': '1; mode=block',
 			'X-Content-Type-Options': 'nosniff',
 			// 'Access-Control-Allow-Origin': '*',
+			// 'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
 			'Server': ETC.server
 		});
 		!ETC.debug && (html = html.replace(/[\r\n\t]+/g, ''));

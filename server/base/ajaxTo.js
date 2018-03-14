@@ -38,18 +38,27 @@ function ajaxTo(php, args) {
 
 	remoteApi(req, res, phpObj).then(data => {
 		data = data[args];
-		res.writeHead(200, {
+
+		// set-cookie在remoteApi.js中设置
+
+		let headObj = {
 			'Content-Type': 'text/plain',
 			'Cache-Control': 'no-cache,no-store',
+			'Content-length': Buffer.byteLength(JSON.stringify(data), 'utf-8'),
 			// 'Access-Control-Allow-Origin': '*',
 			'Server': ETC.server
-		})
+		}
 
 		//for jsonp
 		if (req.__get.callback) {
-			res.end(req.__get.callback + '(' + JSON.stringify(data) + ')');
+			let jsonpData = req.__get.callback + '(' + JSON.stringify(data) + ')';
+			headObj['Content-length'] = Buffer.byteLength(jsonpData, 'utf-8');
+
+			res.writeHead(200, headObj);
+			res.end(jsonpData);
 			return;
 		}
+		res.writeHead(200, headObj);
 		res.end(JSON.stringify(data));
 	})
 }

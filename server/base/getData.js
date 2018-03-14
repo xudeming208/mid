@@ -1,7 +1,15 @@
 const remoteApi = require('./remoteApi');
+const watchFile = require("./watchFile");
 
 async function getData(php) {
-	const loadModel = UTILS.loadModel('./loadModel');
+	const modelPath = UTILS.getModelPath('./loadModel');
+	const loadModel = require(modelPath);
+
+	// watchFile
+	watchFile(modelPath, () => {
+		delete require.cache[modelPath];
+	});
+
 	let self = this,
 		req = self.req,
 		res = self.res;
@@ -17,6 +25,7 @@ async function getData(php) {
 		return await {};
 	}
 
+	// 将model中的php assign
 	loadModel(php);
 	// console.dir(php)
 
@@ -27,7 +36,7 @@ async function getData(php) {
 	// return await remoteApi(req, res, php).catch(err => {
 	// 	console.error(err);
 	// });
-	
+
 	try {
 		return await remoteApi(req, res, php);
 	} catch (err) {

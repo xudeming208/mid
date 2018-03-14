@@ -28,13 +28,18 @@ const route = (req, res) => {
 		reqQuery = reqUrl.query || {};
 
 	// 获取参数
+	// 如果是GET方式，参数的key重复了，其值会是数组，而POST方式不会是数组，而是后面的值覆盖前面的值，所以利用参数时要判断其值的类型，避免报错
+	// foo=bar&foo=baz
+	// var query = url.parse(req.url, true).query;
+	// {
+	// foo: ['bar', 'baz']
+	// }
+
 	req.__get = {};
 	req.__post = {}
 	for (let key in reqQuery) {
 		req.__get[key.replace(/[<>%\'\"]/g, '')] = reqQuery[key];
 	}
-
-	console.log(`query: `, req.__get);
 
 	/*
 	url 格式 [/ 地址/...]模块文件名/方法名/[参数] 
@@ -77,6 +82,11 @@ const route = (req, res) => {
 
 	let Mod = require(modPath);
 
+	// watchFile
+	watchFile(modPath, () => {
+		delete require.cache[modPath];
+	});
+
 	Object.assign(Mod.prototype, {
 		hostname,
 		req,
@@ -96,11 +106,6 @@ const route = (req, res) => {
 	// UTILS(常用的工具函数集合)，代码和模板中都可以使用，例如：UTILS.md5(str)
 	global.UTILS = mod.utils();
 
-	// watchFile
-	watchFile(modPath, () => {
-		delete require.cache[modPath];
-	});
-
 	let toExe = () => {
 		if (fn && typeof fn === 'function') {
 			try {
@@ -119,19 +124,29 @@ const route = (req, res) => {
 
 	// post
 	if ('POST' === req.method) {
-		let data = '';
+		// let str = '';
+		let arr = [];
 		req.on('data', chunk => {
-				data += chunk;
-				if (data.length > 1e6) {
-					req.connection.destroy();
-				}
+				// str += chunk;
+				// if (data.length > 1e6) {
+				// 	req.connection.destroy();
+				// }
+
+				arr.push(chunk);
 			})
 			.on('end', () => {
-				data = querystring.parse(data);
-				req.__post = data;
+				// str = querystring.parse(str);
+				// req.__post = str;
+
+				let postData = querystring.parse(Buffer.concat(arr).toString());
+				req.__post = postData;
+				console.log(`POST query: `, req.__post);
+
 				toExe();
 			})
 	} else {
+		console.log(`GET query: `, req.__get);
+
 		toExe();
 	}
 }
