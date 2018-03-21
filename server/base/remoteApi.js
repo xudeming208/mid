@@ -46,7 +46,9 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 		reqHeaders.reqHost = req.headers.host;
 		reqHeaders.requrl = req.url;
 		reqHeaders.targetEnd = hostSource;
-		let proxyDomain = ['XREF', 'seashell', 'clientIp', 'referer', 'cookie', 'user-agent', 'async'];
+
+		// 将请求头中的字段传递到后端接口
+		let proxyDomain = ['clientIp', 'referer', 'cookie', 'user-agent'];
 		proxyDomain.forEach((item) => {
 			if (req.headers.hasOwnProperty(item)) {
 				reqHeaders[item] = req.headers[item];
@@ -62,22 +64,20 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 		} else {
 			reqHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
 		}
-		// reqHeaders['Content-Type'] = 'text/html; charset=utf-8';
 
 		reqHeaders['Content-Length'] = Buffer.byteLength(remoteData, 'utf8');
-
-		// console.log('reqHeaders:', reqHeaders);
 
 		let startTime = Date.now(),
 			request_timer,
 			options = {
 				protocol: protocol,
+				method: method,
 				host: host,
 				port: port,
-				headers: reqHeaders,
 				path: path,
-				agent: agent,
-				method: method
+				// timeout: ETC.apiTimeOut,
+				headers: reqHeaders,
+				agent: agent
 			};
 		console.log(`\n'${phpKey}' API request options:\n `, options, `\n`);
 
@@ -133,12 +133,9 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 				}
 
 				// test demo
-				// 注意cookie和域名和路径都相关，要想在chrome中看到种植的cookie，必须域名和路径都相同
-				// 如果cookie没设置path，其默认path为调用接口的页面URI；如下面的b，首页访问时，其path为/，127.0.0.1/test调用时，其path为/test
 				// response.headers['set-cookie'] = ['a=1;path=/', 'b=2', 'c=3'];
 
-				// 将后端response.headers传至前端，如果传递，后面的render.js、ajaxTo.js中的writeHead会覆盖后端的header字段
-				// 暂时只考虑传递cookie
+				// 暂时只考虑将后端接口响应头中的cookie传递至前端
 				['set-cookie'].forEach(proxyKey => {
 					if (proxyKey in response.headers) {
 						let pdVal = response.headers[proxyKey];
@@ -155,7 +152,6 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 							// })
 
 							// 不通过cookie.js传递cookie，通过res直接传递，这样不只是node调用接口能传递cookie，ajaxTo也可以传递
-							// 目前框架调用ajax都是通过/xxx/aj/xxx调用，如果不设置cookie的path，其默认path为/xxx/aj，要想首页看到ajax成功种植cookie，需要将cookie的path设置为/
 							res.setHeader('set-cookie', pdVal);
 
 						// 暂时只考虑传递cookie

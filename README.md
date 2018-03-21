@@ -63,7 +63,38 @@ server {
 现代网站强制建议使用 HTTPS 访问，这样可以提供网站内容的安全性，避免内容被劫持、监听、篡改等问题。如果不愿意支付证书的费用，可以使用 Let's Encrypt 提供的免费 SSL/TLS 证书，可以参见文章 [Let's Encrypt](https://imququ.com/post/letsencrypt-certificate.html)，[免费好用的 HTTPS 证书](https://imququ.com/post/letsencrypt-certificate.html)。
 
 # HTTP2
-暂时不推荐使用于生产环境
+	- 暂时不推荐使用于生产环境
+
+#####http2 nginx配置实例：
+
+```javascript
+#rewrite https/http2 
+server {
+    listen       80;
+    server_name h5.fedevot.test.com;
+    rewrite ^(.*) https://h5.fedevot.test.com$1 permanent;
+}
+
+#http2
+server {
+    listen 443 ssl http2 fastopen=3 reuseport;
+    server_name h5.fedevot.test.com;
+
+    #key/ca.cer => /usr/local/etc/nginx/key
+    
+    ssl_certificate  key/ca.cer;
+    ssl_certificate_key key/ca.key;
+    ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers     AES128+EECDH:AES128+EDH:!aNULL;
+    ssl_session_cache shared:SSL:10m;
+
+    location / {
+        proxy_pass http://127.0.0.1:8087;
+    }
+}
+```
+
 
 # Config
 
