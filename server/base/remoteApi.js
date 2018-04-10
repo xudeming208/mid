@@ -3,12 +3,6 @@ const http = require('http'),
 	cookie = require('./cookie.js'),
 	Agent = require('agentkeepalive');
 
-// const agent = new http.Agent({
-// 	maxSockets: 10
-// });
-
-// 对同一个服务器端发起的http请求默认最大连接数为5（超过5个的请求将进入连接池排队），这里修改默认值为ETC.maxSockets；如果设置为false，则代表不受限制
-// Agent对象的sockets和requests属性性分别表示当前连接池中使用中的连接数和处于等待状态的请求数，在业务中监视这两个值有助于发现业务状态的繁忙程程 。
 const agent = ETC.maxSockets ? new Agent({
 	maxSockets: ETC.maxSockets
 }) : false;

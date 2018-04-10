@@ -65,7 +65,8 @@ server {
 # HTTP2
 	- 暂时不推荐使用于生产环境
 
-#####http2 nginx配置实例：
+
+#### http2 nginx配置实例：
 
 ```javascript
 #rewrite https/http2 

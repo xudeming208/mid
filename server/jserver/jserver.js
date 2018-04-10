@@ -1,5 +1,5 @@
 'use strict'
-//生产环境下，应先将less编译、JS压缩传至cdn or Nginx，如果更改HTML的引入路径即可；这时不需要此静态文件服务器了
+//生产环境下，应先在本地将less编译、JS压缩合并等传至cdn or Nginx，如果更改HTML的引入路径即可；这时不需要此静态文件服务器了
 require('../config/config')
 
 const cluster = require('cluster');
@@ -72,6 +72,8 @@ const loadFile = async (req, res, filePath, fileType) => {
 
 	let contentType = mimeTypes[fileType] || 'text/plain';
 
+	// 设置Content-Length可以让浏览器提前知道数据的多少，而无需自己去实时检测数据是否传输完毕，提高其效率
+	// 如果没写Content-Length，浏览器默认为Transfer-Encoding:chunked，代表以流的方式传递数据，这两响应头不能共存
 	resHeader['Content-Length'] = Buffer.byteLength(data, 'utf-8');
 	resHeader['Content-Type'] = contentType + ';charset=utf-8';
 	res.writeHead(200, resHeader);
@@ -84,7 +86,8 @@ const statFile = (req, res, filePath, fileType) => {
 
 	// 开发模式下，禁用cache
 	if (ETC.debug) {
-		resHeader['Expires'] = '0';
+		// resHeader['Expires'] = new Date(Date.now() - 1).toUTCString();
+		resHeader['Expires'] = 0;
 		resHeader['Cache-Control'] = 'no-cache,no-store';
 		return loadFile(req, res, filePath, fileType);
 	}
