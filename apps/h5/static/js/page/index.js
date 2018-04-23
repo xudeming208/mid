@@ -4,7 +4,7 @@ fml.define("page/index", ['component/shareTmp', 'widget/dialog', 'component/util
 		dialog = require('widget/dialog'),
 		utils = require('component/utils');
 
-	console.log('md5:', utils.md5('asdasd'))
+	console.log('md5:', utils.md5('test'))
 
 	console.log('os:', utils.os)
 

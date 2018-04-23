@@ -74,7 +74,7 @@ UTILS.md5()
 
 ## 实时监控，错误分析和报警（keymetrics，OneAPM，听云，Easy-Monitor等）
 
-## 性能分析工具node-clinic
+## 性能分析工具node-clinic,speedscurve
 
 ## 压测 （压测工具有ab,webbench,siege，wrk等，http://www.tuicool.com/articles/riyMJnu）
 

@@ -140,13 +140,10 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 						// if ('set-cookie' == proxyKey) {
 
 							// 通过cookie.js中的res.setHeader('set-cookie', req.__addCookie)将后端的cookie传至浏览器中
-							// let cookieSet = cookie.getHandler(req, res);
-							// pdVal.forEach((val) => {
-							// 	cookieSet.set(val);
-							// })
-
-							// 不通过cookie.js传递cookie，通过res直接传递，这样不只是node调用接口能传递cookie，ajaxTo也可以传递
-							res.setHeader('set-cookie', pdVal);
+							let cookieSet = cookie.getHandler(req, res);
+							pdVal.forEach((val) => {
+								cookieSet.set(val);
+							})
 
 						// 暂时只考虑传递cookie
 						// } else {
