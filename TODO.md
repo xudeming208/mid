@@ -71,12 +71,13 @@ UTILS.md5()
 
 ## eslint
 
-
+https://github.com/xudeming208/node-in-debugging
 ## 实时监控，错误分析和报警（keymetrics，OneAPM，听云，Easy-Monitor等）
 
-## 性能分析工具node-clinic,speedscurve
+## 性能分析工具node-clinic,speedscurve,https://www.cnblogs.com/hustskyking/p/how-to-build-a-https-server.html
 
 ## 压测 （压测工具有ab,webbench,siege，wrk等，http://www.tuicool.com/articles/riyMJnu）
+loadtest  https://help.aliyun.com/document_detail/64011.html?spm=a2c4g.11186623.6.565.lIf4RW
 
 
 ## 部署问题

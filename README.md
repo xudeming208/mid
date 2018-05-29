@@ -24,7 +24,7 @@
 # Usage
 详细查看[DOC.md](https://github.com/xudeming208/mid/blob/master/DOC.md)
 
-# Nginx
+# Nginx(转自[thinkjs](https://thinkjs.org/))
 虽然 Node.js 自身可以直接创建 HTTP(S) 服务，但生产环境不建议直接把 Node 服务可以对外直接访问，而是在前面用 WebServer（如：nginx） 来挡一层，这样有多个好处：
 
 * 可以更好做负载均衡，比如：同一个项目，启动多个端口的服务，用 nginx 做负载
@@ -59,7 +59,7 @@ server {
 **ps:**
 	当然你也可以以80端口启动node服务，然后用sudo启动(1024以下端口需要sudo)，但是不推荐这样。
 
-# HTTPS
+# HTTPS(转自[thinkjs](https://thinkjs.org/))
 现代网站强制建议使用 HTTPS 访问，这样可以提供网站内容的安全性，避免内容被劫持、监听、篡改等问题。如果不愿意支付证书的费用，可以使用 Let's Encrypt 提供的免费 SSL/TLS 证书，可以参见文章 [Let's Encrypt](https://imququ.com/post/letsencrypt-certificate.html)，[免费好用的 HTTPS 证书](https://imququ.com/post/letsencrypt-certificate.html)。
 
 # HTTP2
@@ -91,7 +91,7 @@ server {
     ssl_session_cache shared:SSL:10m;
 
     location / {
-        proxy_pass http://127.0.0.1:8087;
+        proxy_pass http://127.0.0.1:8083;
     }
 }
 ```

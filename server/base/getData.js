@@ -21,7 +21,7 @@ async function getData(php) {
 			'Cache-Control': 'no-cache,no-store'
 		})
 		res.end('Oops! some errors has happend!');
-		console.error(`php is required and must be Object!`);
+		console.error(`php is required and must be an Object!`);
 		return await {};
 	}
 
