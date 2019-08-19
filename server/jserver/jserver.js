@@ -1,6 +1,7 @@
 'use strict'
 //生产环境下，应先在本地将less编译、JS压缩合并等传至cdn or Nginx，如果更改HTML的引入路径即可；这时不需要此静态文件服务器了
-require('../config/config')
+require('../config/config');
+require('../base/log');
 
 const cluster = require('cluster');
 const path = require('path');

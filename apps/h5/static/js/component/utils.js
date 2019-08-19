@@ -113,15 +113,16 @@ fml.define('component/utils', ['component/md5'], function(require, exports) {
 		},
 		//获取参数
 		getQueryString: function(name) {
-			var searchStr = window.location.search.substr(1);
-			if (window.URLSearchParams) {
-				var params = new URLSearchParams(searchStr);
-				return params.get(name);
-			}
-			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-			var r = searchStr.match(reg);
-			if (r != null) return decodeURIComponent(r[2]);
-			return null;
+			// var searchStr = window.location.search.substr(1);
+			// if (window.URLSearchParams) {
+			// 	var params = new URLSearchParams(searchStr);
+			// 	return params.get(name);
+			// }
+			// var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+			// var r = searchStr.match(reg);
+			// if (r != null) return decodeURIComponent(r[2]);
+			// return null;
+			return new URL(location.href).searchParams.get(name);
 		},
 		os: (function() {
 			var os = {},

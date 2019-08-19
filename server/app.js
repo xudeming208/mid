@@ -1,5 +1,6 @@
 'use strict'
 require('./config/config')
+require('./base/log');
 
 const cluster = require('cluster');
 const http = require('http');

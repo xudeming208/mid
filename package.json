@@ -14,12 +14,12 @@
     "debug": "tail -f logs/child-err.log"
   },
   "dependencies": {
-    "agentkeepalive": "^3.4.1",
-    "chokidar": "^2.0.2"
+    "agentkeepalive": "3.4.1",
+    "chokidar": "2.0.2"
   },
   "devDependencies": {
-    "less": "^2.7.3",
-    "uglify-js": "^2.8.29"
+    "less": "2.7.3",
+    "uglify-js": "2.8.29"
   },
   "keywords": [
     "nodejs",

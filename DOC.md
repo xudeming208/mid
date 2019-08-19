@@ -64,6 +64,7 @@ mid
 |	|	|——cookie.js 		
 |	|	|——redirectTo.js			#重定向
 |	|	|——render.js				#渲染
+|	|	|——log.js					#本地日志
 |	|	|——watchFile.js				#监听文件变化
 |	|	|——...
 |	|——config					#配置目录
@@ -77,7 +78,7 @@ mid
 |	|——app.js					#入口
 |	|——router.js					#路由处理
 |——node_modules	
-|——logs							#日志目录
+|——logs							#日志目录(pm2的日志)
 |——tmp							#模板引擎缓存文件目录
 |——.gitignore					
 |——DOC.md 						#框架使用文档
