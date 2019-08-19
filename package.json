@@ -10,8 +10,8 @@
     "start": "pm2 start pm2.json",
     "stop": "rm -rf tmp/* && rm -rf logs/* && pm2 delete pm2.json",
     "restart": "npm stop && npm start",
-    "log": "tail -f logs/child-out.log",
-    "debug": "tail -f logs/child-err.log"
+    "log": "npm start && tail -f logs/child-out.log",
+    "debug": "npm start && tail -f logs/child-err.log"
   },
   "dependencies": {
     "agentkeepalive": "3.4.1",

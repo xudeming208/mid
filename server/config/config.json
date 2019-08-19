@@ -30,6 +30,7 @@
 		"port": 8083
 	},
 	"host": {
+		"localhost": "h5",
 		"127.0.0.1": "h5",
 		"h5.fedevot.test.com": "h5",
 		"pc.fedevot.test.com": "pc",

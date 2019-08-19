@@ -24,7 +24,7 @@ const init = () => {
 		delete config.host[hostKeys[hostLen - 1]];
 	}
 
-	// 更改config的相关配置
+	// 更改config的相关配置。如果想访问PC页，可以将此h5修改为pc，这样就可以通过IP地址访问PC页了
 	config.host[ip] = 'h5';
 	config.site.staticHost = `http://${ip}:${ETC.jserverPort}`;
 	config.site.ip = ip;
@@ -59,7 +59,7 @@ if (cluster.isMaster) {
 } else {
 	http.createServer((req, res) => {
 		router(req, res);
-	}).listen(port, () => {
+	}).listen(port, '0.0.0.0', () => {
 		console.log(`the Server has started on ${ip}:${port} at ${new Date().toLocaleString()}`);
 	});
 }

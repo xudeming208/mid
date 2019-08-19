@@ -63,8 +63,14 @@ const route = (req, res) => {
 
 	console.log(`hostname: ${hostname}`);
 
-	let controllerPath = path.resolve(__dirname, PATH.apps, HOST[hostname], PATH.controller),
+	let controllerPath = '';
+	let modPath = '';
+	try {
+		controllerPath = path.resolve(__dirname, PATH.apps, HOST[hostname], PATH.controller);
 		modPath = path.resolve(controllerPath, modName + '.js');
+	} catch (error) {
+		console.error(error);
+	}
 
 	// notFoundFun
 	let notFoundFun = modPath => {

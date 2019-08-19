@@ -188,7 +188,7 @@ if (cluster.isMaster) {
 } else {
 	http.createServer((req, res) => {
 		onRequest(req, res);
-	}).listen(port, () => {
+	}).listen(port, '0.0.0.0', () => {
 		console.log(`the Jserver has started on ${ip}:${port} at ${new Date().toLocaleString()}`);
 	});
 }
