@@ -16,11 +16,10 @@
 	- mid-cli是mid框架脚手架
 	- 默认打开的是H5页。也可以通过以下方式访问：
       1. 设置host
-            ```javascript
-            127.0.0.1  pc.fedevot.test.com
-            127.0.0.1  h5.fedevot.test.com
-
-            ```
+      ```javascript
+      127.0.0.1  pc.fedevot.test.com
+      127.0.0.1  h5.fedevot.test.com
+      ```
       2. h5.fedevot.test.com => H5页；pc.fedevot.test.com => PC页
 1. sudo npm i -g pm2
 2. sudo npm i -g mid-cli --verbose
