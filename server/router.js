@@ -69,7 +69,10 @@ const route = (req, res) => {
 		controllerPath = path.resolve(__dirname, PATH.apps, HOST[hostname], PATH.controller);
 		modPath = path.resolve(controllerPath, modName + '.js');
 	} catch (error) {
-		console.error(error);
+		console.error(JSON.stringify({
+			trace: console.trace(),
+			error: error.toString()
+		}));
 	}
 
 	// notFoundFun

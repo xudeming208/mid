@@ -1,14 +1,10 @@
 // 本地日志功能
-// 要输出日志，用户只需调用console.error方法即可。此方法已经通过下面重写了：
-
-// const log = require('./base/log');
-// console.meerror = console.error;
-// global.console.error = (...arg) => {
-//   // 输出本来的error
-//   console.meerror.call(global, arg);
-//   // 写进本地日志文件
-//   log(arg);
-// }
+// 要输出日志，用户只需调用console.error方法即可(此方法已经在下面重写了)。如果要输出trace，可以在文件中：
+	
+	// console.error(JSON.stringify({
+	// 	trace: console.trace(),
+	// 	error: error.toString()
+	// }));
 
 // mid本地日志在哪？
 // 通过查看本地日志，可以了解mid的错误信息等：
