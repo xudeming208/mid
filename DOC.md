@@ -201,10 +201,8 @@ fml.define("page/test", [], function(require, exports) {
 	  - npm run debug  // debug模式
 	5. 打开浏览器，输入：`127.0.0.1:8083/test`，即可访问H5页了。也可以通过以下方式访问：
 	  1. 设置host
-	  ```javascript
-	  127.0.0.1  pc.fedevot.test.com
-	  127.0.0.1  h5.fedevot.test.com
-	  ```
+	    127.0.0.1  pc.fedevot.test.com
+	    127.0.0.1  h5.fedevot.test.com
 	  2. h5.fedevot.test.com => H5页；pc.fedevot.test.com => PC页
 >如果遇见不能启动，试着kill pm2试下 => sudo pkill -9 pm2
 
