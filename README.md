@@ -1,4 +1,15 @@
-# mid
+<h1 align="center">
+  mid
+</h1>
+<br>
+<p align="center">
+  <a href="https://travis-ci.org/xudeming208/mid"><img src="https://travis-ci.org/xudeming208/mid.svg?branch=master" alt="Travis Status"></a>
+  <a href="https://github.com/xudeming208/mid/graphs/contributors"><img src="https://img.shields.io/github/contributors/xudeming208/mid.svg" alt="Contributors"></a>
+  <a href="https://www.npmjs.com/package/mid"><img src="https://img.shields.io/github/license/xudeming208/mid.svg" alt="License"></a>
+</p>
+
+
+# 介绍
 	- 用nodejs开发的一套基于URI的 MVC 框架，适用于前后端分离项目。
 	- 后端渲染；运用nodejs + es6(7) + component + less
 	- 采用集群cluster模式（基于PM2）
