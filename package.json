@@ -7,7 +7,6 @@
     "email": "xudeming208@126.com"
   },
   "scripts": {
-    "travis": "node ./server/app.js && node ./server/jserver/jserver.js",
     "start": "pm2 start pm2.json",
     "stop": "rm -rf tmp/* && rm -rf logs/* && pm2 delete pm2.json",
     "restart": "npm stop && npm start",
