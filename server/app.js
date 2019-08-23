@@ -1,6 +1,12 @@
 'use strict'
 require('./config/config')
-require('./base/log');
+const log = require('fe-logs');
+log.setName('.midLog.txt');
+log.setMode('error');
+
+// log会打印4遍，因为mid采用了pm2集群模式
+// log.info('this is a log.info log');
+// console.error('this is a console.error log');
 
 const cluster = require('cluster');
 const http = require('http');
@@ -33,7 +39,10 @@ const init = () => {
 	// 重启服务清除缓存
 	exec(['cd .. ', 'rm -rf tmp/*', 'rm -rf logs/*'].join(' && '), (error, stdout, stderr) => {
 		if (error) {
-			console.error(error);
+			console.error(JSON.stringify({
+				trace: console.trace(),
+				error: error.toString()
+			}));
 		}
 		console.log(`Clear cache finised`);
 	});
@@ -64,7 +73,10 @@ if (cluster.isMaster) {
 	});
 }
 
-process.on('uncaughtException', (err, promise) => {
-	console.error(err);
+process.on('uncaughtException', (error, promise) => {
+	console.error(JSON.stringify({
+		trace: console.trace(),
+		error: error.toString()
+	}));
 	process.exit(1);
 })

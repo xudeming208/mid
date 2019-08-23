@@ -52,7 +52,11 @@ exports.getHandler = function ( req, res ) {
             try {
                 res.setHeader( 'set-cookie', req.__addCookie )
             } catch ( e ) {
-                console.error( 'Cookie unwrite', name, e )
+                console.error(JSON.stringify({
+                    trace: console.trace(),
+                    errorMsg: 'Cookie unwrite' + name,
+                    error: e.toString()
+                }));
             }
         }
     }

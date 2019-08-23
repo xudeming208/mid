@@ -15,7 +15,12 @@ const route = (req, res) => {
 	try {
 		var reqUrl = url.parse('http://' + req.headers.host + req.url, true);
 	} catch (err) {
-		console.error(`Route Parse Error: ${req.url}`);
+		console.error(JSON.stringify({
+			trace: console.trace(),
+			errorMsg: 'Route Parse Error: ' + req.url,
+			error: error.toString()
+		}));
+
 		res.writeHead(500, {
 			'Content-Type': 'text/plain'
 		});

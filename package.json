@@ -15,7 +15,8 @@
   },
   "dependencies": {
     "agentkeepalive": "3.4.1",
-    "chokidar": "2.0.2"
+    "chokidar": "2.0.2",
+    "fe-logs": "1.0.8"
   },
   "devDependencies": {
     "less": "2.7.3",

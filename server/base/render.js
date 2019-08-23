@@ -129,8 +129,12 @@ const render = function(tpl, data = {}) {
 		});
 		!ETC.debug && (html = html.replace(/[\r\n\t]+/g, ''));
 		this.res.end(html);
-	} catch (e) {
-		console.error(e);
+	} catch (error) {
+		console.error(JSON.stringify({
+			trace: console.trace(),
+			error: error.toString()
+		}));
+		
 		this.res.writeHead(503, {
 			'Content-Type': 'text/plain',
 			'Cache-Control': 'no-cache,no-store'

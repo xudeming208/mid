@@ -1,7 +1,9 @@
 'use strict'
 //生产环境下，应先在本地将less编译、JS压缩合并等传至cdn or Nginx，如果更改HTML的引入路径即可；这时不需要此静态文件服务器了
 require('../config/config');
-require('../base/log');
+const log = require('fe-logs');
+log.setName('.midLog.txt');
+log.setMode('error');
 
 const cluster = require('cluster');
 const path = require('path');
@@ -94,9 +96,12 @@ const statFile = (req, res, filePath, fileType) => {
 	}
 
 	// 读取文件的最后修改时间
-	fs.stat(filePath, (err, stat) => {
-		if (err) {
-			console.error(err);
+	fs.stat(filePath, (error, stat) => {
+		if (error) {
+			console.error(JSON.stringify({
+				trace: console.trace(),
+				error: error.toString()
+			}));
 		}
 		let lastModified = stat.mtime.toUTCString(),
 			ifModifiedSince = 'If-Modified-Since'.toLowerCase(),
@@ -193,7 +198,10 @@ if (cluster.isMaster) {
 	});
 }
 
-process.on('uncaughtException', (err, promise) => {
-	console.error(err);
+process.on('uncaughtException', (error, promise) => {
+	console.error(JSON.stringify({
+		trace: console.trace(),
+		error: error.toString()
+	}));
 	process.exit(1);
 })

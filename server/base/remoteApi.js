@@ -106,14 +106,23 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 					let result_orgin = result;
 					try {
 						result = result ? (JSON.parse(result) || result) : false;
-					} catch (err) {
-						console.error('error', 'api', path, 'API ERROR:', result_orgin);
+					} catch (error) {
+						console.error(JSON.stringify({
+							trace: console.trace(),
+							errorMsg: 'error api ' + path + ' API ERROR: ' + result_orgin,
+							error: error.toString()
+						}));
 					}
 				} else {
 					try {
 						result = result ? (JSON.parse(result) || result) : false;
 					} catch (err) {
-						console.error('error', 'api', path, 'API ERROR:', result);
+						console.error(JSON.stringify({
+							trace: console.trace(),
+							errorMsg: 'error api ' + path + ' API ERROR: ' + result,
+							error: error.toString()
+						}));
+						
 						result = false;
 					}
 				}
@@ -155,8 +164,12 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 				resolve(result);
 				return;
 			});
-		}).on('error', e => {
-			console.error('error', 'api', path, e.message);
+		}).on('error', error => {
+			console.error(JSON.stringify({
+				trace: console.trace(),
+				error: error.toString()
+			}));
+
 			resolve(false);
 		});
 		request_timer = setTimeout(() => {
@@ -172,8 +185,11 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 		httpRequest.end();
 	}).then(data => {
 		apiData[phpKey] = data;
-	}).catch(err => {
-		console.error(err);
+	}).catch(error => {
+		console.error(JSON.stringify({
+			trace: console.trace(),
+			error: error.toString()
+		}));
 	});
 }
 

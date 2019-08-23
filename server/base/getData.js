@@ -21,7 +21,12 @@ async function getData(php) {
 			'Cache-Control': 'no-cache,no-store'
 		})
 		res.end('Oops! some errors has happend!');
-		console.error(`php is required and must be an Object!`);
+
+		console.error(JSON.stringify({
+			trace: console.trace(),
+			error: 'php is required and must be an Object!'
+		}));
+		
 		return await {};
 	}
 
@@ -39,8 +44,11 @@ async function getData(php) {
 
 	try {
 		return await remoteApi(req, res, php);
-	} catch (err) {
-		console.error(err);
+	} catch (error) {
+		console.error(JSON.stringify({
+			trace: console.trace(),
+			error: error.toString()
+		}));
 	}
 
 }

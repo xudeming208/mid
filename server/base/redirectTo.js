@@ -16,8 +16,12 @@ function redirectTo(url, proxyArgs) {
 			'Pragma': 'no-cache'
 		});
 		this.res.end('');
-	} catch (err) {
-		console.error('write res error', err, new Date, '')
+	} catch (error) {
+		console.error(JSON.stringify({
+			trace: console.trace(),
+			errorMsg: 'write res error',
+			error: error.toString()
+		}));
 	}
 
 	return false
