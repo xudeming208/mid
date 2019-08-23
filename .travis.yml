@@ -14,4 +14,4 @@ cache:
 install:
     - npm install
 script:
-    - npm run start
+    - npm run travis
