@@ -93,7 +93,7 @@ fml.define('component/utils', ['component/md5'], function(require, exports) {
 			for (var key in obj) {
 				if (o[key] != obj[key]) {
 					if (typeof(obj[key]) == 'object') {
-						o[key] = objClone(obj[key]);
+						o[key] = utils.deepClone(obj[key]);
 					} else {
 						o[key] = obj[key];
 					}

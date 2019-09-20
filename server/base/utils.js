@@ -99,7 +99,7 @@ function utils() {
 			for (let key in obj) {
 				if (o[key] != obj[key]) {
 					if (typeof(obj[key]) == 'object') {
-						o[key] = objClone(obj[key]);
+						o[key] = moduleObj.deepClone(obj[key]);
 					} else {
 						o[key] = obj[key];
 					}
