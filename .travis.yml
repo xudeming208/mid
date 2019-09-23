@@ -1,0 +1,19 @@
+sudo: false
+dist: trusty
+language: node_js
+node_js:
+    - "7.6.0"
+
+branches:
+  only:
+    - master
+cache:
+  directories:
+    - node_modules
+
+before_install:
+    - npm install -g pm2
+install:
+    - npm install
+script:
+    - npm run start
