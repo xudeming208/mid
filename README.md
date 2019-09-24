@@ -3,6 +3,7 @@
 </h1>
 <br>
 <p align="center">
+  <a href="https://travis-ci.org/xudeming208/mid-cli"><img src="https://travis-ci.org/xudeming208/mid-cli.svg?branch=master" alt="Travis Status"></a>
   <a href="https://github.com/xudeming208/mid/graphs/contributors"><img src="https://img.shields.io/github/contributors/xudeming208/mid.svg" alt="Contributors"></a>
   <a href="https://www.npmjs.com/package/mid"><img src="https://img.shields.io/github/license/xudeming208/mid.svg" alt="License"></a>
 </p>
