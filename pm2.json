@@ -3,8 +3,10 @@
         // Application #1
         "name": "server",
         "script": "server/app.js",
+        // 启用多少个实例，可用于负载均衡。如果-i 0或者-i max，则根据当前机器核数确定实例数目
         "instances": 0,
         "exec_mode": "cluster",
+        // 如果想要你的应用，在超过使用内存上限后自动重启，那么可以加上--max-memory-restart参数
         "max_memory_restart": "1G",
         "autorestart": true,
         "merge_logs": true,

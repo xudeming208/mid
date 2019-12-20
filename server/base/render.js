@@ -18,7 +18,7 @@ const complie = (filePath, tpl, content, data) => {
 	// 如果保留模板中的`
 	// content = content.replace(/`+/g,'\\`');
 	// 如果按照ES6语法
-	content = content.replace(/`+/g,'');
+	content = content.replace(/`+/g, '');
 
 	let arr = content.split('<%');
 	tplStr += "/* " + filePath + " */\n";
@@ -66,7 +66,11 @@ const complie = (filePath, tpl, content, data) => {
 	tplStr += 'exports._getHtml = _getHtml' + '\n';
 
 	let tmpPath = getTmpPath(tpl);
-	fs.writeFileSync(tmpPath, tplStr);
+	try {
+		fs.writeFileSync(tmpPath, tplStr);
+	} catch (error) {
+		console.error(error);
+	}
 }
 
 // 获取HTML
@@ -77,12 +81,20 @@ const getHtml = (tpl, data) => {
 	// watchFile
 	watchFile(filePath, () => {
 		delete require.cache[tmpPath];
-		complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
+		try {
+			complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
+		} catch (error) {
+			console.error(error);
+		}
 	});
 
 	// 没有缓存的话就编译
 	if (!fs.existsSync(tmpPath)) {
-		complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
+		try {
+			complie(filePath, tpl, fs.readFileSync(filePath, 'utf-8'), data);
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 	return require(tmpPath)._getHtml(data);
@@ -100,11 +112,11 @@ const render = function(tpl, data = {}) {
 
 	// mkdir tmp
 	let tmpDirPath = path.resolve(__dirname, '../../tmp');
-	if (!fs.existsSync(tmpDirPath)) {
-		fs.mkdirSync(tmpDirPath);
-	}
-
 	try {
+		if (!fs.existsSync(tmpDirPath)) {
+			fs.mkdirSync(tmpDirPath);
+		}
+
 		let html = getHtml(tpl, data);
 
 		//show render data
@@ -134,7 +146,7 @@ const render = function(tpl, data = {}) {
 			trace: console.trace(),
 			error: error.toString()
 		}));
-		
+
 		this.res.writeHead(503, {
 			'Content-Type': 'text/plain',
 			'Cache-Control': 'no-cache,no-store'

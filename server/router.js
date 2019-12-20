@@ -89,9 +89,13 @@ const route = (req, res) => {
 		console.error(`cannot found modPath: ${modPath}`);
 	}
 
-	if (!fs.existsSync(modPath)) {
-		notFoundFun(modPath);
-		return;
+	try {
+		if (!fs.existsSync(modPath)) {
+			notFoundFun(modPath);
+			return;
+		}
+	} catch (error) {
+		console.error(error);
 	}
 
 	let Mod = require(modPath);

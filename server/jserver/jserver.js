@@ -151,13 +151,17 @@ const onRequest = (req, res) => {
 	let filePath = appPath + pathname;
 
 	// 404
-	if (!fs.existsSync(filePath)) {
-		res.writeHead(404, {
-			'Content-Type': 'text/plain',
-			'Cache-Control': 'no-cache,no-store'
-		});
-		console.error(filePath + ' is lost');
-		return res.end(`404 Not Found`);
+	try {
+		if (!fs.existsSync(filePath)) {
+			res.writeHead(404, {
+				'Content-Type': 'text/plain',
+				'Cache-Control': 'no-cache,no-store'
+			});
+			console.error(filePath + ' is lost');
+			return res.end(`404 Not Found`);
+		}
+	} catch (error) {
+		console.error(error);
 	}
 
 	// mvc源文件不允许访问
@@ -179,18 +183,31 @@ const onRequest = (req, res) => {
 
 //jserver
 if (cluster.isMaster) {
+	// process就是当前的进程
+	console.log(`主进程 ${process.pid} 正在运行`);
+
+	// 根据CPU数量生成工作进程
 	for (let i = cpuNums; i--;) {
 		cluster.fork();
 	}
-	cluster.on('death', worker => {
-		console.log(`worker ${worker.pid} died`);
+
+	// 当任何一个工作进程关闭的时候，cluster 模块都将会触发 'exit' 事件。这可以用于重启工作进程（通过再次调用 .fork()）。
+	cluster.on('exit', (worker, code, signal) => {
+		if (signal) {
+			console.log(`工作进程已被信号 ${signal} 杀死`);
+		} else if (code !== 0) {
+			console.log(`工作进程退出，退出码: ${code}`);
+		} else {
+			console.log(`工作进程成功退出，pid为${worker.process.pid}`);
+		}
+
+		console.log('重启中...');
 		cluster.fork();
-	})
-	cluster.on('exit', worker => {
-		console.log(`worker ${worker.process.pid} died`);
-		cluster.fork();
-	})
+	});
 } else {
+	// process就是当前的进程
+	console.log(`工作进程 ${process.pid} 已启动`);
+
 	http.createServer((req, res) => {
 		onRequest(req, res);
 	}).listen(port, '0.0.0.0', () => {
