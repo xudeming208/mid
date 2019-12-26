@@ -71,6 +71,8 @@ server {
 }
 ```
 
+* 浏览器访问h5.fedevot.test.com即可(会通过Nginx反向代理到http://127.0.0.1:8083)
+
 **ps:**
 	当然你也可以以80端口启动node服务，然后用sudo启动(1024以下端口需要sudo)，但是不推荐这样。
 
@@ -95,11 +97,9 @@ server {
 server {
     listen 443 ssl http2 fastopen=3 reuseport;
     server_name h5.fedevot.test.com;
-
-    #key/ca.cer => /usr/local/etc/nginx/key
     
-    ssl_certificate  key/ca.cer;
-    ssl_certificate_key key/ca.key;
+    ssl_certificate  /usr/local/etc/nginx/key/certificate.pem;
+    ssl_certificate_key /usr/local/etc/nginx/key/privatekey.pem;
     ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
     ssl_prefer_server_ciphers on;
     ssl_ciphers     AES128+EECDH:AES128+EDH:!aNULL;
