@@ -141,6 +141,7 @@ const route = (req, res) => {
 	}
 
 	// post
+	// demo: 查看H5首页index.html中的post请求的例子
 	if ('POST' === req.method) {
 		// let str = '';
 		let arr = [];
