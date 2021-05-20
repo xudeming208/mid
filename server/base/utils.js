@@ -14,6 +14,7 @@ function utils() {
 	const self = this;
 	const isType = type => {
 		return obj => {
+			// return ({}).toString.call(obj).replace(/\[object\s(\w+)\]/g, '$1');
 			return ({}).toString.call(obj) === '[object ' + type + ']';
 		}
 	}

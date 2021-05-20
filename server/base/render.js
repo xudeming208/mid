@@ -139,6 +139,7 @@ const render = function(tpl, data = {}) {
 			// 'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
 			'Server': ETC.server
 		});
+		// 这里只是简单的演示，这个会去掉文档内容本来的换行。实际项目中，应该用npm HTML-Minifier，它能压缩html、JS、CSS
 		!ETC.debug && (html = html.replace(/[\r\n\t]+/g, ''));
 		this.res.end(html);
 	} catch (error) {

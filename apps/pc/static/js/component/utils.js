@@ -5,6 +5,7 @@ fml.define('component/utils', ['component/md5'], function(require, exports) {
 	var md5 = require('component/md5');
 	var isType = function(type) {
 		return function(obj) {
+			// return ({}).toString.call(obj).replace(/\[object\s(\w+)\]/g, '$1');
 			return ({}).toString.call(obj) === '[object ' + type + ']';
 		}
 	}

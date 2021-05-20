@@ -31,6 +31,8 @@
 // controller由router.js监听；view模板由render.js监听；model由getData.js监听；静态资源有jserver.js实时返回，无需监听；
 
 
+// 也可以用npm Nodemon，它会监测项目中的所有文件，一旦发现文件有改动，Nodemon 会自动重启应用
+
 // 方案：https://help.aliyun.com/document_detail/60488.html?spm=a2c4g.11186623.6.567.1wCmAc
 const chokidar = require('chokidar');
 const watchFile = (filePath, onChg) => {

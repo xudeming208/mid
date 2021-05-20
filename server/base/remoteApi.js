@@ -62,14 +62,13 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 		reqHeaders['Content-Length'] = Buffer.byteLength(remoteData, 'utf8');
 
 		let startTime = Date.now(),
-			request_timer,
 			options = {
 				protocol: protocol,
 				method: method,
 				host: host,
 				port: port,
 				path: path,
-				// timeout: ETC.apiTimeOut,
+				timeout: ETC.apiTimeOut,
 				headers: reqHeaders,
 				agent: agent
 			};
@@ -79,9 +78,6 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 			// 后面的Buffer.concat(buff)参数必须是Array, Buffer, or Uint8Array，所以这里不能设置utf-8
 			// response.setEncoding('utf8');
 
-			request_timer && clearTimeout(request_timer);
-			request_timer = null;
-
 			let res_state = response.statusCode;
 			if (200 !== res_state && 400 !== res_state && 4000 > res_state) {
 				console.error('error', 'api', path, 'STATUS: ', res_state);
@@ -90,6 +86,8 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 			}
 			let result = '',
 				buff = [];
+			// 接口返回的数据一般不会特别多，所以这里用了data事件和end事件，不用担心内存泄露。
+			// 如果数据量特别大的话，为了防止内存泄露，应该用pipe。如果要对流做处理后再pipe，可以利用stream.Transform([options])。可以参考learning/nodeJS/demo/upload/upload3.js
 			response.on('data', chunk => {
 				buff.push(chunk);
 			}).on('end', () => {
@@ -116,7 +114,7 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 				} else {
 					try {
 						result = result ? (JSON.parse(result) || result) : false;
-					} catch (err) {
+					} catch (error) {
 						console.error(JSON.stringify({
 							trace: console.trace(),
 							errorMsg: 'error api ' + path + ' API ERROR: ' + result,
@@ -171,14 +169,11 @@ const remoteSingle = (req, res, phpKey, remoteObj) => {
 			}));
 
 			resolve(false);
-		});
-		request_timer = setTimeout(() => {
-			request_timer = null;
+		}).on('timeout', () => {
 			httpRequest.abort();
 			console.error('error', 'api', path, 'Request Timeout');
 			resolve(false);
-			return;
-		}, ETC.apiTimeOut);
+		});
 
 		// 写入数据到请求主体 post
 		httpRequest.write(remoteData);

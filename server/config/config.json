@@ -19,14 +19,14 @@
 		"view": "./mvc/view/"
 	},
 	"site": {
-		"staticHost": "http://192.168.120.110:8084",
+		"staticHost": "http://10.91.211.54:8084",
 		"jsDefer": true,
 		"pcPath": "/pc/static",
 		"h5Path": "/h5/static",
 		"pageTitle": "demo",
 		"pageDescription": "nodejs mvc frame",
 		"pageKeywords": "nodejs mvc frame",
-		"ip": "192.168.120.110",
+		"ip": "10.91.211.54",
 		"port": 8083
 	},
 	"host": {
@@ -35,7 +35,7 @@
 		"0.0.0.0": "h5",
 		"h5.fedevot.test.com": "h5",
 		"pc.fedevot.test.com": "pc",
-		"192.168.120.110": "h5"
+		"10.91.211.54": "h5"
 	},
 	"api": {
 		"web": "webapi.busi.inke.com",
